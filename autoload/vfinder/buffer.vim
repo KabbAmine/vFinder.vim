@@ -6,6 +6,7 @@ fun! vfinder#buffer#i(name) abort
     return {
                 \   'name'           : a:name,
                 \   'new'            : function('s:buffer_new'),
+                \   'quit'           : function('s:buffer_quit'),
                 \   'set_options'    : function('s:buffer_set_options'),
                 \   'set_syntax'     : function('s:buffer_set_syntax'),
                 \   'set_maps'       : function('s:buffer_set_maps'),
@@ -14,11 +15,14 @@ fun! vfinder#buffer#i(name) abort
 endfun
 
 fun! s:buffer_new() dict
-    if bufexists(self.name)
-        silent execute 'bwipeout! ' . self.name
-    endif
+    call self.quit()
     silent execute 'topleft split ' . self.name
     call self.set_syntax().set_options().set_maps().set_autocmds()
+    return self
+endfun
+
+fun! s:buffer_quit() dict
+    call s:wipe_buffer(self.name)
     return self
 endfun
 
@@ -44,6 +48,9 @@ endfun
 fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <C-n> <Esc>:call <SID>move_down_i()<CR>
     inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up_i()<CR>
+    inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
+    nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
+    nmap <silent> <buffer> q <Esc>
     return self
 endfun
 
@@ -81,5 +88,12 @@ fun! s:set_insertion_position() abort
     else
         silent execute 'normal! ^'
         startinsert
+    endif
+endfun
+
+fun! s:wipe_buffer(...) abort
+    let buffer = exists('a:1') ? a:1 : bufname('%')
+    if bufexists(buffer)
+        silent execute 'bwipeout! ' . buffer
     endif
 endfun

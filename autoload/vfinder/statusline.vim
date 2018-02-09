@@ -8,13 +8,13 @@ fun! vfinder#statusline#get() abort
 
     let count_infos = current ? current . '/' : ''
     let count_infos .= count_filtered ? count_filtered : ''
-    let count_infos = count_infos ? '(' . count_infos . ')' : ''
+    let count_infos = count_infos ? '[' . count_infos . ']' : ''
 
-    return printf('%3s | VF[%s] %s[%s]',
+    return printf('%3s | vf__%s(%s) %s',
                 \   s:mode(),
                 \   s:name(),
-                \   count_infos,
                 \   s:count_candidates(),
+                \   count_infos
                 \ )
 endfun
 
@@ -37,7 +37,6 @@ fun! s:current_item() abort
 endfun
 
 fun! s:count_filtered() abort
-    let query = getline(1)[2:]
     let count_candidates = line('$') - 1
-    return count_candidates && !empty(query) ? count_candidates : 0
+    return count_candidates ? count_candidates : 0
 endfun

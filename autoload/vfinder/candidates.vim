@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-04
+" Last modification: 2018-02-09
 
 
 fun! vfinder#candidates#i(cmd) abort
@@ -47,7 +47,7 @@ endfun
 fun! s:candidates_filter(query) dict
     call self.get()
     let self.query = vfinder#helpers#process_query(a:query)
-    let self.filtered_list = filter(copy(self.original_list), {i, v -> v =~? self.query})
+    let self.filtered_list = s:filter(self.query, self.original_list)
     let self.was_filtered = 1
     return self
 endfun
@@ -58,4 +58,10 @@ fun! s:candidates_highlight_matched() dict
         call matchadd('CursorLineNr', '\c' . self.query)
     endif
     return self
+endfun
+
+fun! s:filter(query, candidates) abort
+    return has('python3')
+                \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')
+                \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
 endfun

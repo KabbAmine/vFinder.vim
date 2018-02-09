@@ -61,6 +61,9 @@ fun! s:buffer_set_maps() dict
     nnoremap <silent> <buffer> O :call <SID>go_to_prompt()<CR>
     nnoremap <silent> <buffer> R :call <SID>update_candidates_and_stay()<CR>
     inoremap <silent> <buffer> <C-r> <Esc>:call <SID>update_candidates()<CR>
+    inoremap <silent> <buffer> <expr> <BS> <SID>backspace()
+    inoremap <silent> <buffer> <expr> <C-w> <SID>control_w()
+    inoremap <silent> <buffer> <expr> <C-u> <SID>control_u()
     return self
 endfun
 
@@ -128,4 +131,22 @@ endfun
 fun! s:update_candidates() abort
     call vfinder#events#update_candidates_request()
     startinsert!
+endfun
+
+fun! s:backspace() abort
+    return line('.') is# 1
+                \ ? "\<BS>"
+                \ : "\<C-o>1gg\<C-o>$\<BS>"
+endfun
+
+fun! s:control_w() abort
+    return line('.') is# 1
+                \ ? "\<C-w>"
+                \ : "\<C-o>1gg\<C-o>$\<C-w>"
+endfun
+
+fun! s:control_u() abort
+    return line('.') is# 1
+                \ ? "\<C-u>"
+                \ : "\<C-o>1gg\<C-o>$\<C-u>"
 endfun

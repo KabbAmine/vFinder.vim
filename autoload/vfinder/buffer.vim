@@ -51,6 +51,12 @@ fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
     nmap <silent> <buffer> q <Esc>
+    nnoremap <silent> <buffer> i :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> I :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> a :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> A :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> o :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> O :call <SID>go_to_prompt()<CR>
     return self
 endfun
 
@@ -96,4 +102,9 @@ fun! s:wipe_buffer(...) abort
     if bufexists(buffer)
         silent execute 'bwipeout! ' . buffer
     endif
+endfun
+
+fun! s:go_to_prompt() abort
+    call cursor(1, 0)
+    startinsert!
 endfun

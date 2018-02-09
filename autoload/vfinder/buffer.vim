@@ -57,6 +57,8 @@ fun! s:buffer_set_maps() dict
     nnoremap <silent> <buffer> A :call <SID>go_to_prompt()<CR>
     nnoremap <silent> <buffer> o :call <SID>go_to_prompt()<CR>
     nnoremap <silent> <buffer> O :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> R :call <SID>update_candidates_and_stay()<CR>
+    inoremap <silent> <buffer> <C-r> <Esc>:call <SID>update_candidates()<CR>
     return self
 endfun
 
@@ -107,4 +109,15 @@ endfun
 fun! s:go_to_prompt() abort
     call cursor(1, 0)
     startinsert!
+endfun
+
+fun! s:update_candidates_and_stay() abort
+    let pos = getpos('.')
+    call vfinder#events#query_modified()
+    call setpos('.', pos)
+    stopinsert
+endfun
+
+fun! s:update_candidates() abort
+    call vfinder#events#query_modified()
 endfun

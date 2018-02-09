@@ -2,23 +2,6 @@
 " Last modification: 2018-02-04
 
 
-fun! vfinder#go_to_prompt() abort
-    call cursor(1, 0)
-    startinsert!
-endfun
-
-fun! vfinder#update_candidates_i() abort
-    call vfinder#events#update_candidates_request()
-    startinsert!
-endfun
-
-fun! vfinder#update_candidates_and_stay() abort
-    let pos = getpos('.')
-    call vfinder#events#update_candidates_request()
-    call setpos('.', pos)
-    stopinsert
-endfun
-
 fun! vfinder#i(name) abort
     " if name is {} then its the options
 

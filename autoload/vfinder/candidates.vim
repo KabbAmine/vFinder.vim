@@ -13,6 +13,7 @@ fun! vfinder#candidates#i(cmd) abort
                 \   'timer'            : {},
                 \   'get'              : function('s:candidates_get'),
                 \   'delete'           : function('s:candidates_delete'),
+                \   'update'           : function('s:candidates_update'),
                 \   'populate'         : function('s:candidates_populate'),
                 \   'filter'           : function('s:candidates_filter'),
                 \   'highlight_matched': function('s:candidates_highlight_matched'),
@@ -34,6 +35,14 @@ fun! s:candidates_delete() dict
     return self
 endfun
 
+fun! s:candidates_update() dict
+    let self.original_list = []
+    let self.filtered_list = []
+    let self.current = []
+    call self.get()
+    return self
+endfun
+
 fun! s:candidates_populate() dict
     call self.delete()
     if self.was_filtered
@@ -50,10 +59,12 @@ fun! s:candidates_filter(query) dict
     call self.get()
     let self.query = vfinder#helpers#process_query(a:query)
     " If we append chars to our query, there is no need to filter all the
-    " original candidates.
-    let candidates = exists('b:vf.last_query') && self.query =~# '^' . b:vf.last_query
-                \ ? self.current
-                \ : self.original_list
+    " original candidates, except when invoking the candidates update manually.
+    if !exists('b:vf.manually_updated') && exists('b:vf.last_query') && self.query =~# '^' . b:vf.last_query
+        let candidates = self.current
+    else
+        let candidates = self.original_list
+    endif
     let b:vf.last_query = self.query
     let self.filtered_list = s:filter(self.query, candidates)
     let self.was_filtered = 1

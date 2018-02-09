@@ -53,17 +53,17 @@ fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
     nmap <silent> <buffer> q <Esc>
-    nnoremap <silent> <buffer> i :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> I :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> a :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> A :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> o :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> O :call vfinder#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> R :call vfinder#update_candidates_and_stay()<CR>
-    inoremap <silent> <buffer> <C-r> <Esc>:call vfinder#update_candidates_i()<CR>
     inoremap <silent> <buffer> <expr> <BS> <SID>backspace()
     inoremap <silent> <buffer> <expr> <C-w> <SID>control_w()
     inoremap <silent> <buffer> <expr> <C-u> <SID>control_u()
+    nnoremap <silent> <buffer> i :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> I :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> a :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> A :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> o :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> O :call <SID>go_to_prompt()<CR>
+    nnoremap <silent> <buffer> R :call <SID>update_candidates_and_stay()<CR>
+    inoremap <silent> <buffer> <C-r> <Esc>:call <SID>update_candidates_i()<CR>
     nnoremap <silent> <buffer> x <Nop>
     nnoremap <silent> <buffer> c <Nop>
     nnoremap <silent> <buffer> d <Nop>
@@ -136,4 +136,21 @@ fun! s:control_u() abort
     return line('.') is# 1
                 \ ? "\<C-u>"
                 \ : "\<C-o>1gg\<C-o>$\<C-u>"
+endfun
+
+fun! s:go_to_prompt() abort
+    call cursor(1, 0)
+    startinsert!
+endfun
+
+fun! s:update_candidates_i() abort
+    call vfinder#events#update_candidates_request()
+    startinsert!
+endfun
+
+fun! s:update_candidates_and_stay() abort
+    let pos = getpos('.')
+    call vfinder#events#update_candidates_request()
+    call setpos('.', pos)
+    stopinsert
 endfun

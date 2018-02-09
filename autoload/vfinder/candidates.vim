@@ -19,7 +19,10 @@ fun! vfinder#candidates#i(cmd) abort
 endfun
 
 fun! s:candidates_get() dict
-    let self.original_list = systemlist(self.cmd)
+    if empty(self.original_list)
+        echo 'on exec'
+        let self.original_list = systemlist(self.cmd)
+    endif
     return self
 endfun
 

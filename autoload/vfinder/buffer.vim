@@ -113,11 +113,12 @@ endfun
 
 fun! s:update_candidates_and_stay() abort
     let pos = getpos('.')
-    call vfinder#events#query_modified()
+    call vfinder#events#update_candidates_request()
     call setpos('.', pos)
     stopinsert
 endfun
 
 fun! s:update_candidates() abort
-    call vfinder#events#query_modified()
+    call vfinder#events#update_candidates_request()
+    startinsert!
 endfun

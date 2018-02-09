@@ -19,6 +19,7 @@ fun! vfinder#i(name) abort
         call vfinder#helpers#Echo('Candidates gathering...', 'Function')
         let candidates = vfinder#candidates#i(b:vf.cmd)
         call candidates.get().populate()
+        let b:vf.original_candidates = candidates.original_list
         redraw!
 
         startinsert!

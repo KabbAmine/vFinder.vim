@@ -11,6 +11,7 @@ fun! vfinder#buffer#i(name) abort
                 \   'set_syntax'     : function('s:buffer_set_syntax'),
                 \   'set_maps'       : function('s:buffer_set_maps'),
                 \   'set_autocmds'   : function('s:buffer_set_autocmds'),
+                \   'set_statusline' : function('s:buffer_set_statusline')
                 \ }
 endfun
 
@@ -18,6 +19,7 @@ fun! s:buffer_new() dict
     call self.quit()
     silent execute 'topleft split ' . self.name
     call self.set_syntax().set_options().set_maps().set_autocmds()
+    call self.set_statusline()
     return self
 endfun
 
@@ -68,6 +70,10 @@ fun! s:buffer_set_autocmds() dict
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
         autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
     augroup END
+endfun
+
+fun! s:buffer_set_statusline() dict
+    setlocal statusline=%{vfinder#statusline#get()}
 endfun
 
 fun! s:move_down_i() abort

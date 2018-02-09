@@ -66,6 +66,7 @@ fun! s:buffer_set_autocmds() dict
     augroup VFinder
         autocmd!
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
+        autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
     augroup END
 endfun
 

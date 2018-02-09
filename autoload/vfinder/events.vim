@@ -1,6 +1,13 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-04
+" Last modification: 2018-02-09
 
+
+fun! vfinder#events#char_inserted() abort
+    if line('.') isnot# 1
+        silent execute 'normal! 1gg'
+        startinsert!
+    endif
+endfun
 
 fun! vfinder#events#update_candidates_request() abort
     call s:filter_and_update(1)

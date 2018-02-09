@@ -12,7 +12,6 @@ fun! vfinder#i(name) abort
         call buffer.new()
         let b:vf = {}
         let b:vf.cmd = source.cmd
-        " let b:vf.maps
 
         let prompt = vfinder#prompt#i()
         call prompt.render()

@@ -20,6 +20,7 @@ nnoremap <silent> ,,b :call vfinder#i('buffers')<CR>
 nnoremap <silent> ,,r :call vfinder#i('oldfiles')<CR>
 nnoremap <silent> ,,c :call vfinder#i('commands')<CR>
 nnoremap <silent> ,,t :call vfinder#i('tags')<CR>
+nnoremap <silent> ,,o :call vfinder#i('outline')<CR>
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

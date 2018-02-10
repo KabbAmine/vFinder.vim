@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-05
+" Last modification: 2018-02-10
 
 
 fun! vfinder#source#i(name) abort
@@ -8,7 +8,7 @@ fun! vfinder#source#i(name) abort
     " executing it.
     let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
     if empty(fun_result)
-        call vfinder#helpers#Throw('No function "' . fun_name . '" found')
+        call vfinder#helpers#Throw('No function "' . fun_name_prefix . '" found')
     endif
     let options = call(fun_name_prefix . '#get', [])
 
@@ -16,7 +16,7 @@ fun! vfinder#source#i(name) abort
                 \   'name'          : options.name,
                 \   'to_execute'    : options.to_execute,
                 \   'format_fun'    : get(options, 'format_fun', ''),
-                \   'candidate_fun' : get(options, 'candidate_fun', 'getline(".")'),
+                \   'candidate_fun' : get(options, 'candidate_fun', function('getline', ['.'])),
                 \   'maps'          : options.maps,
                 \   'prepare'       : function('<SID>source_prepare'),
                 \   'execute'       : function('<SID>source_execute'),
@@ -28,9 +28,7 @@ endfun
 
 fun! s:source_prepare() dict
     " Execute the source, format & set the mappings
-    call self.execute().format()
-    " TODO:
-    call self.set_maps()
+    call self.execute().format().set_maps()
     return self
 endfun
 
@@ -62,5 +60,49 @@ fun! s:source_format() dict
 endfun
 
 fun! s:source_set_maps() dict
+    for mode in ['i', 'n']
+        let maps_{mode} = self.maps[mode]
+        let keys_{mode} = keys(maps_{mode})
+        let values_{mode} = values(maps_{mode})
+        for i in range(0, len(maps_{mode}) - 1)
+            let keys = keys_{mode}[i]
+            let action = values_{mode}[i].action
+            let options = values_{mode}[i].options
+            let fun_args = printf('"%s", %s, "%s", %d',
+                        \ action,
+                        \ self.candidate_fun,
+                        \ mode,
+                        \ options.quit)
+             silent execute mode . 'noremap <silent> <buffer> ' . keys . ' ' .
+                         \ (mode is# 'i' ? '<Esc>' : '') .
+                         \ ':call <SID>action(' . fun_args . ')<CR>'
+        endfor
+    endfor
     return self
 endfun
+
+fun! s:action(what, candidate_fun, mode, quit)
+    let in_prompt = line('.') is# 1
+    let buffer = bufnr('%')
+    let what = !empty(a:what) ? a:what : '%s'
+    if in_prompt
+        silent normal! j
+        let target = !empty(a:candidate_fun)
+                    \ ? a:candidate_fun()
+                    \ : ''
+        silent normal! k
+    else
+        let target = !empty(a:candidate_fun)
+                    \ ? a:candidate_fun()
+                    \ : ''
+    endif
+    let cmd = printf(what, target)
+    if a:quit
+        silent execute 'bwipeout ' . buffer
+    endif
+    silent execute cmd
+    if a:mode is# 'insert' && !a:quit
+        startinsert
+    endif
+endfun
+

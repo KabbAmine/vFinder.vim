@@ -27,49 +27,18 @@ fun! s:files_format(candidates) abort
 endfun
 
 fun! s:files_maps() abort
-    let insert_maps = {
-                \ "\<CR>": {
-                \	'action': 'edit %s',
-                \	'mode': 'insert',
-                \       'options': {'quit': 1},
-                \       },
-                \ "\<C-s>": {
-                \	'action': 'split %s',
-                \	'mode': 'insert',
-                \       'options': {'quit': 1},
-                \       },
-                \ "\<C-v>": {
-                \	'action': 'vertical split %s',
-                \	'mode': 'insert',
-                \       'options': {'quit': 1},
-                \       },
-                \ "\<C-t>": {
-                \	'action': 'tabedit %s',
-                \	'mode': 'insert',
-                \       'options': {'quit': 1},
-                \       }
+    let maps = {}
+    let maps.i = {
+                \ '<CR>' : {'action': 'edit %s', 'options': {'quit': 1}},
+                \ '<C-s>': {'action': 'split %s', 'options': {'quit': 1}},
+                \ '<C-v>': {'action': 'vertical split %s', 'options': {'quit': 1}},
+                \ '<C-t>': {'action': 'tabedit %s', 'options': {'quit': 1}}
                 \ }
-    let normal_maps = {
-                \ "\<CR>": {
-                \	'action': 'edit %s',
-                \	'mode': 'normal',
-                \       'options': {'quit': 1},
-                \       },
-                \ 's': {
-                \	'action': 'split %s',
-                \	'mode': 'normal',
-                \       'options': {'quit': 1},
-                \       },
-                \ 'v': {
-                \	'action': 'vertical split %s',
-                \	'mode': 'normal',
-                \       'options': {'quit': 1},
-                \       },
-                \ 't': {
-                \	'action': 'tabedit %s',
-                \	'mode': 'normal',
-                \       'options': {'quit': 1},
-                \       }
+    let maps.n = {
+                \ '<CR>': {'action': 'edit %s', 'options': {'quit': 1}},
+                \ 's'    : {'action': 'split %s', 'options': {'quit': 0}},
+                \ 'v'    : {'action': 'vertical split %s', 'options': {'quit': 1}},
+                \ 't'    : {'action': 'tabedit %s', 'options': {'quit': 1}}
                 \ }
-    return extend(insert_maps, normal_maps)
+    return maps
 endfun

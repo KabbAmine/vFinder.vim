@@ -2,6 +2,19 @@
 " Last modification: 2018-02-04
 
 
+fun! vfinder#helpers#go_to_prompt()
+    call cursor(1, 0)
+    startinsert!
+endfun
+
+fun! vfinder#helpers#is_in_prompt()
+    return line('.') is# 1 ? 1 : 0
+endfun
+
+fun! vfinder#helpers#have(options, option) abort
+    return has_key(a:options, a:option) && a:options[a:option] is# 1 ? 1 : 0
+endfun
+
 fun! vfinder#helpers#process_query(query) abort
     return join(split(escape(a:query, '.|*')), '.*')
 endfun

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-10
+" Last modification: 2018-02-11
 
 
 fun! vfinder#sources#files#check()
@@ -8,10 +8,9 @@ endfun
 
 fun! vfinder#sources#files#get() abort
     return {
-                \   'name'      : 'files',
-                \   'to_execute': s:files_source(),
-                \   'format_fun': function('s:files_format'),
-                \   'maps'      : s:files_maps(),
+                \   'name'         : 'files',
+                \   'to_execute'   : s:files_source(),
+                \   'maps'         : s:files_maps(),
                 \ }
 endfun
 
@@ -19,11 +18,6 @@ fun! s:files_source() abort
     return executable('rg') ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag') ? 'ag --nocolor --nogroup --hidden -g ""'
                 \ : 'find * -type f'
-endfun
-
-" Just an example
-fun! s:files_format(candidates) abort
-    return a:candidates
 endfun
 
 fun! s:files_maps() abort

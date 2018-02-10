@@ -1,6 +1,11 @@
 " Creation         : 2018-02-04
 " Last modification: 2018-02-04
 
+" TODO:
+" capitals is some functions
+" multiple selections
+" sources: tags, oldfiles, yank, outline...
+
 
 fun! vfinder#i(source) abort
     " if name is {} then its the options

@@ -2,15 +2,27 @@
 " Last modification: 2018-02-10
 
 
-fun! vfinder#source#i(name) abort
-    let fun_name_prefix = 'vfinder#sources#' . a:name
-    " There is no good way to check if an autoloaded function exist before
-    " executing it.
-    let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
-    if empty(fun_result)
-        call vfinder#helpers#Throw('No function "' . fun_name_prefix . '" found')
+fun! vfinder#source#i(source) abort
+    " if a:source is a:
+    "     - string: Its the name of a source/name.vim file
+    "     - dictionnary: Its a custom source
+
+    if type(a:source) is# v:t_string
+        let fun_name_prefix = 'vfinder#sources#' . a:source
+        " There is no good way to check if an autoloaded function exist before
+        " executing it, at least AFAIK.
+        let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
+        if empty(fun_result)
+            call vfinder#helpers#Throw('No function "' . fun_name_prefix . '" found')
+            return ''
+        endif
+        let options = call(fun_name_prefix . '#get', [])
+    elseif type(a:source) is# v:t_dict
+        let options = a:source
+    else
+        call vfinder#helpers#Throw('The source ' . string(self.to_execute) . ' is not valid')
+        return ''
     endif
-    let options = call(fun_name_prefix . '#get', [])
 
     return {
                 \   'name'          : options.name,
@@ -27,14 +39,13 @@ fun! vfinder#source#i(name) abort
 endfun
 
 fun! s:source_prepare() dict
-    " Execute the source, format & set the mappings
     call self.execute().format().set_maps()
     return self
 endfun
 
 fun! s:source_execute() dict
     let candidates = []
-    if filereadable(self.to_execute)
+    if type(self.to_execute) is# v:t_string && filereadable(self.to_execute)
         let candidates = readfile(self.to_execute)
     elseif type(self.to_execute) is# v:t_func
         let candidates = call(self.to_execute, [])
@@ -64,45 +75,50 @@ fun! s:source_set_maps() dict
         let maps_{mode} = self.maps[mode]
         let keys_{mode} = keys(maps_{mode})
         let values_{mode} = values(maps_{mode})
+        " candidate_fun being a funcref if defined, we must convert it to a
+        " string before passing it to the execute command.
+        let candidate_fun = string(self.candidate_fun)
         for i in range(0, len(maps_{mode}) - 1)
-            let keys = keys_{mode}[i]
-            let action = values_{mode}[i].action
-            let options = values_{mode}[i].options
-            let fun_args = printf('"%s", %s, "%s", %d',
-                        \ action,
-                        \ self.candidate_fun,
+            let fun_args = printf('"%s", %s, "%s", %s',
+                        \ values_{mode}[i].action,
+                        \ candidate_fun,
                         \ mode,
-                        \ options.quit)
-             silent execute mode . 'noremap <silent> <buffer> ' . keys . ' ' .
+                        \ values_{mode}[i].options)
+             silent execute mode . 'noremap <silent> <buffer> ' .
+                         \ keys_{mode}[i] . ' ' .
                          \ (mode is# 'i' ? '<Esc>' : '') .
-                         \ ':call <SID>action(' . fun_args . ')<CR>'
+                         \ ':call <SID>do(' . fun_args . ')<CR>'
         endfor
     endfor
     return self
 endfun
 
-fun! s:action(what, candidate_fun, mode, quit)
-    let in_prompt = line('.') is# 1
+fun! s:do(action, candidate_fun, mode, options)
+    let in_prompt = vfinder#helpers#is_in_prompt()
+    let line = line('.')
+    let quit = vfinder#helpers#have(a:options, 'quit')
+    let update = vfinder#helpers#have(a:options, 'update')
     let buffer = bufnr('%')
-    let what = !empty(a:what) ? a:what : '%s'
+    let action = !empty(a:action) ? a:action : '%s'
     if in_prompt
         silent normal! j
-        let target = !empty(a:candidate_fun)
-                    \ ? a:candidate_fun()
-                    \ : ''
+        let target = !empty(a:candidate_fun) ? a:candidate_fun() : ''
         silent normal! k
     else
-        let target = !empty(a:candidate_fun)
-                    \ ? a:candidate_fun()
-                    \ : ''
+        let target = !empty(a:candidate_fun) ? a:candidate_fun() : ''
     endif
-    let cmd = printf(what, target)
-    if a:quit
+    let cmd = printf(action, target)
+    if quit
         silent execute 'bwipeout ' . buffer
     endif
     silent execute cmd
-    if a:mode is# 'insert' && !a:quit
-        startinsert
+    if !quit
+        if update
+            call vfinder#events#update_candidates_request()
+        endif
+        if a:mode is# 'i'
+            call cursor(line, 0)
+            silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
+        endif
     endif
 endfun
-

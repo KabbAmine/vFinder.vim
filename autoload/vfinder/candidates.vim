@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-10
+" Last modification: 2018-02-11
 
 
 fun! vfinder#candidates#i(source) abort
@@ -13,7 +13,6 @@ fun! vfinder#candidates#i(source) abort
                 \   'timer'            : {},
                 \   'get'              : function('s:candidates_get'),
                 \   'delete'           : function('s:candidates_delete'),
-                \   'update'           : function('s:candidates_update'),
                 \   'populate'         : function('s:candidates_populate'),
                 \   'filter'           : function('s:candidates_filter'),
                 \   'highlight_matched': function('s:candidates_highlight_matched'),
@@ -21,7 +20,7 @@ fun! vfinder#candidates#i(source) abort
 endfun
 
 fun! s:candidates_get() dict
-    if empty(self.original_list)
+    if self.original_list ==# []
         let self.original_list = self.source.prepare().candidates
     endif
     let self.current = getline(2, '$')
@@ -32,14 +31,6 @@ fun! s:candidates_delete() dict
     if line('$') ># 1
         silent execute '2,$delete_'
     endif
-    return self
-endfun
-
-fun! s:candidates_update() dict
-    let self.original_list = []
-    let self.filtered_list = []
-    let self.current = []
-    call self.get()
     return self
 endfun
 
@@ -58,13 +49,12 @@ endfun
 fun! s:candidates_filter(query) dict
     call self.get()
     let self.query = vfinder#helpers#process_query(a:query)
-    " If we append chars to our query, there is no need to filter all the
-    " original candidates, except when invoking the candidates update manually.
-    let candidates = !exists('b:vf.manually_updated')
-                \ && exists('b:vf.last_query')
-                \ && self.query =~# '^' . b:vf.last_query
-                \	? self.current
-                \	: self.original_list
+    " There is no need to filter all the original candidates if we added
+    " characters to our previous query.
+    " The following is not appliable if we have a manual update.
+    let candidates = !exists('b:vf.update') && exists('b:vf.last_query') && self.query =~# '^' . b:vf.last_query
+                \   ? self.current
+                \   : self.original_list
     let b:vf.last_query = self.query
     let self.filtered_list = s:filter(self.query, candidates)
     let self.was_filtered = 1

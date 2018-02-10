@@ -70,7 +70,8 @@ fun! s:candidates_highlight_matched() dict
 endfun
 
 fun! s:filter(query, candidates) abort
-    return has('python3')
-                \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')
-                \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
+    return filter(copy(a:candidates), {i, v -> v =~? a:query})
+    " return has('python3')
+    "             \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')
+    "             \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
 endfun

@@ -30,7 +30,7 @@ fun! s:tags_format(tags) abort
 endfun
 
 fun! s:tags_candidate_fun() abort
-    return matchstr(getline('.'), '^\S\+\ze')
+    return matchstr(getline('.'), '^.*\ze\s\+\f\+')
 endfun
 
 fun! s:tags_maps() abort

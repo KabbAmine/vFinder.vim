@@ -36,7 +36,7 @@ fun! s:filter_and_update(update) abort
     let prompt = vfinder#prompt#i()
     call prompt.render()
 
-    let candidates = vfinder#candidates#i(b:vf.cmd)
+    let candidates = vfinder#candidates#i(b:vf)
     if a:update
         call candidates.update()
         let b:vf.manually_updated = 1

@@ -1,10 +1,10 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-09
+" Last modification: 2018-02-10
 
 
-fun! vfinder#candidates#i(cmd) abort
+fun! vfinder#candidates#i(source) abort
     return {
-                \   'cmd'              : a:cmd,
+                \   'source'           : a:source,
                 \   'query'            : '',
                 \   'was_filtered'     : 0,
                 \   'original_list'    : [],
@@ -22,7 +22,7 @@ endfun
 
 fun! s:candidates_get() dict
     if empty(self.original_list)
-        let self.original_list = systemlist(self.cmd)
+        let self.original_list = self.source.prepare().candidates
     endif
     let self.current = getline(2, '$')
     return self
@@ -60,11 +60,11 @@ fun! s:candidates_filter(query) dict
     let self.query = vfinder#helpers#process_query(a:query)
     " If we append chars to our query, there is no need to filter all the
     " original candidates, except when invoking the candidates update manually.
-    if !exists('b:vf.manually_updated') && exists('b:vf.last_query') && self.query =~# '^' . b:vf.last_query
-        let candidates = self.current
-    else
-        let candidates = self.original_list
-    endif
+    let candidates = !exists('b:vf.manually_updated')
+                \ && exists('b:vf.last_query')
+                \ && self.query =~# '^' . b:vf.last_query
+                \	? self.current
+                \	: self.original_list
     let b:vf.last_query = self.query
     let self.filtered_list = s:filter(self.query, candidates)
     let self.was_filtered = 1

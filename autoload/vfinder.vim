@@ -2,22 +2,21 @@
 " Last modification: 2018-02-04
 
 
-fun! vfinder#i(name) abort
+fun! vfinder#i(source) abort
     " if name is {} then its the options
 
     try
-        let source = vfinder#source#get(a:name)
+        let source = vfinder#source#i(a:source)
 
         let buffer = vfinder#buffer#i(source.name)
         call buffer.new()
-        let b:vf = {}
-        let b:vf.cmd = source.cmd
+        let b:vf = source
 
         let prompt = vfinder#prompt#i()
         call prompt.render()
 
         call vfinder#helpers#Echo('Candidates gathering...', 'Function')
-        let candidates = vfinder#candidates#i(b:vf.cmd)
+        let candidates = vfinder#candidates#i(b:vf)
         call candidates.get().populate()
         let b:vf.original_candidates = candidates.original_list
         redraw!

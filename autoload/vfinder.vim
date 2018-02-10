@@ -1,14 +1,16 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-04
+" Last modification: 2018-02-11
 
 " TODO:
 " capitals is some functions
 " multiple selections
-" sources: outline, yank...
+" sources: command_history, yank...
+" improve the python3 function
+" escape special characters in the query (may be different for python)
 
 
 fun! vfinder#i(source) abort
-    " if name is {} then its the options
+    " if name is {} then its a custom source.
 
     try
         let source = vfinder#source#i(a:source)

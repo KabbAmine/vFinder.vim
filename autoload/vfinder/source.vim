@@ -13,14 +13,14 @@ fun! vfinder#source#i(source) abort
         " executing it, at least AFAIK.
         let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
         if empty(fun_result)
-            call vfinder#helpers#Throw('No function "' . fun_name_prefix . '" found')
+            call vfinder#helpers#Throw('No source "' . a:source . '" found')
             return ''
         endif
         let options = call(fun_name_prefix . '#get', [])
     elseif type(a:source) is# v:t_dict
         let options = a:source
     else
-        call vfinder#helpers#Throw('The source ' . string(self.to_execute) . ' is not valid')
+        call vfinder#helpers#Throw('The source ' . string(a:source) . ' is not valid')
         return ''
     endif
 

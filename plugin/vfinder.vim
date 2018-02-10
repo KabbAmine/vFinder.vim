@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-04
+" Last modification: 2018-02-11
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -17,6 +17,7 @@ set cpoptions&vim
 
 nnoremap <silent> ,,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,,b :call vfinder#i('buffers')<CR>
+nnoremap <silent> ,,r :call vfinder#i('oldfiles')<CR>
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

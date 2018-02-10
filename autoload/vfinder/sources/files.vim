@@ -30,7 +30,7 @@ fun! s:files_maps() abort
                 \ }
     let maps.n = {
                 \ '<CR>': {'action': 'edit %s', 'options': {'quit': 1}},
-                \ 's'    : {'action': 'split %s', 'options': {'quit': 0}},
+                \ 's'    : {'action': 'split %s', 'options': {'quit': 1}},
                 \ 'v'    : {'action': 'vertical split %s', 'options': {'quit': 1}},
                 \ 't'    : {'action': 'tabedit %s', 'options': {'quit': 1}}
                 \ }

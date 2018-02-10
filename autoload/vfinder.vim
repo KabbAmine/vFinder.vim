@@ -4,7 +4,7 @@
 " TODO:
 " capitals is some functions
 " multiple selections
-" sources: commands, tags, yank, outline...
+" sources: outline, yank...
 
 
 fun! vfinder#i(source) abort

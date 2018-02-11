@@ -60,13 +60,13 @@ fun! vfinder#sources#tags#maps() abort
                 \ '<CR>' : {'action': 'tag %s', 'options': {'quit': 1}},
                 \ '<C-s>': {'action': 'split \| tag %s', 'options': {'quit': 1}},
                 \ '<C-v>': {'action': 'vertical split \| tag %s', 'options': {'quit': 1}},
-                \ '<C-o>': {'action': 'ptag %s', 'options': {'quit': 1}},
+                \ '<C-x>': {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     let maps.n = {
                 \ '<CR>': {'action': 'tag %s', 'options': {'quit': 1}},
                 \ 's'   : {'action': 'split \| tag %s', 'options': {'quit': 1}},
                 \ 'v'   : {'action': 'vertical split \| tag %s', 'options': {'quit': 1}},
-                \ 'o'   : {'action': 'ptag %s', 'options': {'quit': 1}},
+                \ 'x'   : {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     return maps
 endfun

@@ -26,6 +26,7 @@ fun! vfinder#source#i(source) abort
 
     return {
                 \   'name'          : options.name,
+                \   'is_valid'      : get(options, 'is_valid', 1),
                 \   'to_execute'    : options.to_execute,
                 \   'format_fun'    : get(options, 'format_fun', ''),
                 \   'candidate_fun' : get(options, 'candidate_fun', function('getline', ['.'])),

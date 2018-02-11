@@ -9,18 +9,25 @@ endfun
 fun! vfinder#sources#outline#get() abort
     return {
                 \   'name'         : 'outline',
+                \   'is_valid'     : s:outline_is_valid(),
                 \   'to_execute'   : s:outline_source(),
                 \   'format_fun'   : function('s:outline_format'),
                 \   'candidate_fun': function('s:outline_candidate_fun'),
-                \   'maps'         : s:outline_maps(),
+                \   'maps'         : vfinder#sources#outline#maps()
                 \ }
 endfun
 
-fun! s:outline_source() abort
+fun! s:outline_is_valid() abort
     if !executable('ctags')
-        call vfinder#helpers#Throw('"ctags" was not found')
+        call vfinder#helpers#Echo('"ctags" was not found', 'Error', 1)
+        return 0
+    else
+        return 1
     endif
-    return 'ctags -x ' . expand('%')
+endfun
+
+fun! s:outline_source() abort
+    return 'ctags -x ' . expand('%') . ' --sort=no'
 endfun
 
 fun! s:outline_format(tags) abort
@@ -41,7 +48,7 @@ fun! s:outline_candidate_fun() abort
     return matchstr(getline('.'), '\d\+$')
 endfun
 
-fun! s:outline_maps() abort
+fun! vfinder#sources#outline#maps() abort
     return {
                 \   'i': {'<CR>': {'action': '%s', 'options': {'quit': 1}}},
                 \   'n': {'<CR>': {'action': '%s', 'options': {'quit': 1}}},

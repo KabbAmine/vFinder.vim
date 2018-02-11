@@ -38,7 +38,7 @@ fun! s:buffers_candidate_fun() abort
 endfun
 
 fun! s:buffers_maps() abort
-    let maps = vfinder#sources#files#get().maps
+    let maps = vfinder#sources#files#maps()
     call extend(maps.i, {
                 \ '<C-d>' : {
                 \       'action': 'bwipeout! %s',

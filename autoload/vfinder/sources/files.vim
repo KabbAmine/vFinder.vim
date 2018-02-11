@@ -7,11 +7,27 @@ fun! vfinder#sources#files#check()
 endfun
 
 fun! vfinder#sources#files#get() abort
+    let is_valid = s:files_is_valid() ? 1 : 0
+    redraw!
     return {
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
-                \   'maps'         : s:files_maps(),
+                \   'maps'         : vfinder#sources#files#maps(),
+                \   'is_valid'     : is_valid,
                 \ }
+endfun
+
+fun! s:files_is_valid()
+    if getcwd() isnot# $HOME
+        return 1
+    else
+        let old_vf_verbose_option = g:vfinder_verbose
+        let g:vfinder_verbose = 1
+        call vfinder#helpers#Echo('Gathering candidates from $HOME may freeze your editor', 'Question')
+        let response = vfinder#helpers#input('Do you want to proceed? [y/N] ', 'Question')
+        let g:vfinder_verbose = old_vf_verbose_option
+        return response =~# 'y\|Y' ? 1 : 0
+    endif
 endfun
 
 fun! s:files_source() abort
@@ -20,7 +36,7 @@ fun! s:files_source() abort
                 \ : 'find * -type f'
 endfun
 
-fun! s:files_maps() abort
+fun! vfinder#sources#files#maps() abort
     let maps = {}
     let maps.i = {
                 \ '<CR>' : {'action': 'edit %s', 'options': {'quit': 1}},

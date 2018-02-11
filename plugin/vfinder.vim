@@ -15,7 +15,7 @@ let s:saveCpoptions = &cpoptions
 set cpoptions&vim
 " 1}}}
 
-" Nothing for now
+let g:vfinder_verbose = get(g:, 'vfinder_verbose', 0)
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

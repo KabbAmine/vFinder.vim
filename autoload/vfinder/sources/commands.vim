@@ -10,7 +10,7 @@ fun! vfinder#sources#commands#get() abort
     return {
                 \   'name'         : 'commands',
                 \   'to_execute'   : s:commands_source(),
-                \   'maps'         : s:commands_maps(),
+                \   'maps'         : vfinder#sources#commands#maps(),
                 \ }
 endfun
 
@@ -18,7 +18,7 @@ fun! s:commands_source() abort
     return getcompletion('', 'command')
 endfun
 
-fun! s:commands_maps() abort
+fun! vfinder#sources#commands#maps() abort
     return {
                 \   'i': {'<CR>' : {'action': '%s', 'options': {'quit': 1}}},
                 \   'n': {'<CR>' : {'action': '%s', 'options': {'quit': 1}}},

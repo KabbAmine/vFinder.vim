@@ -7,6 +7,9 @@
 " sources: command_history, yank...
 " improve the python3 function
 " escape special characters in the query (may be different for python)
+" user options:
+"	* files find command
+"	* ctags executable & options depending of options
 
 
 fun! vfinder#i(source) abort
@@ -14,6 +17,9 @@ fun! vfinder#i(source) abort
 
     try
         let source = vfinder#source#i(a:source)
+        if !source.is_valid
+            return ''
+        endif
 
         let buffer = vfinder#buffer#i(source.name)
         call buffer.new()

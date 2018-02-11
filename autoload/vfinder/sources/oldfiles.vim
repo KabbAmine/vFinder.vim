@@ -19,5 +19,5 @@ fun! s:oldfiles_source() abort
 endfun
 
 fun! s:oldfiles_maps() abort
-    return vfinder#source#i('files').maps
+    return vfinder#sources#files#maps()
 endfun

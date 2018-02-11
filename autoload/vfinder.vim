@@ -4,7 +4,8 @@
 " TODO:
 " capitals is some functions
 " multiple selections
-" sources: command_history, yank...
+" delay filtering when we have a lot of candidates and typing fast.
+" sources: yank...
 " improve the python3 function
 " escape special characters in the query (may be different for python)
 " user options:

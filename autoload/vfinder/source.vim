@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-10
+" Last modification: 2018-02-11
 
 
 fun! vfinder#source#i(source) abort
@@ -99,6 +99,7 @@ fun! s:do(action, candidate_fun, mode, options)
     let line = line('.')
     let quit = vfinder#helpers#have(a:options, 'quit')
     let update = vfinder#helpers#have(a:options, 'update')
+    let silent = vfinder#helpers#have(a:options, 'silent')
     let buffer = bufnr('%')
     let action = !empty(a:action) ? a:action : '%s'
     if in_prompt
@@ -112,7 +113,11 @@ fun! s:do(action, candidate_fun, mode, options)
     if quit
         silent execute 'bwipeout ' . buffer
     endif
-    silent execute cmd
+    if silent
+        silent execute cmd
+    else
+        execute cmd
+    endif
     if !quit
         if update
             call vfinder#events#update_candidates_request()

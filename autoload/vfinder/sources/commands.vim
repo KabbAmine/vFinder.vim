@@ -20,7 +20,7 @@ endfun
 
 fun! vfinder#sources#commands#maps() abort
     return {
-                \   'i': {'<CR>' : {'action': '%s', 'options': {'quit': 1}}},
-                \   'n': {'<CR>' : {'action': '%s', 'options': {'quit': 1}}},
+                \   'i': {'<CR>' : {'action': '%s', 'options': {'quit': 1, 'silent': 0}}},
+                \   'n': {'<CR>' : {'action': '%s', 'options': {'quit': 1, 'silent': 0}}}
                 \ }
 endfun

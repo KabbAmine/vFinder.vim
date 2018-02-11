@@ -10,14 +10,10 @@ fun! vfinder#sources#oldfiles#get() abort
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
-                \   'maps'         : s:oldfiles_maps(),
+                \   'maps'         : vfinder#sources#files#map(),
                 \ }
 endfun
 
 fun! s:oldfiles_source() abort
     return filter(copy(v:oldfiles), 'filereadable(expand(v:val)) && v:val !~# "/vim.*/doc/"')
-endfun
-
-fun! s:oldfiles_maps() abort
-    return vfinder#sources#files#maps()
 endfun

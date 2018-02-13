@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-10
+" Last modification: 2018-02-12
 
 
 fun! vfinder#events#char_inserted() abort
@@ -16,7 +16,8 @@ endfun
 fun! vfinder#events#query_modified() abort
     " This event is called after a manual update, so we ensure to stop it if
     " its the case.
-    if vfinder#helpers#have(b:vf, 'update')
+    " TODO: if needed, it was cheking if update is true
+    if exists('b:vf.update')
         unlet! b:vf.update
         return ''
     endif

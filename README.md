@@ -24,4 +24,5 @@ maps,
 quit,
 silent,
 update,
+function,
 ```

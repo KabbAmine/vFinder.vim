@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-11
+" Last modification: 2018-02-13
 
 
 fun! vfinder#source#i(source) abort
@@ -13,14 +13,14 @@ fun! vfinder#source#i(source) abort
         " executing it, at least AFAIK.
         let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
         if empty(fun_result)
-            call vfinder#helpers#Throw('No source "' . a:source . '" found')
+            call vfinder#helpers#throw('No source "' . a:source . '" found')
             return ''
         endif
         let options = call(fun_name_prefix . '#get', [])
     elseif type(a:source) is# v:t_dict
         let options = a:source
     else
-        call vfinder#helpers#Throw('The source ' . string(a:source) . ' is not valid')
+        call vfinder#helpers#throw('The source ' . string(a:source) . ' is not valid')
         return ''
     endif
 
@@ -47,6 +47,9 @@ endfun
 fun! s:source_execute() dict
     let candidates = []
     if type(self.to_execute) is# v:t_string && filereadable(self.to_execute)
+        " We delay the file reading a little to be sure that the writing
+        " process is done.
+        sleep 150m
         let candidates = readfile(self.to_execute)
     elseif type(self.to_execute) is# v:t_func
         let candidates = call(self.to_execute, [])
@@ -57,7 +60,7 @@ fun! s:source_execute() dict
         let candidates = systemlist(self.to_execute . ' 2> /dev/null',)
     endif
     if candidates is# []
-        call vfinder#helpers#Throw('The source ' . string(self.to_execute) . ' is not valid')
+        call vfinder#helpers#throw('The source ' . string(self.to_execute) . ' is not valid')
         return ''
     endif
     let self.candidates = candidates
@@ -80,11 +83,12 @@ fun! s:source_set_maps() dict
         " string before passing it to the execute command.
         let candidate_fun = string(self.candidate_fun)
         for i in range(0, len(maps_{mode}) - 1)
+            let options = s:set_all_options(values_{mode}[i].options)
             let fun_args = printf('"%s", %s, "%s", %s',
                         \ values_{mode}[i].action,
                         \ candidate_fun,
                         \ mode,
-                        \ values_{mode}[i].options)
+                        \ options)
              silent execute mode . 'noremap <silent> <buffer> ' .
                          \ keys_{mode}[i] . ' ' .
                          \ (mode is# 'i' ? '<Esc>' : '') .
@@ -95,31 +99,45 @@ fun! s:source_set_maps() dict
 endfun
 
 fun! s:do(action, candidate_fun, mode, options)
-    let in_prompt = vfinder#helpers#is_in_prompt()
     let line = line('.')
-    let quit = vfinder#helpers#have(a:options, 'quit')
-    let update = vfinder#helpers#have(a:options, 'update')
-    let silent = vfinder#helpers#have(a:options, 'silent')
     let buffer = bufnr('%')
+    let in_prompt = vfinder#helpers#is_in_prompt()
     let action = !empty(a:action) ? a:action : '%s'
+
     if in_prompt
         silent normal! j
-        let target = !empty(a:candidate_fun) ? a:candidate_fun() : ''
+        let target = a:candidate_fun()
         silent normal! k
     else
-        let target = !empty(a:candidate_fun) ? a:candidate_fun() : ''
+        let target = a:candidate_fun()
     endif
-    let cmd = printf(action, target)
-    if quit
+
+    if a:options.quit
+        silent execute 'wincmd p'
         silent execute 'bwipeout ' . buffer
     endif
-    if silent
-        silent execute cmd
+
+    " A capital C in case we have a funcref
+    let Cmd = a:options.function
+                \ ? function(action, [target])
+                \ : printf(action, target)
+
+    if a:options.silent
+        if a:options.function
+            silent call Cmd()
+        else
+            silent execute Cmd
+        endif
     else
-        execute cmd
+        if a:options.function
+            call Cmd()
+        else
+            execute Cmd
+        endif
     endif
-    if !quit
-        if update
+
+    if !a:options.quit
+        if a:options.update
             call vfinder#events#update_candidates_request()
         endif
         if a:mode is# 'i'
@@ -127,4 +145,13 @@ fun! s:do(action, candidate_fun, mode, options)
             silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
         endif
     endif
+endfun
+
+fun! s:set_all_options(options) abort
+    let opts = copy(a:options)
+    let opts.quit = get(opts, 'quit', 1)
+    let opts.update = get(opts, 'update', 0)
+    let opts.silent = get(opts, 'silent', 1)
+    let opts.function = get(opts, 'function', '')
+    return opts
 endfun

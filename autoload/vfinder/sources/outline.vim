@@ -19,7 +19,7 @@ endfun
 
 fun! s:outline_is_valid() abort
     if !executable('ctags')
-        call vfinder#helpers#Echo('"ctags" was not found', 'Error', 1)
+        call vfinder#helpers#echo('"ctags" was not found', 'Error', 1)
         return 0
     else
         return 1

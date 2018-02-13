@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-11
+" Last modification: 2018-02-13
 
 
 fun! vfinder#helpers#go_to_prompt()
@@ -11,20 +11,16 @@ fun! vfinder#helpers#is_in_prompt()
     return line('.') is# 1 ? 1 : 0
 endfun
 
-fun! vfinder#helpers#have(options, option) abort
-    return has_key(a:options, a:option) && a:options[a:option] is# 1 ? 1 : 0
-endfun
-
 fun! vfinder#helpers#process_query(query) abort
     return join(split(escape(a:query, '.|*')), '.*')
 endfun
 
-fun! vfinder#helpers#Throw(msg) abort
+fun! vfinder#helpers#throw(msg) abort
     let v:errmsg = s:Msg(a:msg, 'error')
     throw v:errmsg
 endfun
 
-fun! vfinder#helpers#Echo(msg, higroup, ...) abort
+fun! vfinder#helpers#echo(msg, higroup, ...) abort
     if g:vfinder_verbose || exists('a:1') && a:1
         let msg = a:msg =~# '^\V[vfinder]' ? a:msg : s:Msg(a:msg)
         silent execute 'echohl ' . a:higroup
@@ -43,7 +39,7 @@ endfun
 fun! vfinder#helpers#question(infos, question) abort
     let old_vf_verbose_option = g:vfinder_verbose
     let g:vfinder_verbose = 1
-    call vfinder#helpers#Echo(a:infos, 'Question')
+    call vfinder#helpers#echo(a:infos, 'Question')
     let response = vfinder#helpers#input(a:question . ' [y/N] ', 'Question')
     let g:vfinder_verbose = old_vf_verbose_option
     return response

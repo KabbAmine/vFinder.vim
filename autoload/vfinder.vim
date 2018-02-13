@@ -1,17 +1,26 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-11
+" Last modification: 2018-02-13
 
 " TODO:
+" sources: mru,...
+" replace a vf window if it already exist (or maybe not?)
+" do not open tags when no tagfiles
 " capitals is some functions
 " multiple selections
 " delay filtering when we have a lot of candidates and typing fast.
-" sources: yank...
 " improve the python3 function
 " escape special characters in the query (may be different for python)
 " user options:
 "	* files find command
 "	* ctags executable & options depending of options
+"	* empty candidates
 
+fun! vfinder#cache_yanked(content) abort
+    " a:content is a string and can have multiple lines.
+    if len(a:content) ># 1 || (len(a:content) is# 1 && len(a:content[0]) ># 1)
+        call vfinder#cache#write('yank', [join(a:content, "\n")])
+    endif
+endfun
 
 fun! vfinder#i(source) abort
     " if name is {} then its a custom source.
@@ -19,6 +28,7 @@ fun! vfinder#i(source) abort
     try
         let source = vfinder#source#i(a:source)
         if !source.is_valid
+            call vfinder#helpers#echo('The source is not valid', 'Error')
             return ''
         endif
 
@@ -29,7 +39,7 @@ fun! vfinder#i(source) abort
         let prompt = vfinder#prompt#i()
         call prompt.render()
 
-        call vfinder#helpers#Echo('Candidates gathering...', 'Function')
+        call vfinder#helpers#echo('Candidates gathering...', 'Function')
         let candidates = vfinder#candidates#i(b:vf)
         call candidates.get().populate()
         let b:vf.original_candidates = candidates.original_list
@@ -37,7 +47,7 @@ fun! vfinder#i(source) abort
 
         startinsert!
     catch /^\[vfinder\].*$/
-        call vfinder#helpers#Echo(v:errmsg, 'Error')
+        call vfinder#helpers#echo(v:errmsg, 'Error')
     endtry
 endfun
 

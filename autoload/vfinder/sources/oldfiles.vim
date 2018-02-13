@@ -10,7 +10,7 @@ fun! vfinder#sources#oldfiles#get() abort
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
-                \   'maps'         : vfinder#sources#files#map(),
+                \   'maps'         : vfinder#sources#files#maps(),
                 \ }
 endfun
 

@@ -21,12 +21,7 @@ let g:vfinder_cache_path = get(g:, 'vfinder_cache_path', $HOME . '/.cache/vfinde
 let g:vfinder_yank_source_enabled = get(g:, 'g:vfinder_yank_source_enabled', 1)
 " 1}}}
 
-if g:vfinder_yank_source_enabled
-    augroup VFCaching
-        autocmd!
-        autocmd TextYankPost * :call vfinder#cache_yanked(v:event.regcontents)
-    augroup END
-endif
+call vfinder#enable_autocmds()
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

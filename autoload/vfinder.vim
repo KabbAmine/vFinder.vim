@@ -15,7 +15,16 @@
 "	* ctags executable & options depending of options
 "	* empty candidates
 
-fun! vfinder#cache_yanked(content) abort
+fun! vfinder#enable_autocmds() abort
+    if g:vfinder_yank_source_enabled
+        augroup VFCaching
+            autocmd!
+            autocmd TextYankPost * :call <SID>cache_yanked(v:event.regcontents)
+        augroup END
+    endif
+endfun
+
+fun! s:cache_yanked(content) abort
     " a:content is a string and can have multiple lines.
     if len(a:content) ># 1 || (len(a:content) is# 1 && len(a:content[0]) ># 1)
         call vfinder#cache#write('yank', [join(a:content, "\n")])

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-11
+" Last modification: 2018-02-13
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -15,7 +15,18 @@ let s:saveCpoptions = &cpoptions
 set cpoptions&vim
 " 1}}}
 
-let g:vfinder_verbose = get(g:, 'vfinder_verbose', 0)
+" Options {{{1
+let g:vfinder_verbose = get(g:, 'vfinder_verbose', 1)	" TODO: default to 0
+let g:vfinder_cache_path = get(g:, 'vfinder_cache_path', $HOME . '/.cache/vfinder')
+let g:vfinder_yank_source_enabled = get(g:, 'g:vfinder_yank_source_enabled', 1)
+" 1}}}
+
+if g:vfinder_yank_source_enabled
+    augroup VFCaching
+        autocmd!
+        autocmd TextYankPost * :call vfinder#cache_yanked(v:event.regcontents)
+    augroup END
+endif
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

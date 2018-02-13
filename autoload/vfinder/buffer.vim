@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-09
+" Last modification: 2018-02-13
 
 
 fun! vfinder#buffer#i(name) abort
@@ -18,7 +18,7 @@ endfun
 fun! s:buffer_new() dict
     call self.quit()
     silent execute 'topleft split ' . self.name
-    call self.set_syntax().set_options().set_maps().set_autocmds()
+    call self.set_options().set_syntax().set_maps().set_autocmds()
     call self.set_statusline()
     return self
 endfun
@@ -29,6 +29,7 @@ fun! s:buffer_quit() dict
 endfun
 
 fun! s:buffer_set_options() dict
+    setfiletype vfinder
     setlocal nonumber
     setlocal nobuflisted
     setlocal buftype=nofile
@@ -68,6 +69,8 @@ fun! s:buffer_set_maps() dict
     nnoremap <silent> <buffer> c <Nop>
     nnoremap <silent> <buffer> d <Nop>
     nnoremap <silent> <buffer> <CR> <Nop>
+    inoremap <silent> <buffer> <F5> <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>
+    nnoremap <silent> <buffer> <F5> :call <SID>clean_cache_if_it_exists()<CR>
     return self
 endfun
 
@@ -148,4 +151,19 @@ fun! s:update_candidates_n() abort
     call vfinder#events#update_candidates_request()
     call setpos('.', pos)
     stopinsert
+endfun
+
+fun! s:clean_cache_if_it_exists(...) abort
+    " a:1 is when we came from insert mode
+    let name = bufname('%')
+    if vfinder#cache#exists(name)
+        call vfinder#cache#clean(name)
+        call vfinder#events#update_candidates_request()
+        silent execute exists('a:1') ? 'startinsert!' : 'normal! 1gg$'
+    else
+        call vfinder#helpers#echo('No cache for the source "' . name . '"', 'Function')
+        if exists('a:1')
+            call s:set_insertion_position()
+        endif
+    endif
 endfun

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-11
+" Last modification: 2018-02-13
 
 
 fun! vfinder#candidates#i(source) abort
@@ -64,7 +64,9 @@ endfun
 fun! s:candidates_highlight_matched() dict
     call clearmatches()
     if !empty(self.query)
-        call matchadd('CursorLineNr', '\c' . self.query)
+        for q in split(self.query, '\.\*')
+            call matchadd('CursorLineNr', '\c' . q)
+        endfor
     endif
     return self
 endfun

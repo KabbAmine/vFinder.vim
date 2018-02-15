@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-13
+" Last modification: 2018-02-15
 
 
 fun! vfinder#helpers#go_to_prompt()
@@ -16,13 +16,13 @@ fun! vfinder#helpers#process_query(query) abort
 endfun
 
 fun! vfinder#helpers#throw(msg) abort
-    let v:errmsg = s:Msg(a:msg, 'error')
+    let v:errmsg = s:msg(a:msg, 'error')
     throw v:errmsg
 endfun
 
 fun! vfinder#helpers#echo(msg, higroup, ...) abort
     if g:vfinder_verbose || exists('a:1') && a:1
-        let msg = a:msg =~# '^\V[vfinder]' ? a:msg : s:Msg(a:msg)
+        let msg = a:msg =~# '^\V[vfinder]' ? a:msg : s:msg(a:msg)
         silent execute 'echohl ' . a:higroup
         echomsg msg
         echohl None
@@ -45,7 +45,11 @@ fun! vfinder#helpers#question(infos, question) abort
     return response
 endfun
 
-fun! s:Msg(content, ...) abort
+fun! s:msg(content, ...) abort
     let extra = exists('a:1') ? '[' . a:1 . '] ' : ''
     return '[vfinder] ' . extra . a:content
+endfun
+
+fun! vfinder#helpers#uniq(a_list) abort
+    return filter(copy(a:a_list), {i, v -> index(a:a_list, v, i + 1) is -1})
 endfun

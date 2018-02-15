@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-13
+" Last modification: 2018-02-15
 
 " TODO: go to the end of the text after pasting it.
 
@@ -10,13 +10,18 @@ endfun
 fun! vfinder#sources#yank#get() abort
     return {
                 \   'name'         : 'yank',
-                \   'to_execute'   : s:yank_source(),
+                \   'to_execute'   : function('s:yank_source'),
                 \   'maps'         : vfinder#sources#yank#maps()
                 \ }
 endfun
 
 fun! s:yank_source() abort
-    return vfinder#cache#get('yank')
+    let yanked = g:vf_cache.yank
+    if empty(yanked)
+        let yanked = vfinder#cache#read('yank')
+        let g:vf_cache.yank = yanked
+    endif
+    return yanked
 endfun
 
 fun! vfinder#sources#yank#maps() abort

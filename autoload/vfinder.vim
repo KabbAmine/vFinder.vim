@@ -1,9 +1,13 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-13
+" Last modification: 2018-02-15
 
 " TODO:
 " sources: mru,...
+" fix <C-w> in prompt
 " replace a vf window if it already exist (or maybe not?)
+" simply echo action, for command history
+" 'no candidates, the source is not valid'
+" save only yanked and not deleted(d)/modified(c)(?)
 " do not open tags when no tagfiles
 " capitals is some functions
 " multiple selections
@@ -16,18 +20,32 @@
 "	* empty candidates
 
 fun! vfinder#enable_autocmds() abort
-    if g:vfinder_yank_source_enabled
-        augroup VFCaching
-            autocmd!
-            autocmd TextYankPost * :call <SID>cache_yanked(v:event.regcontents)
-        augroup END
-    endif
+    " TODO: try to not expose this variable
+    let g:vf_cache = {}
+    augroup VFCaching
+        autocmd!
+        if g:vfinder_yank_source_enabled
+            let g:vf_cache.yank = []
+            autocmd TextYankPost * :call <SID>save_yanked(v:event.regcontents)
+            autocmd VimLeave * :call <SID>cache_yanked()
+        endif
+    augroup END
 endfun
 
-fun! s:cache_yanked(content) abort
+fun! s:save_yanked(content) abort
     " a:content is a string and can have multiple lines.
+
+    let yanked = exists('g:vf_cache') && has_key(g:vf_cache, 'yank')
+                \ ? g:vf_cache.yank : []
     if len(a:content) ># 1 || (len(a:content) is# 1 && len(a:content[0]) ># 1)
-        call vfinder#cache#write('yank', [join(a:content, "\n")])
+        let yanked = [join(a:content, "\n")] + yanked
+    endif
+    let g:vf_cache.yank = vfinder#helpers#uniq(yanked)
+endfun
+
+fun! s:cache_yanked() abort
+    if exists('g:vf_cache') && has_key(g:vf_cache, 'yank') && !empty(g:vf_cache.yank)
+        call vfinder#cache#write('yank', g:vf_cache.yank)
     endif
 endfun
 

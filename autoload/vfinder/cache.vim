@@ -1,5 +1,5 @@
 " Creation         : 2018-02-12
-" Last modification: 2018-02-13
+" Last modification: 2018-02-15
 
 
 " The cache is used only for the sources:
@@ -15,18 +15,26 @@ endfun
 
 fun! vfinder#cache#write(name, content) abort
     let cache_file = vfinder#cache#get(a:name)
-    let old_content = readfile(cache_file)
-    let new_content = copy(a:content) + old_content
-    " Remove duplicates.
-    let new_content = filter(copy(new_content), {i, v -> index(new_content, v, i + 1) is -1})
-    call writefile(new_content, cache_file)
+    call writefile(a:content, cache_file)
 endfun
 
 fun! vfinder#cache#clean(...) abort
-    " Clean all cache files if a:1 does not exit, otherwise clean only a:1.
-    let files = exists('a:1')
-                \ ? [vfinder#cache#get(a:1)]
-                \ : glob(vfinder#cache#get() . '/*', '', 1)
+    " Clean all cache files and temp cache variables if a:1 does not exit,
+    " otherwise clean only a:1.
+
+    if exists('a:1')
+        let files = [vfinder#cache#get(a:1)]
+        if exists('g:vf_cache.' . a:1)
+            let g:vf_cache[a:1] = []
+        endif
+    else
+        let files = glob(vfinder#cache#get() . '/*', '', 1)
+        if exists('g:vf_cache')
+            for k in keys(g:vf_cache)
+                let k = []
+            endfor
+        endif
+    endif
     for f in files
         call writefile([], f)
     endfor

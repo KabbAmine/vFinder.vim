@@ -1,7 +1,6 @@
 " Creation         : 2018-02-11
 " Last modification: 2018-02-15
 
-" TODO: go to the end of the text after pasting it.
 
 fun! vfinder#sources#yank#check()
     return v:true

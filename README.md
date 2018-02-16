@@ -25,4 +25,5 @@ quit,
 silent,
 update,
 function,
+echo,
 ```

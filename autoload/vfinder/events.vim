@@ -16,7 +16,6 @@ endfun
 fun! vfinder#events#query_modified() abort
     " This event is called after a manual update, so we ensure to stop it if
     " its the case.
-    " TODO: if needed, it was cheking if update is true
     if exists('b:vf.update')
         unlet! b:vf.update
         return ''

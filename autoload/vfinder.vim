@@ -1,26 +1,8 @@
 " Creation         : 2018-02-04
 " Last modification: 2018-02-15
 
-" TODO:
-" sources: mru,...
-" fix <C-w> in prompt
-" replace a vf window if it already exist (or maybe not?)
-" simply echo action, for command history
-" 'no candidates, the source is not valid'
-" save only yanked and not deleted(d)/modified(c)(?)
-" do not open tags when no tagfiles
-" capitals is some functions
-" multiple selections
-" delay filtering when we have a lot of candidates and typing fast.
-" improve the python3 function
-" escape special characters in the query (may be different for python)
-" user options:
-"	* files find command
-"	* ctags executable & options depending of options
-"	* empty candidates
 
 fun! vfinder#enable_autocmds() abort
-    " TODO: try to not expose this variable
     let g:vf_cache = {}
     augroup VFCaching
         autocmd!

@@ -56,7 +56,6 @@ fun! s:source_execute() dict
     elseif type(self.to_execute) is# v:t_list
         let candidates = self.to_execute
     elseif type(self.to_execute) is# v:t_string
-        " TODO: add windows black hole in the helpers
         let candidates = systemlist(self.to_execute . ' 2> /dev/null',)
     endif
     if candidates is# []
@@ -122,18 +121,13 @@ fun! s:do(action, candidate_fun, mode, options)
                 \ ? function(action, [target])
                 \ : printf(action, target)
 
-    if a:options.silent
-        if a:options.function
-            silent call Cmd()
-        else
-            silent execute Cmd
-        endif
+    let silent = a:options.silent ? 'silent' : ''
+    if a:options.function
+        execute silent . ' call Cmd()'
+    elseif a:options.echo
+        execute silent . ' call feedkeys(":" . Cmd)'
     else
-        if a:options.function
-            call Cmd()
-        else
-            execute Cmd
-        endif
+        execute silent ' execute Cmd'
     endif
 
     if !a:options.quit
@@ -153,5 +147,6 @@ fun! s:set_all_options(options) abort
     let opts.update = get(opts, 'update', 0)
     let opts.silent = get(opts, 'silent', 1)
     let opts.function = get(opts, 'function', '')
+    let opts.echo = get(opts, 'echo', 0)
     return opts
 endfun

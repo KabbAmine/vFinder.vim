@@ -23,7 +23,17 @@ fun! s:save_yanked(content) abort
     if len(a:content) ># 1 || (len(a:content) is# 1 && len(a:content[0]) ># 1)
         let yanked = [join(a:content, "\n")] + yanked
     endif
-    let g:vf_cache.yank = vfinder#helpers#uniq(yanked)
+    let g:vf_cache.yank = s:filter_yank(yanked)
+endfun
+
+fun! s:filter_yank(a_list) abort
+    let res = []
+    for item in a:a_list
+        if index(res, item) is# -1
+            call add(res, item)
+        endif
+    endfor
+    return res
 endfun
 
 " mru

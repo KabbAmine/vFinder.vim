@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-15
+" Last modification: 2018-02-16
 
 
 fun! vfinder#helpers#go_to_prompt()
@@ -48,8 +48,4 @@ endfun
 fun! s:msg(content, ...) abort
     let extra = exists('a:1') ? '[' . a:1 . '] ' : ''
     return '[vfinder] ' . extra . a:content
-endfun
-
-fun! vfinder#helpers#uniq(a_list) abort
-    return filter(copy(a:a_list), {i, v -> index(a:a_list, v, i + 1) is -1})
 endfun

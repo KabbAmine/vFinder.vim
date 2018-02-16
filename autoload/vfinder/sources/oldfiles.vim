@@ -15,5 +15,12 @@ fun! vfinder#sources#oldfiles#get() abort
 endfun
 
 fun! s:oldfiles_source() abort
-    return filter(copy(v:oldfiles), 'filereadable(expand(v:val)) && v:val !~# "/vim.*/doc/"')
+    return filter(copy(v:oldfiles), {i, v ->
+                \   filereadable(expand(v))
+                \   && vfinder#sources#oldfiles#file_is_valid(v)
+                \ })
+endfun
+
+fun! vfinder#sources#oldfiles#file_is_valid(f) abort
+    return a:f !~#  '/vim.*/doc/' ? 1 : 0
 endfun

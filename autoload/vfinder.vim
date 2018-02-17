@@ -86,7 +86,6 @@ fun! vfinder#i(source) abort
     try
         let source = vfinder#source#i(a:source)
         if !source.is_valid
-            call vfinder#helpers#echo('The source is not valid', 'Error')
             return ''
         endif
 

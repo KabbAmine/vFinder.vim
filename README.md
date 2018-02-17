@@ -1,4 +1,20 @@
-# source
+# sources
+
+## default sources
+
+- files
+- buffers
+- mru
+- oldfiles
+- commands
+- command_history
+- tags
+- outline
+- yank
+- yank
+
+
+# source options
 
 ```viml
 name,

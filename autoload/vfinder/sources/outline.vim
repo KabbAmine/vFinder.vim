@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-11
+" Last modification: 2018-02-17
 
 
 fun! vfinder#sources#outline#check()
@@ -27,7 +27,29 @@ fun! s:outline_is_valid() abort
 endfun
 
 fun! s:outline_source() abort
-    return 'ctags -x ' . expand('%') . ' --sort=no'
+    " Return the approriate ctags command string.
+    " current_file.py    -> return 'ctags --sort=no current_file.py'
+    " current_file.py[+] -> save the content to a temp file 'xxx.py' and return
+    " 			    'ctags --sort=no xxx.py'
+    " current_file[+]    -> save the content to a temp file 'xxx' and return
+    " 			    'ctags --sort=no --language-force=&l:ft xxx'
+
+    let cmd = ['ctags', '--sort=no']
+    if !&l:modified
+        let cmd += ['-x', expand('%:p')]
+    else
+        let ext = fnamemodify(bufname('%'), ':e')
+        let ft = &l:filetype
+        let temp_file = tempname()
+        if empty(ext)
+            let cmd += ['--language-force=' . ft]
+        else
+            let temp_file .= '.' . ext
+        endif
+        call writefile(getline(1, '$'), temp_file)
+        let cmd += ['-x', temp_file]
+    endif
+    return join(cmd)
 endfun
 
 fun! s:outline_format(tags) abort

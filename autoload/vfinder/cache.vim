@@ -1,9 +1,10 @@
 " Creation         : 2018-02-12
-" Last modification: 2018-02-15
+" Last modification: 2018-02-18
 
 
-" The cache is used only for the sources:
+" The cache is used for the sources:
 " * yank
+" * mru
 
 fun! vfinder#cache#read(name) abort
     return readfile(vfinder#cache#get(a:name))

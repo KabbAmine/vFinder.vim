@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-11
+" Last modification: 2018-02-19
 
 
 fun! vfinder#sources#tags#check()
@@ -57,16 +57,16 @@ endfun
 fun! vfinder#sources#tags#maps() abort
     let maps = {}
     let maps.i = {
-                \ '<CR>' : {'action': 'tag %s', 'options': {'quit': 1}},
-                \ '<C-s>': {'action': 'split \| tag %s', 'options': {'quit': 1}},
-                \ '<C-v>': {'action': 'vertical split \| tag %s', 'options': {'quit': 1}},
-                \ '<C-x>': {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ '<CR>' : {'action': 'tag %s', 'options': {}},
+                \ '<C-s>': {'action': 'split \| tag %s', 'options': {}},
+                \ '<C-v>': {'action': 'vertical split \| tag %s', 'options': {}},
+                \ '<C-o>': {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     let maps.n = {
-                \ '<CR>': {'action': 'tag %s', 'options': {'quit': 1}},
-                \ 's'   : {'action': 'split \| tag %s', 'options': {'quit': 1}},
-                \ 'v'   : {'action': 'vertical split \| tag %s', 'options': {'quit': 1}},
-                \ 'x'   : {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ '<CR>': {'action': 'tag %s', 'options': {}},
+                \ 's'   : {'action': 'split \| tag %s', 'options': {}},
+                \ 'v'   : {'action': 'vertical split \| tag %s', 'options': {}},
+                \ 'o'   : {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     return maps
 endfun

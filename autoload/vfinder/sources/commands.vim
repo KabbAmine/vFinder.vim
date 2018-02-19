@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-11
+" Last modification: 2018-02-19
 
 
 fun! vfinder#sources#commands#check()
@@ -20,7 +20,7 @@ endfun
 
 fun! vfinder#sources#commands#maps() abort
     return {
-                \   'i': {'<CR>' : {'action': '%s', 'options': {'quit': 1, 'silent': 0}}},
-                \   'n': {'<CR>' : {'action': '%s', 'options': {'quit': 1, 'silent': 0}}}
+                \   'i': {'<CR>' : {'action': '%s', 'options': {'silent': 0}}},
+                \   'n': {'<CR>' : {'action': '%s', 'options': {'silent': 0}}}
                 \ }
 endfun

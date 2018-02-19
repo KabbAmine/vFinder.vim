@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-17
+" Last modification: 2018-02-19
 
 
 fun! vfinder#sources#outline#check()
@@ -72,7 +72,7 @@ endfun
 
 fun! vfinder#sources#outline#maps() abort
     return {
-                \   'i': {'<CR>': {'action': '%s', 'options': {'quit': 1}}},
-                \   'n': {'<CR>': {'action': '%s', 'options': {'quit': 1}}},
+                \   'i': {'<CR>': {'action': '%s', 'options': {}}},
+                \   'n': {'<CR>': {'action': '%s', 'options': {}}},
                 \ }
 endfun

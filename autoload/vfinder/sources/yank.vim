@@ -41,13 +41,14 @@ fun! s:yank_format(yank_l) abort
 endfun
 
 fun! s:yank_candidate_fun() abort
-    return matchstr(getline('.'), '^\d\+: \zs.*')
+    " the text is like: '100- Foo bar'
+    return getline('.')[5:]
 endfun
 
 fun! vfinder#sources#yank#maps() abort
     return {
-                \   'i': {'<CR>': {'action': function('s:paste'), 'options': {'quit': 1, 'function': 1}}},
-                \   'n': {'<CR>': {'action': function('s:paste'), 'options': {'quit': 1, 'function': 1}}},
+                \   'i': {'<CR>': {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'n': {'<CR>': {'action': function('s:paste'), 'options': {'function': 1}}},
                 \ }
 endfun
 

@@ -2,17 +2,17 @@
 
 ## default sources
 
-- files
 - buffers
+- colors
+- command_history
+- commands
+- directories
+- files
 - mru
 - oldfiles
-- commands
-- command_history
-- tags
 - outline
+- tags
 - yank
-- yank
-
 
 # source options
 

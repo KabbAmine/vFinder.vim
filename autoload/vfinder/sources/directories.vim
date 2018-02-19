@@ -39,14 +39,14 @@ fun! vfinder#sources#directories#maps() abort " {{{2
                 \ }
     return {
                 \   'i': {
-                \       '<CR>' : {'action': 'cd %s', 'options': options},
-                \       '<C-h>': {'action': 'cd ..', 'options': options},
-                \       '<C-s>': {'action': 'cd %s', 'options': {'silent': 0}}
+                \       '<CR>' : {'action': 'cd %s', 'options': {'silent': 0}},
+                \       '<C-o>': {'action': 'cd %s', 'options': options},
+                \       '<C-e>': {'action': 'cd ..', 'options': options}
                 \   },
                 \   'n': {
                 \       '<CR>': {'action': 'cd %s', 'options': options},
-                \       'u'   : {'action': 'cd ..', 'options': options},
-                \       'cd'   : {'action': 'cd %s', 'options': {'silent': 0}}
+                \       'o'   : {'action': 'cd %s', 'options': {'silent': 0}},
+                \       'e'   : {'action': 'cd ..', 'options': options},
                 \   }
                 \ }
 endfun

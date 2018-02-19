@@ -43,16 +43,16 @@ endfun
 fun! vfinder#sources#files#maps() abort
     let maps = {}
     let maps.i = {
-                \ '<CR>' : {'action': 'edit %s', 'options': {'quit': 1}},
-                \ '<C-s>': {'action': 'split %s', 'options': {'quit': 1}},
-                \ '<C-v>': {'action': 'vertical split %s', 'options': {'quit': 1}},
-                \ '<C-t>': {'action': 'tabedit %s', 'options': {'quit': 1}}
+                \ '<CR>' : {'action': 'edit %s', 'options': {}},
+                \ '<C-s>': {'action': 'split %s', 'options': {}},
+                \ '<C-v>': {'action': 'vertical split %s', 'options': {}},
+                \ '<C-t>': {'action': 'tabedit %s', 'options': {}}
                 \ }
     let maps.n = {
-                \ '<CR>': {'action': 'edit %s', 'options': {'quit': 1}},
-                \ 's'    : {'action': 'split %s', 'options': {'quit': 1}},
-                \ 'v'    : {'action': 'vertical split %s', 'options': {'quit': 1}},
-                \ 't'    : {'action': 'tabedit %s', 'options': {'quit': 1}}
+                \ '<CR>': {'action': 'edit %s', 'options': {}},
+                \ 's'   : {'action': 'split %s', 'options': {}},
+                \ 'v'   : {'action': 'vertical split %s', 'options': {}},
+                \ 't'   : {'action': 'tabedit %s', 'options': {}}
                 \ }
     return maps
 endfun

@@ -132,6 +132,11 @@ fun! s:do(action, candidate_fun, mode, options)
         execute silent ' execute Cmd'
     endif
 
+    if !silent && !a:options.echo
+        let to_add = a:options.function ? string(Cmd) : Cmd
+        call histadd('cmd', to_add)
+    endif
+
     if !a:options.quit
         if a:options.clear_prompt
             let prompt = vfinder#prompt#i()

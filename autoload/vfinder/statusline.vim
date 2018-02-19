@@ -1,5 +1,5 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-02-09
+" Last modification: 2018-02-19
 
 
 fun! vfinder#statusline#get() abort
@@ -32,8 +32,8 @@ fun! s:count_candidates() abort
 endfun
 
 fun! s:current_item() abort
-    let current_item = line('.') - 1
-    return current_item ? current_item : 0
+    let l = line('.')
+    return l is# 1 ? 1 : l - 1
 endfun
 
 fun! s:count_filtered() abort

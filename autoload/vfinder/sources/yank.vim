@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-16
+" Last modification: 2018-02-19
 
 
 fun! vfinder#sources#yank#check()
@@ -10,6 +10,8 @@ fun! vfinder#sources#yank#get() abort
     return {
                 \   'name'         : 'yank',
                 \   'to_execute'   : function('s:yank_source'),
+                \   'format_fun'   : function('s:yank_format'),
+                \   'candidate_fun': function('s:yank_candidate_fun'),
                 \   'maps'         : vfinder#sources#yank#maps()
                 \ }
 endfun
@@ -19,8 +21,27 @@ fun! s:yank_source() abort
     if empty(yanked)
         let yanked = vfinder#cache#read('yank')
         let g:vf_cache.yank = yanked
+    elseif len(yanked) ># 100
+        let yanked = g:vf_cache.yank[:99]
+        let g:vf_cache.yank = yanked
     endif
     return yanked
+endfun
+
+fun! s:yank_format(yank_l) abort
+    let res = []
+    for i in range(0, len(a:yank_l) - 1)
+        call add(res, printf(
+                    \   '%-3d: %s',
+                    \   i + 1,
+                    \   substitute(a:yank_l[i], '\n', '\\n', 'g')
+                    \ ))
+    endfor
+    return res
+endfun
+
+fun! s:yank_candidate_fun() abort
+    return matchstr(getline('.'), '^\d\+: \zs.*')
 endfun
 
 fun! vfinder#sources#yank#maps() abort

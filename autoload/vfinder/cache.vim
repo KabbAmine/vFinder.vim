@@ -1,5 +1,5 @@
 " Creation         : 2018-02-12
-" Last modification: 2018-02-18
+" Last modification: 2018-02-19
 
 
 " The cache is used for the sources:
@@ -14,9 +14,10 @@ fun! vfinder#cache#exists(name) abort
     return filereadable(vfinder#cache#get() . '/' . a:name)
 endfun
 
-fun! vfinder#cache#write(name, content) abort
+fun! vfinder#cache#write(name, content, ...) abort
+    let limit = exists('a:1') ? a:1 - 1 : 99
     let cache_file = vfinder#cache#get(a:name)
-    call writefile(a:content, cache_file)
+    call writefile(a:content[:limit], cache_file)
 endfun
 
 fun! vfinder#cache#clean(...) abort

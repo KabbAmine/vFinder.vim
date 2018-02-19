@@ -42,7 +42,7 @@ endfun
 
 fun! s:yank_candidate_fun() abort
     " the text is like: '100- Foo bar'
-    return getline('.')[5:]
+    return substitute(getline('.')[5:], '\\n', '\n', 'g')
 endfun
 
 fun! vfinder#sources#yank#maps() abort

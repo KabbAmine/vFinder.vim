@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-13
+" Last modification: 2018-02-19
 
 
 fun! vfinder#candidates#i(source) abort
@@ -10,7 +10,6 @@ fun! vfinder#candidates#i(source) abort
                 \   'original_list'    : [],
                 \   'filtered_list'    : [],
                 \   'current'          : [],
-                \   'timer'            : {},
                 \   'get'              : function('s:candidates_get'),
                 \   'delete'           : function('s:candidates_delete'),
                 \   'populate'         : function('s:candidates_populate'),
@@ -64,14 +63,13 @@ endfun
 fun! s:candidates_highlight_matched() dict
     call clearmatches()
     if !empty(self.query)
-        for q in split(self.query, '\.\*')
-            call matchadd('CursorLineNr', '\c' . q)
-        endfor
+        call matchadd('CursorLineNr', '\c' . self.query)
     endif
     return self
 endfun
 
 fun! s:filter(query, candidates) abort
+    " Note that we're using a special vim pattern \{-\} here so no python compatible
     return filter(copy(a:candidates), {i, v -> v =~? a:query})
     " return has('python3')
     "             \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')

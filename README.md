@@ -13,6 +13,7 @@
 - outline
 - tags
 - yank
+- registers
 
 # source options
 

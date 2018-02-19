@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-04
+" Last modification: 2018-02-19
 
 
 fun! vfinder#prompt#i() abort
@@ -12,6 +12,16 @@ fun! vfinder#prompt#i() abort
                 \}
 endfun
 
+fun! s:prompt_render(...) dict
+    if exists('a:1')
+        let self.query = a:1
+        call self.set()
+    else
+        call self.delete().get_query().set()
+    endif
+    return self
+endfun
+
 fun! s:prompt_get_query() dict
     let self.query = getline(1)[2:]
     return self
@@ -19,12 +29,6 @@ endfun
 
 fun! s:prompt_delete() dict
     let self.query = ''
-    call self.render()
-    return self
-endfun
-
-fun! s:prompt_render() dict
-    call self.get_query().set()
     return self
 endfun
 

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-02-10
+" Last modification: 2018-02-20
 
 
 fun! vfinder#sources#buffers#check()
@@ -41,13 +41,19 @@ fun! s:buffers_maps() abort
     let maps = vfinder#sources#files#maps()
     call extend(maps.i, {
                 \ '<C-d>' : {
-                \       'action': 'bwipeout! %s',
-                \       'options': {'update': 1, 'quit': 0}},
+                \       'action': function('s:wipe'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}},
                 \ })
     call extend(maps.n, {
                 \ 'dd' : {
-                \       'action': 'bwipeout! %s',
-                \       'options': {'update': 1, 'quit': 0}},
+                \       'action': function('s:wipe'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}},
                 \ })
     return maps
+endfun
+
+fun! s:wipe(buffer) abort
+    if bufexists(a:buffer)
+        execute 'bwipeout! ' . a:buffer
+    endif
 endfun

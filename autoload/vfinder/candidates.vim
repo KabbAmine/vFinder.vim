@@ -69,8 +69,11 @@ fun! s:candidates_highlight_matched() dict
 endfun
 
 fun! s:filter(query, candidates) abort
-    " Note that we're using a special vim pattern \{-\} here so no python compatible
-    return filter(copy(a:candidates), {i, v -> v =~? a:query})
+    " Note that we're using a special vim pattern \{-\} here which is no
+    " compatible with python
+    return a:query =~# '\u'
+                \ ? filter(copy(a:candidates), {i, v -> v =~# a:query})
+                \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
     " return has('python3')
     "             \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')
     "             \ : filter(copy(a:candidates), {i, v -> v =~? a:query})

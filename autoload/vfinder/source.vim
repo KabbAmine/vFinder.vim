@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-13
+" Last modification: 2018-02-20
 
 
 fun! vfinder#source#i(source) abort
@@ -132,7 +132,7 @@ fun! s:do(action, candidate_fun, mode, options)
         execute silent ' execute Cmd'
     endif
 
-    if !silent && !a:options.echo
+    if !a:options.silent && !a:options.echo
         let to_add = a:options.function ? string(Cmd) : Cmd
         call histadd('cmd', to_add)
     endif

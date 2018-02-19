@@ -117,9 +117,11 @@ fun! s:do(action, candidate_fun, mode, options)
     endif
 
     " A capital C in case we have a funcref
-    let Cmd = a:options.function
-                \ ? function(action, [target])
-                \ : printf(action, target)
+    if a:options.function
+        let Cmd = function(action, [target])
+    else
+        let Cmd = action =~ '%s' ? printf(action, target) : action
+    endif
 
     let silent = a:options.silent ? 'silent' : ''
     if a:options.function
@@ -131,6 +133,11 @@ fun! s:do(action, candidate_fun, mode, options)
     endif
 
     if !a:options.quit
+        if a:options.clear_prompt
+            let prompt = vfinder#prompt#i()
+            call prompt.render('')
+            call clearmatches()
+        endif
         if a:options.update
             call vfinder#events#update_candidates_request()
         endif
@@ -148,5 +155,6 @@ fun! s:set_all_options(options) abort
     let opts.silent = get(opts, 'silent', 1)
     let opts.function = get(opts, 'function', '')
     let opts.echo = get(opts, 'echo', 0)
+    let opts.clear_prompt = get(opts, 'clear_prompt', 0)
     return opts
 endfun

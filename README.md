@@ -42,4 +42,5 @@ silent,
 update,
 function,
 echo,
+clear_prompt,
 ```

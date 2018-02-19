@@ -32,18 +32,19 @@ fun! vfinder#sources#directories#maps() abort " {{{2
     let options = {
                 \   'silent'      : 0,
                 \   'update'      : 1,
-                \   'quit'        : 0
+                \   'quit'        : 0,
+                \   'clear_prompt': 1
                 \ }
     return {
                 \   'i': {
-                \       '<CR>' : {'action': 'cd %s', 'options': extend(copy(options), {'clear_prompt': 1})},
-                \       '<C-s>': {'action': 'cd ..', 'options': options},
-                \       '<C-v>': {'action': 'cd %s', 'options': {'silent': 0}}
+                \       '<CR>' : {'action': 'cd %s', 'options': options},
+                \       '<C-h>': {'action': 'cd ..', 'options': options},
+                \       '<C-s>': {'action': 'cd %s', 'options': {'silent': 0}}
                 \   },
                 \   'n': {
-                \       '<CR>': {'action': 'cd %s', 'options': extend(copy(options), {'clear_prompt': 1})},
-                \       's'   : {'action': 'cd ..', 'options': options},
-                \       'v'   : {'action': 'cd %s', 'options': {'silent': 0}}
+                \       '<CR>': {'action': 'cd %s', 'options': options},
+                \       'u'   : {'action': 'cd ..', 'options': options},
+                \       'cd'   : {'action': 'cd %s', 'options': {'silent': 0}}
                 \   }
                 \ }
 endfun

@@ -17,7 +17,9 @@ fun! vfinder#sources#directories#get() abort
 endfun
 
 fun! s:directories_source() abort
-    return ['../'] + map(glob('*/', 1, 1), 'fnamemodify(v:val, ":.")')
+    let dirs = glob('*/', 1, 1)
+    let dirs += glob('.*/', 1, 1)[2:]
+    return ['../'] + map(copy(dirs), 'fnamemodify(v:val, ":.")')
 endfun
 
 fun! s:directories_format(dirs) abort

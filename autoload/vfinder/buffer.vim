@@ -1,10 +1,10 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-13
+" Last modification: 2018-02-20
 
 
 fun! vfinder#buffer#i(name) abort
     return {
-                \   'name'           : a:name,
+                \   'name'           : 'vf__' . a:name . '__',
                 \   'new'            : function('s:buffer_new'),
                 \   'quit'           : function('s:buffer_quit'),
                 \   'set_options'    : function('s:buffer_set_options'),
@@ -53,7 +53,7 @@ fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up_i()<CR>
     inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
-    nmap <silent> <buffer> q <Esc>
+    nnoremap <silent> <buffer> q :call <SID>wipe_buffer()<CR>
     inoremap <silent> <buffer> <expr> <BS> <SID>backspace()
     inoremap <silent> <buffer> <expr> <C-w> <SID>control_w()
     inoremap <silent> <buffer> <expr> <C-u> <SID>control_u()

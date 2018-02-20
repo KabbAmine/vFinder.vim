@@ -10,7 +10,7 @@ fun! vfinder#statusline#get() abort
     let count_infos .= count_filtered ? count_filtered : ''
     let count_infos = count_infos ? '[' . count_infos . ']' : ''
 
-    return printf('%3s | vf__%s(%s) %s',
+    return printf('%3s | %s(%s) %s',
                 \   s:mode(),
                 \   s:name(),
                 \   s:count_candidates(),

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-20
+" Last modification: 2018-02-22
 
 
 fun! vfinder#source#i(source) abort
@@ -101,9 +101,14 @@ fun! s:do(action, candidate_fun, mode, options)
     let line = line('.')
     let buffer = bufnr('%')
     let in_prompt = vfinder#helpers#is_in_prompt()
+    let no_candidates = line('$') is# 1
     let action = !empty(a:action) ? a:action : '%s'
 
     if in_prompt
+        if no_candidates
+            call s:set_mode(line, a:mode)
+            return ''
+        endif
         silent normal! j
         let target = a:candidate_fun()
         silent normal! k
@@ -146,10 +151,7 @@ fun! s:do(action, candidate_fun, mode, options)
         if a:options.update
             call vfinder#events#update_candidates_request()
         endif
-        if a:mode is# 'i'
-            call cursor(line, 0)
-            silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
-        endif
+        call s:set_mode(a:mode)
     endif
 endfun
 
@@ -162,4 +164,11 @@ fun! s:set_all_options(options) abort
     let opts.echo = get(opts, 'echo', 0)
     let opts.clear_prompt = get(opts, 'clear_prompt', 0)
     return opts
+endfun
+
+fun! s:set_mode(line, mode) abort
+    if a:mode is# 'i'
+        call cursor(a:line, 0)
+        silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
+    endif
 endfun

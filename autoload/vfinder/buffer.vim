@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-20
+" Last modification: 2018-02-22
 
 
 fun! vfinder#buffer#i(name) abort
@@ -54,9 +54,9 @@ fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> q :call <SID>wipe_buffer()<CR>
-    inoremap <silent> <buffer> <expr> <BS> <SID>backspace()
-    inoremap <silent> <buffer> <expr> <C-w> <SID>control_w()
-    inoremap <silent> <buffer> <expr> <C-u> <SID>control_u()
+    inoremap <silent> <buffer> <BS> <Esc>:call <SID>backspace()<CR>
+    inoremap <silent> <buffer> <C-w> <Esc>:call <SID>control_w()<CR>
+    inoremap <silent> <buffer> <C-u> <Esc>:call <SID>control_u()<CR>
     nnoremap <silent> <buffer> i :call vfinder#helpers#go_to_prompt()<CR>
     nnoremap <silent> <buffer> I :call vfinder#helpers#go_to_prompt()<CR>
     nnoremap <silent> <buffer> a :call vfinder#helpers#go_to_prompt()<CR>
@@ -108,7 +108,7 @@ fun! s:move_up_i() abort
 endfun
 
 fun! s:set_insertion_position() abort
-    if line('.') is# 1
+    if vfinder#helpers#is_in_prompt()
         startinsert!
     else
         silent execute 'normal! ^'
@@ -124,21 +124,33 @@ fun! s:wipe_buffer(...) abort
 endfun
 
 fun! s:backspace() abort
-    return line('.') is# 1
-                \ ? "\<BS>"
-                \ : "\<C-o>1gg\<C-o>$\<BS>"
+    let prompt = vfinder#prompt#i()
+    let new_query = prompt.get_query().query[:-2]
+    call prompt.render(new_query)
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, 0)
+    endif
+    startinsert!
 endfun
 
 fun! s:control_w() abort
-    return line('.') is# 1
-                \ ? "\<C-w>"
-                \ : "\<C-o>1gg\<C-o>$\<C-w>"
+    let prompt = vfinder#prompt#i()
+    " We use here \S instead of \w to allow special characters
+    let query = substitute(prompt.get_query().query, '\s*\S*$', '', '')
+    call prompt.render(query)
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, 0)
+    endif
+    startinsert!
 endfun
 
 fun! s:control_u() abort
-    return line('.') is# 1
-                \ ? "\<C-u>"
-                \ : "\<C-o>1gg\<C-o>$\<C-u>"
+    let prompt = vfinder#prompt#i()
+    call prompt.render('')
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, 0)
+    endif
+    startinsert!
 endfun
 
 fun! s:update_candidates_i() abort

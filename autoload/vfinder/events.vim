@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-12
+" Last modification: 2018-02-22
 
 
 fun! vfinder#events#char_inserted() abort
@@ -16,12 +16,18 @@ endfun
 fun! vfinder#events#query_modified() abort
     " This event is called after a manual update, so we ensure to stop it if
     " its the case.
+    let col = col('.')
     if exists('b:vf.update')
         unlet! b:vf.update
         return ''
     endif
     call s:filter_and_update()
-    startinsert!
+    if col is# col('$')
+        startinsert!
+    else
+        startinsert
+        call cursor(1, col)
+    endif
 endfun
 
 fun! s:filter_and_update() abort

@@ -50,14 +50,21 @@ endfun
 
 fun! s:buffer_set_maps() dict
     " Prompt & movement
-    inoremap <silent> <buffer> <C-n> <Esc>:call <SID>move_down_i()<CR>
-    inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up_i()<CR>
+    inoremap <silent> <buffer> <C-n> <Esc>:call <SID>move_down()<CR>
+    inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up()<CR>
+    inoremap <silent> <buffer> <C-h> <Esc>:call <SID>move_left()<CR>
+    inoremap <silent> <buffer> <C-l> <Esc>:call <SID>move_right()<CR>
+    inoremap <silent> <buffer> <C-a> <Esc>:call <SID>move_to_edge(-1)<CR>
+    inoremap <silent> <buffer> <C-e> <Esc>:call <SID>move_to_edge(1)<CR>
     inoremap <silent> <buffer> <BS> <Esc>:call <SID>backspace()<CR>
+    inoremap <silent> <buffer> <Del> <Esc>:call <SID>delete()<CR>
     inoremap <silent> <buffer> <C-w> <Esc>:call <SID>control_w()<CR>
     inoremap <silent> <buffer> <C-u> <Esc>:call <SID>control_u()<CR>
-    for k in ['i', 'I', 'a', 'A', 'o', 'O']
-        silent execute 'nnoremap <silent> <buffer> ' . k . ' :call vfinder#helpers#go_to_prompt()<CR>'
-    endfor
+    " Insert mode
+    nnoremap <silent> <buffer> i :call <SID>start_insert_mode(-1)<CR>
+    nnoremap <silent> <buffer> I :call <SID>start_insert_mode(-1)<CR>
+    nnoremap <silent> <buffer> a :call <SID>start_insert_mode(1)<CR>
+    nnoremap <silent> <buffer> A :call <SID>start_insert_mode(1)<CR>
     " Buffer
     inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
     nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
@@ -68,7 +75,7 @@ fun! s:buffer_set_maps() dict
     inoremap <silent> <buffer> <F5> <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>
     nnoremap <silent> <buffer> <F5> :call <SID>clean_cache_if_it_exists()<CR>
     " Disable some default vim keys
-    for k in ['<CR>', 'x', 'c', 'd']
+    for k in ['<CR>', 'x', 'c', 'd', 'o', 'O']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
     endfor
     return self
@@ -86,7 +93,7 @@ fun! s:buffer_set_statusline() dict
     setlocal statusline=%{vfinder#statusline#get()}
 endfun
 
-fun! s:move_down_i() abort
+fun! s:move_down() abort
     let current_line = line('.')
     let last_line = line('$')
     if current_line is# last_line
@@ -97,7 +104,7 @@ fun! s:move_down_i() abort
     call s:set_insertion_position()
 endfun
 
-fun! s:move_up_i() abort
+fun! s:move_up() abort
     let current_line = line('.')
     if current_line is# 1
         call cursor(line('$'), 0)
@@ -105,6 +112,47 @@ fun! s:move_up_i() abort
         silent execute 'normal! k'
     endif
     call s:set_insertion_position()
+endfun
+
+fun! s:move_left() abort
+    startinsert
+    if s:already_near_the_prompt_char()
+        return ''
+    endif
+endfun
+
+fun! s:move_right() abort
+    startinsert
+    call cursor(1, col('.') + 2)
+endfun
+
+fun! s:move_to_edge(direction) abort
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, 0)
+    endif
+    if a:direction ># 0
+        startinsert!
+    else
+        startinsert
+        call cursor(1, 3)
+    endif
+endfun
+
+fun! s:start_insert_mode(...) abort
+    if !vfinder#helpers#is_in_prompt()
+        call vfinder#helpers#go_to_prompt()
+    else
+        startinsert
+        if !exists('a:1')
+            let new_col = col('$')
+        elseif a:1 is# 1
+            let new_col = col('.') + 1
+        elseif a:1 is# -1
+            let new_col = col('.')
+        endif
+        call cursor(1, new_col)
+        call s:already_near_the_prompt_char()
+    endif
 endfun
 
 fun! s:set_insertion_position() abort
@@ -124,33 +172,73 @@ fun! s:wipe_buffer(...) abort
 endfun
 
 fun! s:backspace() abort
-    let prompt = vfinder#prompt#i()
-    let new_query = prompt.get_query().query[:-2]
-    call prompt.render(new_query)
     if !vfinder#helpers#is_in_prompt()
-        call cursor(1, 0)
+        call cursor(1, col('$'))
+        startinsert!
     endif
-    startinsert!
+    let origin_col = col('.')
+    if s:already_near_the_prompt_char()
+        return ''
+    endif
+    let [pre_inp, post_inp] = s:get_pre_post_of_query(origin_col)
+    let prompt = vfinder#prompt#i()
+    call prompt.render(pre_inp[:-2] . post_inp)
+    startinsert
+    call cursor(1, origin_col)
+endfun
+
+fun! s:delete() abort
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, col('$'))
+        startinsert!
+    endif
+    let origin_col = col('.')
+    if origin_col is# col('$')
+        return ''
+    endif
+    let [pre_inp, post_inp] = s:get_pre_post_of_query(origin_col)
+    let prompt = vfinder#prompt#i()
+    call prompt.render(pre_inp . post_inp[1:])
+    startinsert
+    call cursor(1, origin_col + 1)
 endfun
 
 fun! s:control_w() abort
+    if !vfinder#helpers#is_in_prompt()
+        call cursor(1, col('$'))
+        startinsert!
+    endif
+    let origin_col = col('.')
+    if s:already_near_the_prompt_char()
+        return ''
+    endif
+    let [pre_inp, post_inp] = s:get_pre_post_of_query(origin_col)
     let prompt = vfinder#prompt#i()
     " We use here \S instead of \w to allow special characters
-    let query = substitute(prompt.get_query().query, '\s*\S*$', '', '')
-    call prompt.render(query)
-    if !vfinder#helpers#is_in_prompt()
-        call cursor(1, 0)
-    endif
-    startinsert!
+    let query = prompt.get_query().query
+    let pre_inp = substitute(pre_inp, '\S\+\s*$', '', '')
+    let new_query = pre_inp . post_inp
+    call prompt.render(new_query)
+    startinsert
+    let len_deleted = len(query) - len(new_query)
+    let new_col = origin_col - len_deleted
+    call cursor(1, new_col + 1)
 endfun
 
 fun! s:control_u() abort
-    let prompt = vfinder#prompt#i()
-    call prompt.render('')
     if !vfinder#helpers#is_in_prompt()
-        call cursor(1, 0)
+        call cursor(1, col('$'))
+        startinsert!
     endif
-    startinsert!
+    let origin_col = col('.')
+    if s:already_near_the_prompt_char()
+        return ''
+    endif
+    let post_inp = s:get_pre_post_of_query(origin_col)[1]
+    let prompt = vfinder#prompt#i()
+    call prompt.render(post_inp)
+    startinsert
+    call cursor(1, 3)
 endfun
 
 fun! s:update_candidates_i() abort
@@ -178,4 +266,22 @@ fun! s:clean_cache_if_it_exists(...) abort
             call s:set_insertion_position()
         endif
     endif
+endfun
+
+fun! s:already_near_the_prompt_char() abort
+    if col('.') <# 3
+        startinsert
+        call cursor(1, 3)
+        return 1
+    else
+        return 0
+    endif
+endfun
+
+fun! s:get_pre_post_of_query(col) abort
+    " From a:col split query in pre & post part and return them.
+    let query = getline('.')[2:]
+    let pre_inp = query[: a:col - 3]
+    let post_inp = strpart(query, len(pre_inp))
+    return [pre_inp, post_inp]
 endfun

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-19
+" Last modification: 2018-02-22
 
 
 fun! vfinder#sources#command_history#check()
@@ -17,7 +17,9 @@ fun! vfinder#sources#command_history#get() abort
 endfun
 
 fun! s:command_history_source() abort
-    return split(execute('history'), "\n")[1:]
+    let cmd_history = split(execute('history'), "\n")[1:]
+    call remove(cmd_history, -1)
+    return reverse(cmd_history)
 endfun
 
 fun! s:command_history_format(commands) abort

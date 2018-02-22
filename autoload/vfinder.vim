@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-15
+" Last modification: 2018-02-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -63,7 +63,7 @@ endfun
 "			Main
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#enable_autocmds() abort
+fun! vfinder#enable_autocmds_for_caching() abort
     let g:vf_cache = {}
     augroup VFCaching
         autocmd!

@@ -49,28 +49,28 @@ fun! s:buffer_set_syntax() dict
 endfun
 
 fun! s:buffer_set_maps() dict
+    " Prompt & movement
     inoremap <silent> <buffer> <C-n> <Esc>:call <SID>move_down_i()<CR>
     inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up_i()<CR>
-    inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
-    nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
-    nnoremap <silent> <buffer> q :call <SID>wipe_buffer()<CR>
     inoremap <silent> <buffer> <BS> <Esc>:call <SID>backspace()<CR>
     inoremap <silent> <buffer> <C-w> <Esc>:call <SID>control_w()<CR>
     inoremap <silent> <buffer> <C-u> <Esc>:call <SID>control_u()<CR>
-    nnoremap <silent> <buffer> i :call vfinder#helpers#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> I :call vfinder#helpers#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> a :call vfinder#helpers#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> A :call vfinder#helpers#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> o :call vfinder#helpers#go_to_prompt()<CR>
-    nnoremap <silent> <buffer> O :call vfinder#helpers#go_to_prompt()<CR>
+    for k in ['i', 'I', 'a', 'A', 'o', 'O']
+        silent execute 'nnoremap <silent> <buffer> ' . k . ' :call vfinder#helpers#go_to_prompt()<CR>'
+    endfor
+    " Buffer
+    inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
+    nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
+    nnoremap <silent> <buffer> q :call <SID>wipe_buffer()<CR>
+    " Candidates & cache
     nnoremap <silent> <buffer> R :call <SID>update_candidates_n()<CR>
     inoremap <silent> <buffer> <C-r> <Esc>:call <SID>update_candidates_i()<CR>
-    nnoremap <silent> <buffer> x <Nop>
-    nnoremap <silent> <buffer> c <Nop>
-    nnoremap <silent> <buffer> d <Nop>
-    nnoremap <silent> <buffer> <CR> <Nop>
     inoremap <silent> <buffer> <F5> <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>
     nnoremap <silent> <buffer> <F5> :call <SID>clean_cache_if_it_exists()<CR>
+    " Disable some default vim keys
+    for k in ['<CR>', 'x', 'c', 'd']
+        silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
+    endfor
     return self
 endfun
 

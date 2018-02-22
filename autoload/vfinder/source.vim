@@ -151,7 +151,7 @@ fun! s:do(action, candidate_fun, mode, options)
         if a:options.update
             call vfinder#events#update_candidates_request()
         endif
-        call s:set_mode(a:mode)
+        call s:set_mode(line, a:mode)
     endif
 endfun
 

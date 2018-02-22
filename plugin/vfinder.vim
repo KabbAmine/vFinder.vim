@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-19
+" Last modification: 2018-02-22
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -23,7 +23,7 @@ let g:vfinder_yank_source_enabled = get(g:, 'vfinder_yank_source_enabled', 1)
 let g:vfinder_mru_source_enabled = get(g:, 'vfinder_mru_source_enabled', 1)
 " 1}}}
 
-call vfinder#enable_autocmds()
+call vfinder#enable_autocmds_for_caching()
 
 " Restore default vim options {{{1
 let &cpoptions = s:saveCpoptions

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-19
+" Last modification: 2018-02-22
 
 
 fun! vfinder#sources#directories#check()
@@ -40,13 +40,13 @@ fun! vfinder#sources#directories#maps() abort " {{{2
     return {
                 \   'i': {
                 \       '<CR>' : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       '<C-o>': {'action': 'cd %s', 'options': options},
-                \       '<C-e>': {'action': 'cd ..', 'options': options}
+                \       '<C-s>': {'action': 'cd %s', 'options': options},
+                \       '<C-v>': {'action': 'cd ..', 'options': options}
                 \   },
                 \   'n': {
                 \       '<CR>': {'action': 'cd %s', 'options': options},
-                \       'o'   : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       'e'   : {'action': 'cd ..', 'options': options},
+                \       's'   : {'action': 'cd %s', 'options': {'silent': 0}},
+                \       'v'   : {'action': 'cd ..', 'options': options},
                 \   }
                 \ }
 endfun

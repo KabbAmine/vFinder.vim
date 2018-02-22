@@ -198,7 +198,11 @@ fun! s:delete() abort
     endif
     let [pre_inp, post_inp] = s:get_pre_post_of_query(origin_col)
     let prompt = vfinder#prompt#i()
-    call prompt.render(pre_inp . post_inp[1:])
+    " When we have: _foo, foo is the pre_inp and there is no post_inp, so:
+    let query = origin_col is# 2 && empty(post_inp)
+                \ ? pre_inp[1:]
+                \ : pre_inp . post_inp[1:]
+    call prompt.render(query)
     startinsert
     call cursor(1, origin_col + 1)
 endfun

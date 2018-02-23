@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#yank#check()
@@ -12,6 +12,7 @@ fun! vfinder#sources#yank#get() abort
                 \   'to_execute'   : function('s:yank_source'),
                 \   'format_fun'   : function('s:yank_format'),
                 \   'candidate_fun': function('s:yank_candidate_fun'),
+                \   'syntax_fun'   : function('s:yank_syntax_fun'),
                 \   'maps'         : vfinder#sources#yank#maps()
                 \ }
 endfun
@@ -43,6 +44,11 @@ endfun
 fun! s:yank_candidate_fun() abort
     " the text is like: '100- Foo bar'
     return substitute(getline('.')[5:], '\\n', '\n', 'g')
+endfun
+
+fun! s:yank_syntax_fun() abort
+    syntax match vfinderYankIndex =^\d\+\s*:\s\+=
+    highlight! link vfinderYankIndex vfinderIndex
 endfun
 
 fun! vfinder#sources#yank#maps() abort

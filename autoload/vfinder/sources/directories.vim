@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-22
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#directories#check()
@@ -12,6 +12,7 @@ fun! vfinder#sources#directories#get() abort
                 \   'to_execute'   : function('s:directories_source'),
                 \   'format_fun'   : function('s:directories_format'),
                 \   'candidate_fun': function('s:directories_candidate_fun'),
+                \   'syntax_fun'   : function('s:directories_syntax_fun'),
                 \   'maps'         : vfinder#sources#directories#maps(),
                 \ }
 endfun
@@ -28,6 +29,13 @@ endfun
 
 fun! s:directories_candidate_fun() abort
     return fnamemodify(getline('.'), ':p')
+endfun
+
+fun! s:directories_syntax_fun() abort
+    syntax match vfinderDirectoriesHidden =^\.\f\+$=
+    syntax match vfinderDirectoriesGoback =\%2l\.\./=
+    highlight! link vfinderDirectoriesHidden Comment
+    highlight! link vfinderDirectoriesGoback CursorLineNr
 endfun
 
 fun! vfinder#sources#directories#maps() abort " {{{2

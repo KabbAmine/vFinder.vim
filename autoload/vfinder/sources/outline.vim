@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#outline#check()
@@ -13,6 +13,7 @@ fun! vfinder#sources#outline#get() abort
                 \   'to_execute'   : s:outline_source(),
                 \   'format_fun'   : function('s:outline_format'),
                 \   'candidate_fun': function('s:outline_candidate_fun'),
+                \   'syntax_fun'   : function('s:outline_syntax_fun'),
                 \   'maps'         : vfinder#sources#outline#maps()
                 \ }
 endfun
@@ -58,9 +59,11 @@ fun! s:outline_format(tags) abort
         " An example of how the output is:
         " Font(s)          Heading_L3   25 .vim/README.md   ### Font(s)
         " Formatters & fixers Heading_L3   30 .vim/README.md   ### Formatters & fixers
-        let name_and_kind = split(matchstr(t, '.*\ze\s\+\d\+\s\+\f\+'))
-        let line = matchstr(t, '\s\+\zs\d\+\ze\s\+\f\+')
-        let l = printf('%-25s %-10s %d', join(name_and_kind[:-2]), name_and_kind[-1][:9], line)
+        let till_line = matchstr(t, '.*\s\+\d\+\ze\s\+')
+        let kind = matchstr(till_line, '\S\+\ze\s\+\d\+$')
+        let name = substitute(matchstr(till_line, '^.*\ze\s\+\S\+\s\+\d\+$'), '\s*$', '', '')
+        let line = matchstr(till_line, '\d\+$')
+        let l = printf('%-50s %-10s %5d', name, '[' . kind . ']', line)
         call add(res, l)
     endfor
     return res
@@ -68,6 +71,13 @@ endfun
 
 fun! s:outline_candidate_fun() abort
     return matchstr(getline('.'), '\d\+$')
+endfun
+
+fun! s:outline_syntax_fun() abort
+    syntax match vfinderOutlineLinenr =\d\+$=
+    syntax match vfinderOutlineKind =\s\+\[\S\+\]\s\+=
+    highlight! link vfinderOutlineLinenr vfinderIndex
+    highlight! link vfinderOutlineKind Identifier
 endfun
 
 fun! vfinder#sources#outline#maps() abort

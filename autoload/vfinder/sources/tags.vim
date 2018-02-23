@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#tags#check()
@@ -15,6 +15,7 @@ fun! vfinder#sources#tags#get() abort
                 \   'to_execute'   : function('s:tags_source'),
                 \   'format_fun'   : function('s:tags_format'),
                 \   'candidate_fun': function('s:tags_candidate_fun'),
+                \   'syntax_fun'   : function('s:tags_syntax_fun'),
                 \   'maps'         : vfinder#sources#tags#maps(),
                 \ }
 endfun
@@ -44,7 +45,7 @@ endfun
 fun! s:tags_format(tags) abort
     let res = []
     for t in a:tags
-        let l = printf('%-25s %s', t.name, fnamemodify(t.filename, ':~'))
+        let l = printf('%-50s %s', t.name, fnamemodify(t.filename, ':~'))
         call add(res, l)
     endfor
     return res
@@ -52,6 +53,11 @@ endfun
 
 fun! s:tags_candidate_fun() abort
     return matchstr(getline('.'), '^.*\ze\s\+\f\+')
+endfun
+
+fun! s:tags_syntax_fun() abort
+    syntax match vfinderTagsFilename =\f\+$=
+    highlight! link vfinderTagsFilename vfinderIndex
 endfun
 
 fun! vfinder#sources#tags#maps() abort

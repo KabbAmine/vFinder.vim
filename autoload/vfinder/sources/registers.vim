@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#registers#check()
@@ -12,6 +12,7 @@ fun! vfinder#sources#registers#get() abort
                 \   'to_execute'   : function('s:registers_source'),
                 \   'format_fun'   : function('s:registers_format'),
                 \   'candidate_fun': function('s:registers_candidate_fun'),
+                \   'syntax_fun'   : function('s:registers_syntax_fun'),
                 \   'maps'         : vfinder#sources#yank#maps()
                 \ }
 endfun
@@ -55,4 +56,9 @@ endfun
 
 fun! s:registers_candidate_fun() abort
     return getline('.')[3:]
+endfun
+
+fun! s:registers_syntax_fun() abort
+    syntax match vfinderRegistersName =^\S\+:\s\+=
+    highlight! link vfinderRegistersName vfinderIndex
 endfun

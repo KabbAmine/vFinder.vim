@@ -12,7 +12,8 @@ fun! vfinder#sources#buffers#get() abort
                 \   'to_execute'   : function('s:buffers_source'),
                 \   'format_fun'   : function('s:buffers_format'),
                 \   'candidate_fun': function('s:buffers_candidate_fun'),
-                \   'maps'         : s:buffers_maps(),
+                \   'syntax_fun'   : function('s:buffers_syntax_fun'),
+                \   'maps'         : s:buffers_maps()
                 \ }
 endfun
 
@@ -55,6 +56,11 @@ fun! s:buffers_maps() abort
                 \       'options': {'function': 1, 'update': 1, 'quit': 0}},
                 \ })
     return maps
+endfun
+
+fun! s:buffers_syntax_fun() abort
+    syntax match vfinderBuffersModified =\[+\]=
+    highlight! link vfinderBuffersModified Identifier
 endfun
 
 fun! s:wipe(buffer) abort

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-02-20
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#buffers#check()
@@ -28,13 +28,18 @@ fun! s:buffers_format(nrs) abort
     let res = []
     for nr in a:nrs
         let name = empty(bufname(nr)) ? '[No Name]' : fnamemodify(bufname(nr), ':.')
-        call add(res, printf("%-5d %s", nr, name))
+        let was_modified = getbufvar(nr, '&modified', 0)
+        call add(res, printf("%-4d %3s %s",
+                    \   nr,
+                    \   was_modified ? '[+]' : '',
+                    \   name)
+                    \ )
     endfor
     return res
 endfun
 
 fun! s:buffers_candidate_fun() abort
-    return matchstr(getline('.'), '^\d\+\s\+\zs.*')
+    return matchstr(getline('.'), '^\d\+\s\+\(\[+\]\s\+\)\?\zs.*')
 endfun
 
 fun! s:buffers_maps() abort

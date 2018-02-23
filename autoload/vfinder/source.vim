@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-22
+" Last modification: 2018-02-23
 
 
 fun! vfinder#source#i(source) abort
@@ -30,6 +30,7 @@ fun! vfinder#source#i(source) abort
                 \   'to_execute'    : options.to_execute,
                 \   'format_fun'    : get(options, 'format_fun', ''),
                 \   'candidate_fun' : get(options, 'candidate_fun', function('getline', ['.'])),
+                \   'syntax_fun'    : get(options, 'syntax_fun', ''),
                 \   'maps'          : options.maps,
                 \   'prepare'       : function('<SID>source_prepare'),
                 \   'execute'       : function('<SID>source_execute'),

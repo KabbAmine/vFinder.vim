@@ -23,6 +23,7 @@ is_valid,
 to_execute,
 format_fun,
 candidate_fun,
+syntax_fun,
 maps,
 ```
 

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-22
+" Last modification: 2018-02-23
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -89,7 +89,7 @@ fun! vfinder#i(source) abort
             return ''
         endif
 
-        let buffer = vfinder#buffer#i(source.name)
+        let buffer = vfinder#buffer#i(source)
         call buffer.new()
         let b:vf = source
 

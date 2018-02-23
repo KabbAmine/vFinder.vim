@@ -1,5 +1,5 @@
 " Creation         : 2018-02-16
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#sources#mru#check()
@@ -10,6 +10,7 @@ fun! vfinder#sources#mru#get() abort
     return {
                 \   'name'         : 'mru',
                 \   'to_execute'   : function('s:mru_source'),
+                \   'format_fun'   : function('s:mru_format'),
                 \   'maps'         : vfinder#sources#files#maps()
                 \ }
 endfun
@@ -27,4 +28,8 @@ fun! s:mru_source() abort
                 \   filereadable(v)
                 \   && vfinder#sources#oldfiles#file_is_valid(v)
                 \ })
+endfun
+
+fun! s:mru_format(files) abort
+    return map(copy(a:files), 'fnamemodify(v:val, ":~")')
 endfun

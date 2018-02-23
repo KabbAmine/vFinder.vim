@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#helpers#go_to_prompt()
@@ -13,9 +13,9 @@ endfun
 
 fun! vfinder#helpers#process_query(query) abort
     let q = escape(a:query, '.|*')
-    let sep = g:vfinder_fuzzy ? '\zs' : ' '
+    let q_sep = g:vfinder_fuzzy ? '\zs' : ' '
     let sep_pat = '.\{-\}'
-    return join(split(q, sep), sep_pat)
+    return join(split(q, q_sep), sep_pat)
 endfun
 
 fun! vfinder#helpers#throw(msg) abort

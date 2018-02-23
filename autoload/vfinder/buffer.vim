@@ -173,6 +173,8 @@ endfun
 fun! s:wipe_buffer(...) abort
     let buffer = exists('a:1') ? a:1 : bufname('%')
     if bufexists(buffer)
+        " Be sure to go back to initial window
+        silent execute 'wincmd p'
         silent execute 'bwipeout! ' . buffer
     endif
 endfun

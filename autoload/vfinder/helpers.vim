@@ -12,10 +12,17 @@ fun! vfinder#helpers#is_in_prompt()
 endfun
 
 fun! vfinder#helpers#process_query(query) abort
-    let q = escape(a:query, '.|*')
+    let q = g:vfinder_fuzzy
+                \ ? substitute(a:query, ' ', '', 'g')
+                \ : a:query
     let q_sep = g:vfinder_fuzzy ? '\zs' : ' '
-    let sep_pat = '.\{-\}'
-    return join(split(q, q_sep), sep_pat)
+    let join_pat = '.{-}'
+    let to_escape = '$.*~()|{}%[]'
+    let final_regex = []
+    for item in split(q, q_sep)
+        call add(final_regex, escape(item, to_escape))
+    endfor
+    return '\v' . join(final_regex, join_pat)
 endfun
 
 fun! vfinder#helpers#throw(msg) abort

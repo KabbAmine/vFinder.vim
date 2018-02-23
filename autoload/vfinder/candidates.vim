@@ -50,8 +50,9 @@ fun! s:candidates_filter(query) dict
     let self.query = vfinder#helpers#process_query(a:query)
     " There is no need to filter all the original candidates if we added
     " characters to our previous query.
-    " The following is not appliable if we have a manual update.
-    let candidates = !exists('b:vf.update') && exists('b:vf.last_query') && self.query =~# '^' . b:vf.last_query
+    " Note that the following is not appliable if we have a manual update.
+    let candidates = !exists('b:vf.update') && exists('b:vf.last_query')
+                \ && self.query[2:] =~# '^\v' . b:vf.last_query[2:]
                 \   ? self.current
                 \   : self.original_list
     let b:vf.last_query = self.query
@@ -62,7 +63,7 @@ endfun
 
 fun! s:candidates_highlight_matched() dict
     call clearmatches()
-    if !empty(self.query)
+    if !empty(self.query) && self.query isnot# '\v'
         let case = self.query =~# '\u' ? '\C' : '\c'
         call matchadd('CursorLineNr', case . self.query)
     endif

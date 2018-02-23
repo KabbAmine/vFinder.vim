@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-22
+" Last modification: 2018-02-23
 
 
 fun! vfinder#buffer#i(name) abort
@@ -286,6 +286,6 @@ fun! s:get_pre_post_of_query(col) abort
     " From a:col split query in pre & post part and return them.
     let query = getline('.')[2:]
     let pre_inp = query[: a:col - 3]
-    let post_inp = strpart(query, len(pre_inp))
+    let post_inp = strcharpart(query, len(pre_inp))
     return [pre_inp, post_inp]
 endfun

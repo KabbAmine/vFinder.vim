@@ -265,7 +265,8 @@ endfun
 
 fun! s:clean_cache_if_it_exists(...) abort
     " a:1 is when we came from insert mode
-    let name = bufname('%')
+    " The bufname is vf__foo_bar__
+    let name = bufname('%')[4:-3]
     if vfinder#cache#exists(name)
         call vfinder#cache#clean(name)
         call vfinder#events#update_candidates_request()

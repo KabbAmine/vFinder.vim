@@ -2,9 +2,10 @@
 " Last modification: 2018-02-23
 
 
-fun! vfinder#buffer#i(name) abort
+fun! vfinder#buffer#i(source) abort
     return {
-                \   'name'           : 'vf__' . a:name . '__',
+                \   'source'         : a:source,
+                \   'name'           : 'vf__' . a:source.name . '__',
                 \   'new'            : function('s:buffer_new'),
                 \   'quit'           : function('s:buffer_quit'),
                 \   'set_options'    : function('s:buffer_set_options'),
@@ -44,7 +45,12 @@ fun! s:buffer_set_syntax() dict
     syntax clear
     syntax case ignore
     syntax match vfinderPrompt =\%1l.*=
+    syntax match vfinderIndex =^\d\+\s*=
     highlight! link vfinderPrompt ModeMsg
+    highlight! link vfinderIndex Comment
+    if !empty(self.source.syntax_fun)
+        call call(self.source.syntax_fun, [])
+    endif
     return self
 endfun
 

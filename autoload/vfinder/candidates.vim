@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-19
+" Last modification: 2018-02-23
 
 
 fun! vfinder#candidates#i(source) abort
@@ -63,13 +63,14 @@ endfun
 fun! s:candidates_highlight_matched() dict
     call clearmatches()
     if !empty(self.query)
-        call matchadd('CursorLineNr', '\c' . self.query)
+        let case = self.query =~# '\u' ? '\C' : '\c'
+        call matchadd('CursorLineNr', case . self.query)
     endif
     return self
 endfun
 
 fun! s:filter(query, candidates) abort
-    " Note that we're using a special vim pattern \{-\} here which is no
+    " Note that we're using a special vim pattern .{-} here which is no
     " compatible with python
     return a:query =~# '\u'
                 \ ? filter(copy(a:candidates), {i, v -> v =~# a:query})

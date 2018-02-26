@@ -112,6 +112,7 @@ fun! s:buffer_set_autocmds() dict
         autocmd!
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
         autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
+        autocmd WinEnter <buffer> :call vfinder#events#update_candidates_request()
     augroup END
 endfun
 

@@ -1,11 +1,12 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-23
+" Last modification: 2018-02-26
 
 
 fun! vfinder#buffer#i(source) abort
     return {
                 \   'source'         : a:source,
                 \   'name'           : 'vf__' . a:source.name . '__',
+                \   'goto'           : function('s:buffer_goto'),
                 \   'new'            : function('s:buffer_new'),
                 \   'quit'           : function('s:buffer_quit'),
                 \   'set_options'    : function('s:buffer_set_options'),
@@ -16,8 +17,27 @@ fun! vfinder#buffer#i(source) abort
                 \ }
 endfun
 
+fun! s:buffer_goto() dict
+    " If the vf buffer already exists we:
+    "    - move to it if its window is in the current tab.
+    "    - wipe it and create a new on in the current tab.
+    " Otherwise we create a new one.
+
+    if bufexists(self.name)
+        let win_nr = bufwinnr(bufname(self.name))
+        if win_nr ># 0
+            silent execute win_nr . 'wincmd w'
+        else
+            silent execute 'bwipeout ' . self.name
+            call self.new()
+        endif
+    else
+        call self.new()
+    endif
+    return self
+endfun
+
 fun! s:buffer_new() dict
-    call self.quit()
     silent execute 'topleft split ' . self.name
     call self.set_options().set_syntax().set_maps().set_autocmds()
     call self.set_statusline()
@@ -100,9 +120,8 @@ fun! s:buffer_set_statusline() dict
 endfun
 
 fun! s:move_down() abort
-    let current_line = line('.')
     let last_line = line('$')
-    if current_line is# last_line
+    if line('.') is# last_line
         call cursor(1, 0)
     else
         silent execute 'normal! j'
@@ -111,8 +130,7 @@ fun! s:move_down() abort
 endfun
 
 fun! s:move_up() abort
-    let current_line = line('.')
-    if current_line is# 1
+    if line('.') is# 1
         call cursor(line('$'), 0)
     else
         silent execute 'normal! k'

@@ -90,7 +90,7 @@ fun! vfinder#i(source) abort
         endif
 
         let buffer = vfinder#buffer#i(source)
-        call buffer.new()
+        call buffer.goto()
         let b:vf = source
 
         let prompt = vfinder#prompt#i()

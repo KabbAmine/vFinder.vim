@@ -29,8 +29,7 @@ fun! s:outline_is_valid() abort
 endfun
 
 fun! s:outline_source() abort
-    let cmd = ['ctags', '--sort=no', '-x']
-
+    let cmd = ['ctags', '--sort=no']
     " Not valid if empty buffer
     if vfinder#helpers#empty_buffer()
         return ''
@@ -38,11 +37,14 @@ fun! s:outline_source() abort
     let buffer = bufname('%')
     let modified = getbufvar(buffer, '&modified')
     let file = fnamemodify(buffer, ':p')
+    let ft = getbufvar(buffer, '&filetype')
     if filereadable(file) && !modified
-        let cmd += [file]
+        if !empty(ft)
+            let cmd += ['--language-force=' . ft]
+        endif
+        let cmd += ['-x'] + [file]
     else
         let ext = fnamemodify(buffer, ':e')
-        let ft = getbufvar(buffer, '&filetype')
         " Not valid if not extension or filetype
         if empty(ext) && empty(ft)
             return ''
@@ -54,10 +56,8 @@ fun! s:outline_source() abort
             let cmd += ['--language-force=' . ft]
         endif
         call writefile(getline(1, '$'), temp_file)
-        let cmd += [temp_file]
+        let cmd += ['-x'] + [temp_file]
     endif
-
-    echomsg join(cmd)
     return join(cmd)
 endfun
 

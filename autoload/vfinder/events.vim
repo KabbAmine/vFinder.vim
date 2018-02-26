@@ -1,10 +1,10 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-22
+" Last modification: 2018-02-26
 
 
 fun! vfinder#events#char_inserted() abort
     if !vfinder#helpers#is_in_prompt()
-        call vfinder#helpers#go_to_prompt()
+        call vfinder#helpers#go_to_prompt_and_startinsert()
     endif
 endfun
 

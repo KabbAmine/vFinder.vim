@@ -164,7 +164,7 @@ endfun
 
 fun! s:start_insert_mode(...) abort
     if !vfinder#helpers#is_in_prompt()
-        call vfinder#helpers#go_to_prompt()
+        call vfinder#helpers#go_to_prompt_and_startinsert()
     else
         startinsert
         if !exists('a:1')

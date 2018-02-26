@@ -2,7 +2,7 @@
 " Last modification: 2018-02-26
 
 
-fun! vfinder#helpers#go_to_prompt()
+fun! vfinder#helpers#go_to_prompt_and_startinsert()
     call cursor(1, 0)
     startinsert!
 endfun

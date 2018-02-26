@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-23
+" Last modification: 2018-02-26
 
 
 fun! vfinder#sources#outline#check()
@@ -7,14 +7,15 @@ fun! vfinder#sources#outline#check()
 endfun
 
 fun! vfinder#sources#outline#get() abort
+    let to_execute = s:outline_source()
     return {
-                \   'name'         : 'outline',
-                \   'is_valid'     : s:outline_is_valid(),
-                \   'to_execute'   : s:outline_source(),
-                \   'format_fun'   : function('s:outline_format'),
-                \   'candidate_fun': function('s:outline_candidate_fun'),
-                \   'syntax_fun'   : function('s:outline_syntax_fun'),
-                \   'maps'         : vfinder#sources#outline#maps()
+                \   'name'                : 'outline',
+                \   'is_valid'            : empty(to_execute) ? 0 : 1,
+                \   'to_execute'          : to_execute,
+                \   'format_fun'          : function('s:outline_format'),
+                \   'candidate_fun'       : function('s:outline_candidate_fun'),
+                \   'syntax_fun'          : function('s:outline_syntax_fun'),
+                \   'maps'                : vfinder#sources#outline#maps()
                 \ }
 endfun
 
@@ -28,28 +29,35 @@ fun! s:outline_is_valid() abort
 endfun
 
 fun! s:outline_source() abort
-    " Return the approriate ctags command string.
-    " current_file.py    -> return 'ctags --sort=no current_file.py'
-    " current_file.py[+] -> save the content to a temp file 'xxx.py' and return
-    " 			    'ctags --sort=no xxx.py'
-    " current_file[+]    -> save the content to a temp file 'xxx' and return
-    " 			    'ctags --sort=no --language-force=&l:ft xxx'
+    let cmd = ['ctags', '--sort=no', '-x']
 
-    let cmd = ['ctags', '--sort=no']
-    if !&l:modified
-        let cmd += ['-x', expand('%:p')]
+    " Not valid if empty buffer
+    if vfinder#helpers#empty_buffer()
+        return ''
+    endif
+    let buffer = bufname('%')
+    let modified = getbufvar(buffer, '&modified')
+    let file = fnamemodify(buffer, ':p')
+    if filereadable(file) && !modified
+        let cmd += [file]
     else
-        let ext = fnamemodify(bufname('%'), ':e')
-        let ft = &l:filetype
+        let ext = fnamemodify(buffer, ':e')
+        let ft = getbufvar(buffer, '&filetype')
+        " Not valid if not extension or filetype
+        if empty(ext) && empty(ft)
+            return ''
+        endif
         let temp_file = tempname()
-        if empty(ext)
-            let cmd += ['--language-force=' . ft]
-        else
+        if !empty(ext)
             let temp_file .= '.' . ext
+        else
+            let cmd += ['--language-force=' . ft]
         endif
         call writefile(getline(1, '$'), temp_file)
-        let cmd += ['-x', temp_file]
+        let cmd += [temp_file]
     endif
+
+    echomsg join(cmd)
     return join(cmd)
 endfun
 

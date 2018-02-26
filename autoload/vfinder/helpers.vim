@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-23
+" Last modification: 2018-02-26
 
 
 fun! vfinder#helpers#go_to_prompt()
@@ -58,4 +58,8 @@ endfun
 fun! s:msg(content, ...) abort
     let extra = exists('a:1') ? '[' . a:1 . '] ' : ''
     return '[vfinder] ' . extra . a:content
+endfun
+
+fun! vfinder#helpers#empty_buffer() abort
+    return join(getline(1, '$')) =~# '^\s*$'
 endfun

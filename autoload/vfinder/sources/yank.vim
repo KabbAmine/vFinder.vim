@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-23
+" Last modification: 2018-02-28
 
 
 fun! vfinder#sources#yank#check()
@@ -48,7 +48,9 @@ endfun
 
 fun! s:yank_syntax_fun() abort
     syntax match vfinderYankIndex =^\d\+\s*:\s\+=
+    syntax match vfinderYankEndofline =\\n=
     highlight! link vfinderYankIndex vfinderIndex
+    highlight! link vfinderYankEndofline vfinderYankIndex
 endfun
 
 fun! vfinder#sources#yank#maps() abort

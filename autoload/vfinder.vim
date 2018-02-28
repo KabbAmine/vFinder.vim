@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-23
+" Last modification: 2018-02-28
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -89,9 +89,11 @@ fun! vfinder#i(source) abort
             return ''
         endif
 
+        let initial_bufnr = bufnr('%')
+
         let buffer = vfinder#buffer#i(source)
         call buffer.goto()
-        let b:vf = source
+        let b:vf = extend(source, {'initial_bufnr': initial_bufnr})
 
         let prompt = vfinder#prompt#i()
         call prompt.render()

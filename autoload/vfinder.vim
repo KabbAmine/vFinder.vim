@@ -89,6 +89,9 @@ fun! vfinder#i(source) abort
             return ''
         endif
 
+        " Some sources need an initial content to process (e.g outline source)
+        " to be able to be updated a 2nd time, so we store the current buffer
+        " number.
         let initial_bufnr = bufnr('%')
 
         let buffer = vfinder#buffer#i(source)

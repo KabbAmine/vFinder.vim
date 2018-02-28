@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-26
+" Last modification: 2018-02-28
 
 
 fun! vfinder#sources#outline#check()
@@ -7,15 +7,14 @@ fun! vfinder#sources#outline#check()
 endfun
 
 fun! vfinder#sources#outline#get() abort
-    let to_execute = s:outline_source()
     return {
-                \   'name'                : 'outline',
-                \   'is_valid'            : empty(to_execute) ? 0 : 1,
-                \   'to_execute'          : to_execute,
-                \   'format_fun'          : function('s:outline_format'),
-                \   'candidate_fun'       : function('s:outline_candidate_fun'),
-                \   'syntax_fun'          : function('s:outline_syntax_fun'),
-                \   'maps'                : vfinder#sources#outline#maps()
+                \   'name'         : 'outline',
+                \   'is_valid'     : s:outline_is_valid(),
+                \   'to_execute'   : function('s:outline_source'),
+                \   'format_fun'   : function('s:outline_format'),
+                \   'candidate_fun': function('s:outline_candidate_fun'),
+                \   'syntax_fun'   : function('s:outline_syntax_fun'),
+                \   'maps'         : vfinder#sources#outline#maps()
                 \ }
 endfun
 
@@ -29,15 +28,29 @@ fun! s:outline_is_valid() abort
 endfun
 
 fun! s:outline_source() abort
+    " Set the approriate ctags command string (+ flags + filename) and execute
+    " it then return the result.
+    " The filename can be the current one if it is a file and was not modified,
+    " otherwise save and use a temporary file with the current content.
+    " P.S:
+    "	- The function uses b:vf.intitial_bufnr as initial buffer number.
+    "	- When using a temp file, we use the same extension as the
+    "	current buffer, or we pass the current filetype to ctags command. If no
+    "	extension and no filetype, we simply return an empty list.
+    " e.g. with all the possible cases for ctags command string:
+    "	ctags --sort=no foo.bar 2> /dev/null
+    "	ctags --sort=no -x /tmp/foo.bar 2> /dev/null
+    "	ctags --sort=no --language-force=vim -x /tmp/foo 2> /dev/null
+
     let cmd = ['ctags', '--sort=no']
-    " Not valid if empty buffer
-    if vfinder#helpers#empty_buffer()
-        return ''
+    let bufnr = b:vf.initial_bufnr
+    let buffer = bufname(bufnr)
+    if vfinder#helpers#empty_buffer(bufnr)
+        return []
     endif
-    let buffer = bufname('%')
-    let modified = getbufvar(buffer, '&modified')
+    let modified = getbufvar(bufnr, '&modified')
     let file = fnamemodify(buffer, ':p')
-    let ft = getbufvar(buffer, '&filetype')
+    let ft = getbufvar(bufnr, '&filetype')
     if filereadable(file) && !modified
         if !empty(ft)
             let cmd += ['--language-force=' . ft]
@@ -45,9 +58,8 @@ fun! s:outline_source() abort
         let cmd += ['-x'] + [file]
     else
         let ext = fnamemodify(buffer, ':e')
-        " Not valid if not extension or filetype
         if empty(ext) && empty(ft)
-            return ''
+            return []
         endif
         let temp_file = tempname()
         if !empty(ext)
@@ -55,10 +67,10 @@ fun! s:outline_source() abort
         else
             let cmd += ['--language-force=' . ft]
         endif
-        call writefile(getline(1, '$'), temp_file)
+        call writefile(getbufline(bufnr, 1, '$'), temp_file)
         let cmd += ['-x'] + [temp_file]
     endif
-    return join(cmd)
+    return systemlist(join(cmd) . ' ' . vfinder#helpers#black_hole())
 endfun
 
 fun! s:outline_format(tags) abort

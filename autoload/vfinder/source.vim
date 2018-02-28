@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-24
+" Last modification: 2018-02-26
 
 
 fun! vfinder#source#i(source) abort
@@ -57,7 +57,7 @@ fun! s:source_execute() dict
     elseif type(self.to_execute) is# v:t_list
         let candidates = self.to_execute
     elseif type(self.to_execute) is# v:t_string
-        let candidates = systemlist(self.to_execute . ' 2> /dev/null',)
+        let candidates = systemlist(self.to_execute . ' ' . vfinder#helpers#black_hole())
     endif
     if candidates is# []
         call vfinder#helpers#throw('The source ' . string(self.to_execute) . ' is not valid')
@@ -68,7 +68,7 @@ fun! s:source_execute() dict
 endfun
 
 fun! s:source_format() dict
-    if !empty(self.format_fun)
+    if !empty(self.format_fun) && !empty(self.candidates)
         let self.candidates = call(self.format_fun, [self.candidates])
     endif
     return self

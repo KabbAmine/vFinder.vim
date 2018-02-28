@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-26
+" Last modification: 2018-02-28
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -60,6 +60,11 @@ fun! s:msg(content, ...) abort
     return '[vfinder] ' . extra . a:content
 endfun
 
-fun! vfinder#helpers#empty_buffer() abort
-    return join(getline(1, '$')) =~# '^\s*$'
+fun! vfinder#helpers#empty_buffer(...) abort
+    let buf_nr = exists('a:1') ? a:1 : bufnr('%')
+    return join(getbufline(buf_nr, 1, '$')) =~# '^\s*$'
+endfun
+
+fun! vfinder#helpers#black_hole() abort
+    return '2> /dev/null'
 endfun

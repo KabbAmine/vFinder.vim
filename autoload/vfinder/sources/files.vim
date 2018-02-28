@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-19
+" Last modification: 2018-02-28
 
 
 fun! vfinder#sources#files#check()
@@ -12,6 +12,7 @@ fun! vfinder#sources#files#get() abort
     return {
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
+                \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
                 \   'maps'         : vfinder#sources#files#maps(),
                 \   'is_valid'     : is_valid,
                 \ }
@@ -38,6 +39,10 @@ fun! s:files_source() abort
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
                 \ : 'find * -type f'
+endfun
+
+fun! vfinder#sources#files#candidate_fun() abort
+    return escape(getline('.'), '%#')
 endfun
 
 fun! vfinder#sources#files#maps() abort

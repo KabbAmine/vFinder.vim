@@ -1,5 +1,5 @@
 " Creation         : 2018-02-16
-" Last modification: 2018-02-23
+" Last modification: 2018-02-28
 
 
 fun! vfinder#sources#mru#check()
@@ -11,6 +11,7 @@ fun! vfinder#sources#mru#get() abort
                 \   'name'         : 'mru',
                 \   'to_execute'   : function('s:mru_source'),
                 \   'format_fun'   : function('s:mru_format'),
+                \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
                 \   'maps'         : vfinder#sources#files#maps()
                 \ }
 endfun

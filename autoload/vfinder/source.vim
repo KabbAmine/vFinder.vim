@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-26
+" Last modification: 2018-02-28
 
 
 fun! vfinder#source#i(source) abort
@@ -116,9 +116,6 @@ fun! s:do(action, candidate_fun, mode, options)
     else
         let target = a:candidate_fun()
     endif
-
-    " Escape special vim characters from the target if they exist
-    let target = escape(target, '%#')
 
     if a:options.quit
         silent execute 'wincmd p'

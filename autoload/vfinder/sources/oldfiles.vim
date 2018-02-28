@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-11
+" Last modification: 2018-02-28
 
 
 fun! vfinder#sources#oldfiles#check()
@@ -10,6 +10,7 @@ fun! vfinder#sources#oldfiles#get() abort
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
+                \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
                 \   'maps'         : vfinder#sources#files#maps(),
                 \ }
 endfun

@@ -11,6 +11,7 @@ fun! vfinder#sources#oldfiles#get() abort
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
                 \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
+                \   'filter_name'  : 'match_position',
                 \   'maps'         : vfinder#sources#files#maps(),
                 \ }
 endfun

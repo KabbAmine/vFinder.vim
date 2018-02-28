@@ -14,6 +14,7 @@ fun! vfinder#sources#files#get() abort
                 \   'to_execute'   : s:files_source(),
                 \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
                 \   'maps'         : vfinder#sources#files#maps(),
+                \   'filter_name'  : 'match_position',
                 \   'is_valid'     : is_valid,
                 \ }
 endfun

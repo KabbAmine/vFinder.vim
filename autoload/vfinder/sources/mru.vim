@@ -12,6 +12,7 @@ fun! vfinder#sources#mru#get() abort
                 \   'to_execute'   : function('s:mru_source'),
                 \   'format_fun'   : function('s:mru_format'),
                 \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
+                \   'filter_name'  : 'match_position',
                 \   'maps'         : vfinder#sources#files#maps()
                 \ }
 endfun

@@ -31,6 +31,7 @@ fun! vfinder#source#i(source) abort
                 \   'format_fun'    : get(options, 'format_fun', ''),
                 \   'candidate_fun' : get(options, 'candidate_fun', function('getline', ['.'])),
                 \   'syntax_fun'    : get(options, 'syntax_fun', ''),
+                \   'filter_name'   : get(options, 'filter_name', 'default'),
                 \   'maps'          : options.maps,
                 \   'prepare'       : function('<SID>source_prepare'),
                 \   'execute'       : function('<SID>source_execute'),

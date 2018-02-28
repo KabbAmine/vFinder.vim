@@ -14,6 +14,7 @@ fun! vfinder#sources#outline#get() abort
                 \   'format_fun'   : function('s:outline_format'),
                 \   'candidate_fun': function('s:outline_candidate_fun'),
                 \   'syntax_fun'   : function('s:outline_syntax_fun'),
+                \   'filter_name'  : 'compact_match',
                 \   'maps'         : vfinder#sources#outline#maps()
                 \ }
 endfun

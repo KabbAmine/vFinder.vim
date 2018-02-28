@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-23
+" Last modification: 2018-02-28
 
 
 fun! vfinder#candidates#i(source) abort
@@ -71,12 +71,5 @@ fun! s:candidates_highlight_matched() dict
 endfun
 
 fun! s:filter(query, candidates) abort
-    " Note that we're using a special vim pattern .{-} here which is no
-    " compatible with python
-    return a:query =~# '\u'
-                \ ? filter(copy(a:candidates), {i, v -> v =~# a:query})
-                \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
-    " return has('python3')
-    "             \ ? py3eval('filter("' . a:query . '", ' . string(a:candidates) . ')')
-    "             \ : filter(copy(a:candidates), {i, v -> v =~? a:query})
+    return vfinder#filter#i(b:vf.filter_name, a:candidates, a:query)
 endfun

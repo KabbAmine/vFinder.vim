@@ -112,27 +112,3 @@ fun! vfinder#i(source) abort
         call vfinder#helpers#echo(v:errmsg, 'Error')
     endtry
 endfun
-
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			Filtering
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if has('python3')
-
-python3 << EOF
-# TODO: No smartcase :/
-
-from vim import eval
-from re import search,IGNORECASE
-
-def filter(query, candidates):
-    suggestions = []
-    pattern = r'' + query
-    for candidate in candidates:
-        s = search(pattern, candidate, IGNORECASE)
-        if s:
-            suggestions.append(s.string)
-    return suggestions
-EOF
-
-endif

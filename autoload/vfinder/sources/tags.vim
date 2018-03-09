@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-23
+" Last modification: 2018-03-09
 
 
 fun! vfinder#sources#tags#check()
@@ -64,14 +64,14 @@ fun! vfinder#sources#tags#maps() abort
     let maps = {}
     let maps.i = {
                 \ '<CR>' : {'action': 'tag %s', 'options': {}},
-                \ '<C-s>': {'action': 'split \| tag %s', 'options': {}},
-                \ '<C-v>': {'action': 'vertical split \| tag %s', 'options': {}},
+                \ '<C-s>': {'action': 'stag %s', 'options': {}},
+                \ '<C-v>': {'action': 'vertical stag %s', 'options': {}},
                 \ '<C-o>': {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     let maps.n = {
                 \ '<CR>': {'action': 'tag %s', 'options': {}},
-                \ 's'   : {'action': 'split \| tag %s', 'options': {}},
-                \ 'v'   : {'action': 'vertical split \| tag %s', 'options': {}},
+                \ 's'   : {'action': 'stag %s', 'options': {}},
+                \ 'v'   : {'action': 'vertical stag %s', 'options': {}},
                 \ 'o'   : {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     return maps

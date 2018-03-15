@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-02-23
+" Last modification: 2018-03-15
 
 
 fun! vfinder#sources#buffers#check()
@@ -30,7 +30,7 @@ fun! s:buffers_format(nrs) abort
     for nr in a:nrs
         let name = empty(bufname(nr)) ? '[No Name]' : fnamemodify(bufname(nr), ':.')
         let was_modified = getbufvar(nr, '&modified', 0)
-        call add(res, printf("%-4d %3s %s",
+        call add(res, printf('%-4d %3s %s',
                     \   nr,
                     \   was_modified ? '[+]' : '',
                     \   name)
@@ -40,21 +40,31 @@ fun! s:buffers_format(nrs) abort
 endfun
 
 fun! s:buffers_candidate_fun() abort
-    return matchstr(getline('.'), '^\d\+\s\+\(\[+\]\s\+\)\?\zs.*')
+    return matchstr(getline('.'), '^\d\+\ze')
 endfun
 
 fun! s:buffers_maps() abort
-    let maps = vfinder#sources#files#maps()
-    call extend(maps.i, {
-                \ '<C-d>' : {
+    let maps = {}
+    let maps.i = {
+                \ '<CR>' : {'action': 'buffer %s', 'options': {}},
+                \ '<C-s>': {'action': 'sbuffer %s', 'options': {}},
+                \ '<C-v>': {'action': 'vertical sbuffer %s', 'options': {}},
+                \ '<C-t>': {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ '<C-d>': {
                 \       'action': function('s:wipe'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}},
-                \ })
-    call extend(maps.n, {
-                \ 'dd' : {
+                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \       },
+                \ }
+    let maps.n = {
+                \ '<CR>' : {'action': 'buffer %s', 'options': {}},
+                \ 's'    : {'action': 'sbuffer %s', 'options': {}},
+                \ 'v'    : {'action': 'vertical sbuffer %s', 'options': {}},
+                \ 't'    : {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ 'dd'   : {
                 \       'action': function('s:wipe'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}},
-                \ })
+                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \       },
+                \ }
     return maps
 endfun
 
@@ -64,7 +74,11 @@ fun! s:buffers_syntax_fun() abort
 endfun
 
 fun! s:wipe(buffer) abort
-    if bufexists(a:buffer)
-        execute 'bwipeout! ' . a:buffer
+    let b = str2nr(a:buffer)
+    if bufexists(b)
+        try
+            execute b . 'bwipeout'
+        catch
+        endtry
     endif
 endfun

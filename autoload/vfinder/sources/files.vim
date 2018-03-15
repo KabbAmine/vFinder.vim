@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-28
+" Last modification: 2018-03-15
 
 
 fun! vfinder#sources#files#check()
@@ -33,12 +33,12 @@ fun! s:files_is_valid()
 endfun
 
 fun! s:files_source() abort
-    return executable('git') && isdirectory('./.git')
-                \ ? 'git ls-files -co -X ./.gitignore'
-                \ : executable('rg')
+    return executable('rg')
                 \ ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
+                \ : executable('git') && isdirectory('./.git')
+                \ ? 'git ls-files -co --exclude-standard'
                 \ : 'find * -type f'
 endfun
 

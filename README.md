@@ -14,6 +14,7 @@
 - tags
 - yank
 - registers
+- spell
 
 # source options
 

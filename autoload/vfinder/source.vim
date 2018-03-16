@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-28
+" Last modification: 2018-03-16
 
 
 fun! vfinder#source#i(source) abort
@@ -85,8 +85,12 @@ fun! s:source_set_maps() dict
         let candidate_fun = string(self.candidate_fun)
         for i in range(0, len(maps_{mode}) - 1)
             let options = s:set_all_options(values_{mode}[i].options)
+            let Action = values_{mode}[i].action
+            if type(Action) is# v:t_string
+                let Action = escape(Action, '"')
+            endif
             let fun_args = printf('"%s", %s, "%s", %s',
-                        \ values_{mode}[i].action,
+                        \ Action,
                         \ candidate_fun,
                         \ mode,
                         \ options)

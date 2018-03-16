@@ -1,5 +1,5 @@
 " Creation         : 2018-02-16
-" Last modification: 2018-02-28
+" Last modification: 2018-03-16
 
 
 fun! vfinder#sources#mru#check()
@@ -18,14 +18,7 @@ fun! vfinder#sources#mru#get() abort
 endfun
 
 fun! s:mru_source() abort
-    let files = g:vf_cache.mru
-    if empty(files)
-        let files = vfinder#cache#read('mru')
-        let g:vf_cache.mru = files
-    elseif len(files) ># 100
-        let files = g:vf_cache.files[:99]
-        let g:vf_cache.files = files
-    endif
+    let files = vfinder#cache#get_and_set_elements('mru', 100)
     return filter(copy(files), {i, v ->
                 \   filereadable(v)
                 \   && vfinder#sources#oldfiles#file_is_valid(v)

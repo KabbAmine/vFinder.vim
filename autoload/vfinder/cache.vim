@@ -1,10 +1,22 @@
 " Creation         : 2018-02-12
-" Last modification: 2018-02-19
+" Last modification: 2018-03-16
 
 
 " The cache is used for the sources:
 " * yank
 " * mru
+
+fun! vfinder#cache#get_and_set_elements(name, limit) abort
+    let elements = g:vf_cache[a:name]
+    if empty(elements)
+        let elements = vfinder#cache#read(a:name)
+        let g:vf_cache[a:name] = elements
+    elseif len(elements) ># a:limit
+        let elements = g:vf_cache[a:name][: a:limit - 1]
+        let g:vf_cache[a:name] = elements
+    endif
+    return elements
+endfun
 
 fun! vfinder#cache#read(name) abort
     return readfile(vfinder#cache#get(a:name))

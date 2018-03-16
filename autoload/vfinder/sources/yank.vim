@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-28
+" Last modification: 2018-03-16
 
 
 fun! vfinder#sources#yank#check()
@@ -18,14 +18,7 @@ fun! vfinder#sources#yank#get() abort
 endfun
 
 fun! s:yank_source() abort
-    let yanked = g:vf_cache.yank
-    if empty(yanked)
-        let yanked = vfinder#cache#read('yank')
-        let g:vf_cache.yank = yanked
-    elseif len(yanked) ># 100
-        let yanked = g:vf_cache.yank[:99]
-        let g:vf_cache.yank = yanked
-    endif
+    let yanked = vfinder#cache#get_and_set_elements('yank', 100)
     return yanked
 endfun
 

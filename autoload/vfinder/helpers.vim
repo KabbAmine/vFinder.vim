@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-28
+" Last modification: 2018-03-18
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -17,7 +17,7 @@ fun! vfinder#helpers#process_query(query) abort
                 \ : a:query
     let q_sep = g:vfinder_fuzzy ? '\zs' : ' '
     let join_pat = '.{-}'
-    let to_escape = '$.*~()|{}%[]'
+    let to_escape = '@=?+&$.*~()|{}%[]'
     let final_regex = []
     for item in split(q, q_sep)
         call add(final_regex, escape(item, to_escape))

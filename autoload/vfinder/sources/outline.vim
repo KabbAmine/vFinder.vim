@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-28
+" Last modification: 2018-03-18
 
 
 fun! vfinder#sources#outline#check()
@@ -103,7 +103,15 @@ endfun
 
 fun! vfinder#sources#outline#maps() abort
     return {
-                \   'i': {'<CR>': {'action': '%s', 'options': {}}},
-                \   'n': {'<CR>': {'action': '%s', 'options': {}}},
+                \   'i': {
+                \       '<CR>' : {'action': '%s', 'options': {}},
+                \       '<C-s>': {'action': 'split \| %s', 'options': {}},
+                \       '<C-v>': {'action': 'vertical split \| %s', 'options': {}}
+                \   },
+                \   'n': {
+                \       '<CR>' : {'action': '%s', 'options': {}},
+                \       's'    : {'action': 'split \| %s', 'options': {}},
+                \       'v'    : {'action': 'vertical split \| %s', 'options': {}}
+                \   }
                 \ }
 endfun

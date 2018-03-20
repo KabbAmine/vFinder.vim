@@ -81,49 +81,51 @@ Note that the default sources have their own mappings (Not customizable for the 
 
 - `buffers`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Edit <buf>
-    + `<C-s> / s`  : Edit <buf> in a split
-    + `<C-v> / v`  : Edit <buf> in a vertical split
-    + `<C-t> / t`  : Edit <buf> in a tab
-    + `<C-d> / dd` : Wipeout <buf>
+    + `<CR> / <CR>`: Edit 'buffer'
+    + `<C-s> / s`  : Edit 'buffer' in a split
+    + `<C-v> / v`  : Edit 'buffer' in a vertical split
+    + `<C-t> / t`  : Edit 'buffer' in a tab
+    + `<C-d> / dd` : Wipeout 'buffer'
 - `colors`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Apply the <colorscheme>
-    + `<C-o> / o`  : Apply the <colorscheme> and stay
+    + `<CR> / <CR>`: Apply the 'colorscheme'
+    + `<C-o> / o`  : Apply the 'colorscheme' and stay
 - `command_history`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Echo <command> in the command line
+    + `<CR> / <CR>`: Echo 'command' in the command line
 - `commands`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Execute <command>
+    + `<CR> / <CR>`: Execute 'command'
 - `directories`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Cd to <dir>
-    + `<C-s> / s`  : Cd to <dir> and stay
-    + `<C-v> / v`  : Cd to ../<dir> and stay
+    + `<CR> / <CR>`: Cd to 'dir'
+    + `<C-s> / s`  : Cd to 'dir' and stay
+    + `<C-v> / v`  : Cd to ../'dir' and stay
 - `files`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Edit <file>
-    + `<C-s> / s`  : Edit <file> in a split
-    + `<C-v> / v`  : Edit <file> in a vertical split
-    + `<C-t> / t`  : Edit <file> in a tab
+    + `<CR> / <CR>`: Edit 'file'
+    + `<C-s> / s`  : Edit 'file' in a split
+    + `<C-v> / v`  : Edit 'file' in a vertical split
+    + `<C-t> / t`  : Edit 'file' in a tab
 - `mru`, `oldfiles`:
   * *Same as `files`*
 - `outline`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Go to <tag> line
+    + `<CR> / <CR>`: Go to 'tag' line
+    + `<C-s> / s`  : Split the current window and go to 'tag' line
+    + `<C-v> / v`  : Split vertically the current window and go to 'tag' line
 - `registers`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Paste in place the <selection>
+    + `<CR> / <CR>`: Paste in place the 'selection'
 - `spell`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Replace by the <suggestion>
+    + `<CR> / <CR>`: Replace the current word by the 'suggestion'
 - `tags`:
   * insert mode/normal mode:
-    + `<CR> / <CR>`: Go to <tag> line
-    + `<C-s> / s`  : Open <tag> in a split
-    + `<C-v> / v`  : Open <tag> in a vertical split
-    + `<C-o> / o`  : Preview <tag> in the preview window
+    + `<CR> / <CR>`: Go to 'tag' line
+    + `<C-s> / s`  : Open 'tag' in a split
+    + `<C-v> / v`  : Open 'tag' in a vertical split
+    + `<C-o> / o`  : Preview 'tag' in the preview window
 - `yank`:
   * *Same as `registers`*
 

@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-03-16
+" Last modification: 2018-03-18
 
 
 fun! vfinder#sources#spell#check()
@@ -41,8 +41,6 @@ fun! s:spell_format(suggestions) abort
     for s in a:suggestions
         let i = matchstr(s, '^\s*\zs\d\+')
         let sug = matchstr(s, '"\zs.*\ze"')
-        " let n = substitute(s, '"', '', 'g')
-        " let n = substitute(n, '^\s*', '', '')
         call add(res, printf('%-3s %s', i, sug))
     endfor
     return res
@@ -62,6 +60,6 @@ endfun
 fun! s:use_suggestion(i) abort
     let pos = getpos('.')
     silent execute 'normal! ' . a:i . 'z='
-    " Depending of the suggestion length, the postion may not be accurate.
+    " Depending of the suggestion length, the position may not be accurate.
     call setpos('.', pos)
 endfun

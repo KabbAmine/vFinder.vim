@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-09
+" Last modification: 2018-03-17
 
 
 fun! vfinder#sources#tags#check()
@@ -52,7 +52,7 @@ fun! s:tags_format(tags) abort
 endfun
 
 fun! s:tags_candidate_fun() abort
-    return matchstr(getline('.'), '^.*\ze\s\+\f\+')
+    return escape(matchstr(getline('.'), '^.*\ze\s\+\f\+'), '"')
 endfun
 
 fun! s:tags_syntax_fun() abort

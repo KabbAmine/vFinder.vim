@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-23
+" Last modification: 2018-03-20
 
 
 fun! vfinder#sources#registers#check()
@@ -38,7 +38,7 @@ fun! s:registers_source() abort
         let reg = nr2char(a)
         let content = getreg(reg)
         if !empty(content)
-            call add(regs, regs[reg] . ' ' . content)
+            call add(regs, reg . ' ' . content)
         endif
     endfor
     for r in ['-', '.', '%', '/']

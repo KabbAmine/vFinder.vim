@@ -63,14 +63,14 @@ call vfinder#maps#create('commands', {
             \ })
 call vfinder#maps#create('directories', {
             \   'i': {
-            \       'cd'    : '<CR>',
-            \       'goto'  : '<C-s>',
-            \       'goback': '<C-v>'
+            \       'goto'  : '<CR>',
+            \       'goback': '<C-v>',
+            \       'cd'    : '<C-s>'
             \   },
             \   'n': {
-            \       'cd'    : '<CR>',
-            \       'goto'  : 's',
-            \       'goback': 'v'
+            \       'goto'  : '<CR>',
+            \       'goback': 'v',
+            \       'cd'    : 's'
             \   }
             \ })
 call vfinder#maps#create('files', {

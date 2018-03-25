@@ -48,14 +48,14 @@ fun! vfinder#sources#directories#maps() abort " {{{2
                 \ }
     return {
                 \   'i': {
-                \       keys.i.cd  : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       keys.i.goto: {'action': 'cd %s', 'options': options},
-                \       keys.i.goback: {'action': 'cd ..', 'options': options}
+                \       keys.i.goto  : {'action': 'cd %s', 'options': options},
+                \       keys.i.goback: {'action': 'cd ..', 'options': options},
+                \       keys.i.cd    : {'action': 'cd %s', 'options': {'silent': 0}}
                 \   },
                 \   'n': {
-                \       keys.n.cd  : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       keys.n.goto: {'action': 'cd %s', 'options': options},
+                \       keys.n.goto  : {'action': 'cd %s', 'options': options},
                 \       keys.n.goback: {'action': 'cd ..', 'options': options},
+                \       keys.n.cd    : {'action': 'cd %s', 'options': {'silent': 0}}
                 \   }
                 \ }
 endfun

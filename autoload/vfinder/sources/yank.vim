@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-16
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#yank#check()
@@ -47,9 +47,10 @@ fun! s:yank_syntax_fun() abort
 endfun
 
 fun! vfinder#sources#yank#maps() abort
+    let keys = vfinder#maps#get('yank')
     return {
-                \   'i': {'<CR>': {'action': function('s:paste'), 'options': {'function': 1}}},
-                \   'n': {'<CR>': {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'i': {keys.i.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'n': {keys.n.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
                 \ }
 endfun
 

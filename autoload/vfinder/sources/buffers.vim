@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-03-15
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#buffers#check()
@@ -45,25 +45,26 @@ endfun
 
 fun! s:buffers_maps() abort
     let maps = {}
+    let keys = vfinder#maps#get('buffers')
     let maps.i = {
-                \ '<CR>' : {'action': 'buffer %s', 'options': {}},
-                \ '<C-s>': {'action': 'sbuffer %s', 'options': {}},
-                \ '<C-v>': {'action': 'vertical sbuffer %s', 'options': {}},
-                \ '<C-t>': {'action': 'tabnew \| buffer %s', 'options': {}},
-                \ '<C-d>': {
+                \ keys.i.edit  : {'action': 'buffer %s', 'options': {}},
+                \ keys.i.split : {'action': 'sbuffer %s', 'options': {}},
+                \ keys.i.vsplit: {'action': 'vertical sbuffer %s', 'options': {}},
+                \ keys.i.tab   : {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ keys.i.wipe  : {
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       },
+                \       }
                 \ }
     let maps.n = {
-                \ '<CR>' : {'action': 'buffer %s', 'options': {}},
-                \ 's'    : {'action': 'sbuffer %s', 'options': {}},
-                \ 'v'    : {'action': 'vertical sbuffer %s', 'options': {}},
-                \ 't'    : {'action': 'tabnew \| buffer %s', 'options': {}},
-                \ 'dd'   : {
+                \ keys.n.edit  : {'action': 'buffer %s', 'options': {}},
+                \ keys.n.split : {'action': 'sbuffer %s', 'options': {}},
+                \ keys.n.vsplit: {'action': 'vertical sbuffer %s', 'options': {}},
+                \ keys.n.tab   : {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ keys.n.wipe  : {
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       },
+                \       }
                 \ }
     return maps
 endfun

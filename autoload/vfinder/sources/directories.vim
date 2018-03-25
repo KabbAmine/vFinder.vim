@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-23
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#directories#check()
@@ -39,6 +39,7 @@ fun! s:directories_syntax_fun() abort
 endfun
 
 fun! vfinder#sources#directories#maps() abort " {{{2
+    let keys = vfinder#maps#get('directories')
     let options = {
                 \   'silent'      : 0,
                 \   'update'      : 1,
@@ -47,14 +48,14 @@ fun! vfinder#sources#directories#maps() abort " {{{2
                 \ }
     return {
                 \   'i': {
-                \       '<CR>' : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       '<C-s>': {'action': 'cd %s', 'options': options},
-                \       '<C-v>': {'action': 'cd ..', 'options': options}
+                \       keys.i.cd  : {'action': 'cd %s', 'options': {'silent': 0}},
+                \       keys.i.goto: {'action': 'cd %s', 'options': options},
+                \       keys.i.goback: {'action': 'cd ..', 'options': options}
                 \   },
                 \   'n': {
-                \       '<CR>': {'action': 'cd %s', 'options': options},
-                \       's'   : {'action': 'cd %s', 'options': {'silent': 0}},
-                \       'v'   : {'action': 'cd ..', 'options': options},
+                \       keys.n.cd  : {'action': 'cd %s', 'options': {'silent': 0}},
+                \       keys.n.goto: {'action': 'cd %s', 'options': options},
+                \       keys.n.goback: {'action': 'cd ..', 'options': options},
                 \   }
                 \ }
 endfun

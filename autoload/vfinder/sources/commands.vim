@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-02-19
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#commands#check()
@@ -19,8 +19,15 @@ fun! s:commands_source() abort
 endfun
 
 fun! vfinder#sources#commands#maps() abort
+    let keys = vfinder#maps#get('commands')
     return {
-                \   'i': {'<CR>' : {'action': '%s', 'options': {'silent': 0}}},
-                \   'n': {'<CR>' : {'action': '%s', 'options': {'silent': 0}}}
+                \   'i': {
+                \       keys.i.apply: {'action': '%s', 'options': {'silent': 0}},
+                \       keys.i.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \   },
+                \   'n': {
+                \       keys.n.apply: {'action': '%s', 'options': {'silent': 0}},
+                \       keys.n.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \   }
                 \ }
 endfun

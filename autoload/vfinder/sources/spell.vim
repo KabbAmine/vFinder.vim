@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-03-18
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#spell#check()
@@ -52,8 +52,9 @@ endfun
 
 fun! vfinder#sources#spell#maps() abort
     let maps = {}
-    let maps.i = {'<CR>' : {'action': function('s:use_suggestion'), 'options': {'function': 1}}}
-    let maps.n = maps.i
+    let keys = vfinder#maps#get('spell')
+    let maps.i = {keys.i.use: {'action': function('s:use_suggestion'), 'options': {'function': 1}}}
+    let maps.n = {keys.n.use: {'action': function('s:use_suggestion'), 'options': {'function': 1}}}
     return maps
 endfun
 

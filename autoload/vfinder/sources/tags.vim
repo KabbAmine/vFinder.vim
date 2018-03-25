@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-17
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#tags#check()
@@ -62,17 +62,18 @@ endfun
 
 fun! vfinder#sources#tags#maps() abort
     let maps = {}
+    let keys = vfinder#maps#get('tags')
     let maps.i = {
-                \ '<CR>' : {'action': 'tag %s', 'options': {}},
-                \ '<C-s>': {'action': 'stag %s', 'options': {}},
-                \ '<C-v>': {'action': 'vertical stag %s', 'options': {}},
-                \ '<C-o>': {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ keys.i.goto         : {'action': 'tag %s', 'options': {}},
+                \ keys.i.splitandgoto : {'action': 'stag %s', 'options': {}},
+                \ keys.i.vsplitandgoto: {'action': 'vertical stag %s', 'options': {}},
+                \ keys.i.preview      : {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     let maps.n = {
-                \ '<CR>': {'action': 'tag %s', 'options': {}},
-                \ 's'   : {'action': 'stag %s', 'options': {}},
-                \ 'v'   : {'action': 'vertical stag %s', 'options': {}},
-                \ 'o'   : {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ keys.n.goto         : {'action': 'tag %s', 'options': {}},
+                \ keys.n.splitandgoto : {'action': 'stag %s', 'options': {}},
+                \ keys.n.vsplitandgoto: {'action': 'vertical stag %s', 'options': {}},
+                \ keys.n.preview      : {'action': 'ptag %s', 'options': {'quit': 0}},
                 \ }
     return maps
 endfun

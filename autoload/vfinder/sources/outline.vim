@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-18
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#outline#check()
@@ -102,16 +102,17 @@ fun! s:outline_syntax_fun() abort
 endfun
 
 fun! vfinder#sources#outline#maps() abort
+    let keys = vfinder#maps#get('outline')
     return {
                 \   'i': {
-                \       '<CR>' : {'action': '%s', 'options': {}},
-                \       '<C-s>': {'action': 'split \| %s', 'options': {}},
-                \       '<C-v>': {'action': 'vertical split \| %s', 'options': {}}
+                \       keys.i.goto       : {'action': '%s', 'options': {}},
+                \       keys.i.splitandgoto : {'action': 'split \| %s', 'options': {}},
+                \       keys.i.vsplitandgoto: {'action': 'vertical split \| %s', 'options': {}}
                 \   },
                 \   'n': {
-                \       '<CR>' : {'action': '%s', 'options': {}},
-                \       's'    : {'action': 'split \| %s', 'options': {}},
-                \       'v'    : {'action': 'vertical split \| %s', 'options': {}}
+                \       keys.n.goto       : {'action': '%s', 'options': {}},
+                \       keys.n.splitandgoto : {'action': 'split \| %s', 'options': {}},
+                \       keys.n.vsplitandgoto: {'action': 'vertical split \| %s', 'options': {}}
                 \   }
                 \ }
 endfun

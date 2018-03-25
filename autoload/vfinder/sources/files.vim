@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-15
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#files#check()
@@ -48,17 +48,18 @@ endfun
 
 fun! vfinder#sources#files#maps() abort
     let maps = {}
+    let keys = vfinder#maps#get('files')
     let maps.i = {
-                \ '<CR>' : {'action': 'edit %s', 'options': {}},
-                \ '<C-s>': {'action': 'split %s', 'options': {}},
-                \ '<C-v>': {'action': 'vertical split %s', 'options': {}},
-                \ '<C-t>': {'action': 'tabedit %s', 'options': {}}
+                \ keys.i.edit  : {'action': 'edit %s', 'options': {}},
+                \ keys.i.split : {'action': 'split %s', 'options': {}},
+                \ keys.i.vsplit: {'action': 'vertical split %s', 'options': {}},
+                \ keys.i.tab   : {'action': 'tabedit %s', 'options': {}}
                 \ }
     let maps.n = {
-                \ '<CR>': {'action': 'edit %s', 'options': {}},
-                \ 's'   : {'action': 'split %s', 'options': {}},
-                \ 'v'   : {'action': 'vertical split %s', 'options': {}},
-                \ 't'   : {'action': 'tabedit %s', 'options': {}}
+                \ keys.n.edit  : {'action': 'edit %s', 'options': {}},
+                \ keys.n.split : {'action': 'split %s', 'options': {}},
+                \ keys.n.vsplit: {'action': 'vertical split %s', 'options': {}},
+                \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}}
                 \ }
     return maps
 endfun

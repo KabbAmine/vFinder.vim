@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-02-19
+" Last modification: 2018-03-25
 
 
 fun! vfinder#sources#colors#check()
@@ -19,14 +19,15 @@ fun! s:colors_source() abort
 endfun
 
 fun! vfinder#sources#colors#maps() abort
+    let keys = vfinder#maps#get('colors')
     return {
                 \   'i': {
-                \       '<CR>' : {'action': 'colorscheme %s', 'options': {'silent': 0}},
-                \       '<C-o>': {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
+                \       keys.i.apply  : {'action': 'colorscheme %s', 'options': {'silent': 0}},
+                \       keys.i.preview: {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
                 \   },
                 \   'n': {
-                \       '<CR>' : {'action': 'colorscheme %s', 'options': {'silent': 0}},
-                \       'o'    : {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
+                \       keys.n.apply: {'action': 'colorscheme %s', 'options': {'silent': 0}},
+                \       keys.n.preview: {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
                 \   }
                 \ }
 endfun

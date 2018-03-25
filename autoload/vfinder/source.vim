@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-16
+" Last modification: 2018-03-25
 
 
 fun! vfinder#source#i(source) abort
@@ -94,10 +94,12 @@ fun! s:source_set_maps() dict
                         \ candidate_fun,
                         \ mode,
                         \ options)
-             silent execute mode . 'noremap <silent> <buffer> ' .
-                         \ keys_{mode}[i] . ' ' .
-                         \ (mode is# 'i' ? '<Esc>' : '') .
-                         \ ':call <SID>do(' . fun_args . ')<CR>'
+            silent execute printf('%snoremap <silent> <buffer> %s %s:call <SID>do(%s)<CR>',
+                        \  mode,
+                        \  keys_{mode}[i],
+                        \  (mode is# 'i' ? '<Esc>' : ''),
+                        \  fun_args
+                        \ )
         endfor
     endfor
     return self

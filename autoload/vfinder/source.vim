@@ -159,7 +159,12 @@ fun! s:do(action, candidate_fun, mode, options)
         if a:options.update
             call vfinder#events#update_candidates_request()
         endif
-        call s:set_mode(line, a:mode)
+
+        if a:options.goto_prompt
+            silent startinsert!
+        else
+            call s:set_mode(line, a:mode)
+        endif
     endif
 endfun
 
@@ -171,6 +176,7 @@ fun! s:set_all_options(options) abort
     let opts.function = get(opts, 'function', '')
     let opts.echo = get(opts, 'echo', 0)
     let opts.clear_prompt = get(opts, 'clear_prompt', 0)
+    let opts.goto_prompt = get(opts, 'goto_prompt', 0)
     return opts
 endfun
 

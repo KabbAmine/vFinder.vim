@@ -153,7 +153,7 @@ fun! s:do(action, candidate_fun, mode, options)
     if a:options.quit && a:options.exec_in_vf
         silent execute 'bwipeout ' . buffer
         silent execute 'wincmd p'
-    else
+    elseif !a:options.quit
         if a:options.clear_prompt
             let prompt = vfinder#prompt#i()
             call prompt.render('')

@@ -39,7 +39,6 @@ fun! vfinder#sources#directories#maps() abort
     let options = {
                 \   'clear_prompt': 1,
                 \   'function'    : 1,
-                \   'goto_prompt' : 1,
                 \   'quit'        : 0,
                 \   'silent'      : 0
                 \ }
@@ -58,7 +57,7 @@ fun! vfinder#sources#directories#maps() abort
 endfun
 
 fun! s:goto(path) abort
-    let goto = a:path is# '../'
+    if a:path is# '../'
         call s:goback('../')
     else
         let goto = exists('b:vf.last_wd')

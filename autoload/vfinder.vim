@@ -94,9 +94,15 @@ fun! vfinder#i(source) abort
         " number.
         let initial_bufnr = bufnr('%')
 
+        " Same thing goes for the working directory
+        let initial_wd = getcwd() . '/'
+
         let buffer = vfinder#buffer#i(source)
         call buffer.goto()
-        let b:vf = extend(source, {'initial_bufnr': initial_bufnr})
+        let b:vf = extend(source, {
+                    \   'initial_bufnr': initial_bufnr,
+                    \   'initial_wd'   : initial_wd
+                    \ })
 
         let prompt = vfinder#prompt#i()
         call prompt.render()

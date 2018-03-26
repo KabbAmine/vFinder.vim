@@ -58,6 +58,8 @@ fun! s:buffer_set_options() dict
     setlocal modifiable
     setlocal cursorline
     setlocal nowrap
+    setlocal foldcolumn=0
+    setlocal textwidth=0
     return self
 endfun
 

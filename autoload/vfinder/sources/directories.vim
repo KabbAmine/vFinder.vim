@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-03-25
+" Last modification: 2018-03-26
 
 
 fun! vfinder#sources#directories#check()
@@ -46,12 +46,14 @@ fun! vfinder#sources#directories#maps() abort
                 \   'i': {
                 \       keys.i.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.i.goback: {'action': function('s:goback'), 'options': options},
-                \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')}
+                \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
+                \       keys.i.reload: {'action': function('s:reload_i'), 'options': {'function': 1, 'quit': 0}}
                 \   },
                 \   'n': {
                 \       keys.n.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.n.goback: {'action': function('s:goback'), 'options': options},
-                \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')}
+                \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
+                \       keys.n.reload: {'action': function('s:reload_n'), 'options': {'function': 1, 'quit': 0}}
                 \   }
                 \ }
 endfun
@@ -61,7 +63,7 @@ fun! s:goto(path) abort
         call s:goback('../')
     else
         let goto = exists('b:vf.last_wd')
-                    \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
+                    \ ? b:vf.last_wd . a:path
                     \ : a:path
         call s:set_path_to(goto)
     endif
@@ -69,17 +71,18 @@ endfun
 
 fun! s:goback(path) abort
     let goto = exists('b:vf.last_wd') && b:vf.last_wd isnot# '/..'
-                \ ? fnamemodify(b:vf.last_wd . '../', ':p')
+                \ ? b:vf.last_wd . '../'
                 \ : b:vf.initial_wd . '../'
     call s:set_path_to(goto)
 endfun
 
 fun! s:set_path_to(dir) abort
-    silent execute 'cd ' . a:dir
+    let path = fnamemodify(a:dir, ':p')
+    silent execute 'cd ' . path
     call vfinder#prompt#i().render('')
     call vfinder#events#update_candidates_request()
     silent execute 'cd ' . b:vf.initial_wd
-    let b:vf.last_wd = a:dir
+    let b:vf.last_wd = path
 endfun
 
 fun! s:cd(path) abort
@@ -87,4 +90,20 @@ fun! s:cd(path) abort
                 \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
                 \ : a:path
     silent execute 'cd ' . goto
+endfun
+
+fun! s:reload_i(...) abort
+    call s:reload()
+    startinsert!
+endfun
+
+fun! s:reload_n(...) abort
+    call s:reload()
+endfun
+
+fun! s:reload() abort
+    if exists('b:vf.last_wd')
+        call remove(b:vf, 'last_wd')
+    endif
+    call vfinder#events#update_candidates_request()
 endfun

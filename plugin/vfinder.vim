@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-25
+" Last modification: 2018-03-26
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -65,12 +65,14 @@ call vfinder#maps#create('directories', {
             \   'i': {
             \       'goto'  : '<CR>',
             \       'goback': '<C-v>',
-            \       'cd'    : '<C-s>'
+            \       'cd'    : '<C-s>',
+            \       'reload': '<C-r>'
             \   },
             \   'n': {
             \       'goto'  : '<CR>',
             \       'goback': 'v',
-            \       'cd'    : 's'
+            \       'cd'    : 's',
+            \       'reload': 'R'
             \   }
             \ })
 call vfinder#maps#create('files', {

@@ -3,11 +3,18 @@
 ![Badge version](https://img.shields.io/badge/version-0.0.1-blue.svg?style=flat-square "Badge for version")
 ![License version](https://img.shields.io/badge/license-mit-blue.svg?style=flat-square "Badge for license")
 
-A Unite-like non async finder for vim.
+A versatile finder for vim.
 
 ![Demo of vFinder](.img/vfinder_demo.gif "Demo of vFinder")
 
-**N.B:** The plugin is very experimental and may change a lot.
+**N.B:**
+
+The plugin:
+- Is experimental and may change a lot.
+- Is not windows compatible yet.
+- Is non asynchronous (But may be in the future).
+- Projects with <= 20000 files work as expected.
+- Use some features from last vim versions so it may not work on old ones.
 
 # Usage
 
@@ -30,19 +37,20 @@ The candidates are gathered form the key `to_execute` which can be:
 - A list         : `['foo', 'bar']`
 - A shell command: `foo -f --flag2`
 
+There are no mappings provided for executing sources, please define your owns (See the example of configuration below).
+
 # Global options
 
-| options                         | default value               | description                                 |
-| --------------                  | --------------              | --------------                              |
-| `g:vfinder_verbose`             | `1`                         | Enable/Disable showing echoed messages      |
-| `g:vfinder_fuzzy`               | `0`                         | Enable/Disable fuzzy matching (May be slow) |            
-| `g:vfinder_cache_path`          | `$HOME . '/.cache/vfinder'` | Directory where to store cache files        |
-| `g:vfinder_yank_source_enabled` | `1`                         | Enable/Disable yank source which use caching|
-| `g:vfinder_mru_source_enabled`  | `1`                         | Enable/Disable mru source which use caching |
+| options                         | default value                     | description                                 |
+| --------------                  | --------------                    | --------------                              |
+| `g:vfinder_verbose`             | `1`                               | Enable/Disable showing echoed messages      |
+| `g:vfinder_fuzzy`               | `0`                               | Enable/Disable fuzzy matching (May be slow) |
+| `g:vfinder_cache_path`          | `$HOME . '/.cache/vfinder'`       | Directory where to store cache files        |
+| `g:vfinder_yank_source_enabled` | `1`                               | Enable/Disable yank source which use caching|
+| `g:vfinder_mru_source_enabled`  | `1`                               | Enable/Disable mru source which use caching |
+| `g:vfinder_maps`                | *See the part about __Mappings__* | Global & per sources actions/mappings       |
 
-# Sources
-
-## Default sources
+# Default sources
 
 The plugin provides the following sources:
 
@@ -51,109 +59,241 @@ The plugin provides the following sources:
 - `command_history`
 - `commands`
 - `directories`
-- `files` (Need `rg`, `ag`, `git ls-files` or `find`) (Do not work on windows yet)
-- `mru`
+- `files`<sup>n</sup>
+- `mru`<sup>c</sup>
 - `oldfiles`
-- `outline` (Need `ctags-exuberant`)
+- `outline`<sup>t</sup>
 - `registers`
 - `spell`
-- `tags` (Need `ctags-exuberant`)
-- `yank`
+- `tags`<sup>t</sup>
+- `yank`<sup>c</sup>
 
-# Source options
+*__<sup>n</sup>__  Need `rg`, `ag`, `git` or `find`.*  
+*__<sup>t</sup>__ Need `ctags`.*  
+*__<sup>c</sup>__ Use cache files.*
+
+# Mappings
+
+The plugin defines mappings only for the vfinder file type and all of them can be
+overwritten with `g:vfinder_maps`.  
+The syntax to overwrite a default mapping is the following:
+
+```viml
+let g:vfinder_maps = {}
+let g:vfinder_maps.scope = {
+            \   'i': {
+            \       'action1': 'keys',
+            \       'action2': 'keys',
+            \   },
+            \   'n': {
+            \       'action' : 'keys',
+            \       'action2': 'keys',
+            \   }
+            \ }
+```
+
+Where `i` (insert) and `n` (normal) are the modes where the combination(s) action/keys operates.  
+And where `scope` can be:
+- `_`: Global mappings that affect all vfinder windows.
+- `<source_name>`: Mappings specific to the `<source_name>`.
+
+## Global mappings
+
+| mode | action                 | default value   |
+| ---- | ------                 | -----           |
+| `i`  | `prompt_backspace`     | `<BS>`          |
+| `i`  | `prompt_delete`        | `<Del>`         |
+| `i`  | `prompt_delete_line`   | `<C-u>`         |
+| `i`  | `prompt_delete_word`   | `<C-w>`         |
+| `i`  | `prompt_move_down`     | `<C-n>`         |
+| `i`  | `prompt_move_left`     | `<C-h>`         |
+| `i`  | `prompt_move_right`    | `<C-l>`         |
+| `i`  | `prompt_move_to_end`   | `<C-e>`         |
+| `i`  | `prompt_move_to_start` | `<C-a>`         |
+| `i`  | `prompt_move_up`       | `<C-p>`         |
+| `n`  | `start_insert_mode_a`  | `a`             |
+| `n`  | `start_insert_mode_A`  | `A`             |
+| `n`  | `start_insert_mode_i`  | `i`             |
+| `n`  | `start_insert_mode_I`  | `I`             |
+| `i`  | `window_quit`          | `<Esc>`         |
+| `n`  | `window_quit`          | `<Esc>`         |
+| `i`  | `candidates_update`    | `<C-r>`         |
+| `n`  | `candidates_update`    | `R`             |
+| `i`  | `cache_clean`          | `<F5>`          |
+| `n`  | `cache_clean`          | `<F5>`          |
+
+e.g.
+
+```viml
+let g:vfinder_maps = {}
+let g:vfinder_maps._ = {
+            \   'i': {'candidates_update': '<C-f>'},
+            \   'n': {'window_quit'      : 'q'}
+            \ }
+```
+
+## Per source mappings
+
+### Buffers
+
+| mode | action   | default value |
+| ---- | ------   | -----         |
+| `i`  | `edit`   | `<CR>`        |
+| `n`  | `edit`   | `<CR>`        |
+| `i`  | `split`  | `<C-s>`       |
+| `n`  | `split`  | `s`           |
+| `i`  | `vsplit` | `<C-v>`       |
+| `n`  | `vsplit` | `v`           |
+| `i`  | `tab`    | `<C-t>`       |
+| `n`  | `tab`    | `t`           |
+| `i`  | `wipe`   | `<C-d>`       |
+| `n`  | `wipe`   | `dd`          |
+
+### Colors
+
+| mode | action    | default value |
+| ---- | ------    | -----         |
+| `i`  | `apply`   | `<CR>`        |
+| `n`  | `apply`   | `<CR>`        |
+| `i`  | `preview` | `<C-o>`       |
+| `n`  | `preview` | `o`           |
+
+### Commands
+
+| mode | action  | default value |
+| ---- | ------  | -----         |
+| `i`  | `apply` | `<CR>`        |
+| `n`  | `apply` | `<CR>`        |
+| `i`  | `echo`  | `<C-o>`       |
+| `n`  | `echo`  | `o`           |
+
+### Directories
+
+| mode | action   | default value |
+| ---- | ------   | -----         |
+| `i`  | `goto`   | `<CR>`        |
+| `n`  | `goto`   | `<CR>`        |
+| `i`  | `goback` | `<C-v>`       |
+| `n`  | `goback` | `v`           |
+| `i`  | `cd`     | `<C-s>`       |
+| `n`  | `cd`     | `s`           |
+
+### Files
+
+| mode | action   | default value |
+| ---- | ------   | -----         |
+| `i`  | `edit`   | `<CR>`        |
+| `n`  | `edit`   | `<CR>`        |
+| `i`  | `split`  | `<C-s>`       |
+| `n`  | `split`  | `s`           |
+| `i`  | `vsplit` | `<C-v>`       |
+| `n`  | `vsplit` | `v`           |
+| `i`  | `tab`    | `<C-t>`       |
+| `n`  | `tab`    | `t`           |
+
+### Outline
+
+| mode | action          | default value |
+| ---- | ------          | -----         |
+| `i`  | `goto`          | `<CR>`        |
+| `n`  | `goto`          | `<CR>`        |
+| `i`  | `splitandgoto`  | `<C-s>`       |
+| `n`  | `splitandgoto`  | `s`           |
+| `i`  | `vsplitandgoto` | `<C-v>`       |
+| `n`  | `vsplitandgoto` | `v`           |
+
+### Spell
+
+| mode | action | default value |
+| ---- | ------ | -----         |
+| `i`  | `use`  | `<CR>`        |
+| `n`  | `use`  | `<CR>`        |
+
+### Tags
+
+| mode | action          | default value |
+| ---- | ------          | -----         |
+| `i`  | `goto`          | `<CR>`        |
+| `n`  | `goto`          | `<CR>`        |
+| `i`  | `splitandgoto`  | `<C-s>`       |
+| `n`  | `splitandgoto`  | `s`           |
+| `i`  | `vsplitandgoto` | `<C-v>`       |
+| `n`  | `vsplitandgoto` | `v`           |
+| `i`  | `preview`       | `<C-o>`       |
+| `n`  | `preview`       | `o`           |
+
+### Yank
+
+| mode | action  | default value |
+| ---- | ------  | -----         |
+| `i`  | `paste` | `<CR>`        |
+| `n`  | `paste` | `<CR>`        |
+
+Some sources do not have actions, because they inherit actions/mappings from other sources.
+
+- `command_history` inherits from `commands`.
+- `mru` & `oldfiles` inherits from `files`.
+- `registers` inherits from `yank`.
+
+e.g.
+
+```viml
+" Define g:vfinder_maps only if its not already defined.
+let g:vfinder_maps = {}
+
+let g:vfinder_maps.buffers = {
+            \   'i': {
+            \       'split' : '<C-k>',
+            \       'vsplit': '<C-z>'
+            \   }
+            \ }
+let g:vfinder_maps.spell = {
+            \   'i': {'use': '<C-z>'}
+            \   'n': {'use': 'zz'}
+            \ }
+```
+
+# Create a source
 
 *(The following will be documented soon)*
 
-- `name`
-- `is_valid`
-- `to_execute`
-- `format_fun`
-- `candidate_fun`
-- `syntax_fun`
-- `filter_name`
-- `maps`
+## Source options
 
-# Maps
+- name
+- is_valid
+- to_execute
+- format_fun
+- candidate_fun
+- syntax_fun
+- filter_name
+- maps
 
-There are no mappings provided by the plugin, please define your owns (See the example of configuration below).
-
-Note that the default sources have their own mappings (Not customizable for the moment).
-
-- `buffers`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Edit 'buffer'
-    + `<C-s> / s`  : Edit 'buffer' in a split
-    + `<C-v> / v`  : Edit 'buffer' in a vertical split
-    + `<C-t> / t`  : Edit 'buffer' in a tab
-    + `<C-d> / dd` : Wipeout 'buffer'
-- `colors`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Apply the 'colorscheme'
-    + `<C-o> / o`  : Apply the 'colorscheme' and stay
-- `command_history`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Echo 'command' in the command line
-- `commands`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Execute 'command'
-- `directories`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Cd to 'dir'
-    + `<C-s> / s`  : Cd to 'dir' and stay
-    + `<C-v> / v`  : Cd to ../'dir' and stay
-- `files`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Edit 'file'
-    + `<C-s> / s`  : Edit 'file' in a split
-    + `<C-v> / v`  : Edit 'file' in a vertical split
-    + `<C-t> / t`  : Edit 'file' in a tab
-- `mru`, `oldfiles`:
-  * *Same as `files`*
-- `outline`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Go to 'tag' line
-    + `<C-s> / s`  : Split the current window and go to 'tag' line
-    + `<C-v> / v`  : Split vertically the current window and go to 'tag' line
-- `registers`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Paste in place the 'selection'
-- `spell`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Replace the current word by the 'suggestion'
-- `tags`:
-  * insert mode/normal mode:
-    + `<CR> / <CR>`: Go to 'tag' line
-    + `<C-s> / s`  : Open 'tag' in a split
-    + `<C-v> / v`  : Open 'tag' in a vertical split
-    + `<C-o> / o`  : Preview 'tag' in the preview window
-- `yank`:
-  * *Same as `registers`*
-
-# Actions
-
-*(The following will be documented soon)*
+## Actions
 
 ```viml
 {
-  i:{'keys': {'action': '%s', 'options': {<see below>}}},
-  n:{'keys': {'action': '%s', 'options': {<see below>}}},
-}
-
-" options
-{
-clear_prompt: 0,
-echo        : 0,
-function    : 0,
-quit        : 1,
-silent      : 1,
-update      : 0
+  i:{'action_name': {'action': '%s', 'options': {<see below>}}},
+  n:{'action_name': {'action': '%s', 'options': {<see below>}}},
 }
 ```
+
+## Map options
+
+- clear_prompt: `0`
+- echo        : `0`
+- exec_in_vf  : `1`
+- function    : `0`
+- goto_prompt : `0`
+- quit        : `1`
+- silent      : `1`
+- update      : `0`
 
 # Example of configuration
 
 ```viml
 let g:vfinder_fuzzy = 0
+let g:vfinder_maps = {}
+let g:vfinder_maps._ = {'n': {'window_quit': 'q'}}
 nnoremap <silent> ,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,b :call vfinder#i('buffers')<CR>
 nnoremap <silent> ,d :call vfinder#i('directories')<CR>

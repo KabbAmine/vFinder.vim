@@ -24,10 +24,13 @@ call vfinder#i('files')
 
 " Or use a custom one
 call vfinder#i({
-    \   'name'      : 'my_bookmarks',
-    \   'to_execute': ['~/.foo', '~/lab/bar'],
-    \   'maps'      : vfinder#sources#directories#maps()
-})
+        \   'name'      : 'custom',
+        \   'to_execute': ['~/.foo', '~/lab/bar'],
+        \   'maps'      : {
+        \       'i': {'<CR>': {'action': 'cd %s', 'options': {}}},
+        \       'n': {'<CR>': {'action': 'cd %s', 'options': {}}}
+        \   }
+        \ })
 ```
 
 The candidates are gathered form the key `to_execute` which can be:
@@ -313,12 +316,18 @@ inoremap <silent> <A-y> <Esc>:call vfinder#i('yank')<CR>
 " nnoremap <silent> ,C :call vfinder#i('colors')<CR>
 " nnoremap <silent> ,,r :call vfinder#i('oldfiles')<CR>
 " nnoremap <silent> ,Y :call vfinder#i('registers')<CR>
-nnoremap <silent> ,B :call vfinder#i({
+
+nnoremap <silent> ,B :call vfinder#i(<SID>BookmarksSource())<CR>
+fun! s:BookmarksSource() abort
+    return {
             \   'name'      : 'bookmarks',
             \   'to_execute': ['~/.vim', '~/Temp/lab'],
-            \   'maps'      : vfinder#sources#directories#maps()
-            \ })<CR>
-
+            \   'maps'      : {
+            \       'i': {'<CR>': {'action': 'cd %s', 'options': {'silent': 1}}},
+            \       'n': {'<CR>': {'action': 'cd %s', 'options': {'silent': 1}}}
+            \   }
+            \ }
+endfun
 ```
 
 # Note

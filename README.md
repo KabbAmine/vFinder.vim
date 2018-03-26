@@ -32,10 +32,10 @@ call vfinder#i({
 
 The candidates are gathered form the key `to_execute` which can be:
 
-- A filename     : `path/to/foo`
+- A filename     : `'path/to/foo'`
 - A funcref      : `function('s:foo')`
 - A list         : `['foo', 'bar']`
-- A shell command: `foo -f --flag2`
+- A shell command: `'foo -f --flag2'`
 
 There are no mappings provided for executing sources, please define your owns (See the example of configuration below).
 
@@ -90,6 +90,9 @@ let g:vfinder_maps.scope = {
             \       'action2': 'keys',
             \   }
             \ }
+
+" Note that if you re-source your vimrc often, you should add the following function to be sure that your plugin's mappings are up-to-date.
+call vfinder#maps#define()
 ```
 
 Where `i` (insert) and `n` (normal) are the modes where the combination(s) action/keys operates.  
@@ -294,6 +297,7 @@ let g:vfinder_maps.spell = {
 let g:vfinder_fuzzy = 0
 let g:vfinder_maps = {}
 let g:vfinder_maps._ = {'n': {'window_quit': 'q'}}
+call vfinder#maps#define()
 nnoremap <silent> ,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,b :call vfinder#i('buffers')<CR>
 nnoremap <silent> ,d :call vfinder#i('directories')<CR>

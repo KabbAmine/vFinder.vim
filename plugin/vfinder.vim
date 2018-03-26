@@ -25,6 +25,33 @@ let g:vfinder_maps = get(g:, 'vfinder_maps', {})
 " 1}}}
 
 " Mappings {{{1
+call vfinder#maps#create('_', {
+            \   'i': {
+            \       'prompt_move_down'    : '<C-n>',
+            \       'prompt_move_up'      : '<C-p>',
+            \       'prompt_move_left'    : '<C-h>',
+            \       'prompt_move_right'   : '<C-l>',
+            \       'prompt_move_to_start': '<C-a>',
+            \       'prompt_move_to_end'  : '<C-e>',
+            \       'prompt_backspace'    : '<BS>',
+            \       'prompt_delete'       : '<Del>',
+            \       'prompt_delete_word'  : '<C-w>',
+            \       'prompt_delete_line'  : '<C-u>',
+            \       'window_quit'         : '<Esc>',
+            \       'candidates_update'   : '<C-r>',
+            \       'cache_clean'         : '<F5>'
+            \   },
+            \   'n': {
+            \       'start_insert_mode_i': 'i',
+            \       'start_insert_mode_I': 'I',
+            \       'start_insert_mode_a': 'a',
+            \       'start_insert_mode_A': 'A',
+            \       'window_quit'        : '<Esc>',
+            \       'candidates_update'  : 'R',
+            \       'cache_clean'        : '<F5>'
+            \
+            \   }
+            \ })
 call vfinder#maps#create('buffers', {
             \   'i': {
             \       'edit'  : '<CR>',

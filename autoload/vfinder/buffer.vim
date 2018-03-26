@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-26
+" Last modification: 2018-03-26
 
 
 fun! vfinder#buffer#i(source) abort
@@ -75,35 +75,36 @@ fun! s:buffer_set_syntax() dict
 endfun
 
 fun! s:buffer_set_maps() dict
-    " Prompt & movement
-    inoremap <silent> <buffer> <C-n> <Esc>:call <SID>move_down()<CR>
-    inoremap <silent> <buffer> <C-p> <Esc>:call <SID>move_up()<CR>
-    inoremap <silent> <buffer> <C-h> <Esc>:call <SID>move_left()<CR>
-    inoremap <silent> <buffer> <C-l> <Esc>:call <SID>move_right()<CR>
-    inoremap <silent> <buffer> <C-a> <Esc>:call <SID>move_to_edge(-1)<CR>
-    inoremap <silent> <buffer> <C-e> <Esc>:call <SID>move_to_edge(1)<CR>
-    inoremap <silent> <buffer> <BS> <Esc>:call <SID>backspace()<CR>
-    inoremap <silent> <buffer> <Del> <Esc>:call <SID>delete()<CR>
-    inoremap <silent> <buffer> <C-w> <Esc>:call <SID>control_w()<CR>
-    inoremap <silent> <buffer> <C-u> <Esc>:call <SID>control_u()<CR>
-    " Insert mode
-    nnoremap <silent> <buffer> i :call <SID>start_insert_mode(-1)<CR>
-    nnoremap <silent> <buffer> I :call <SID>start_insert_mode(-1)<CR>
-    nnoremap <silent> <buffer> a :call <SID>start_insert_mode(1)<CR>
-    nnoremap <silent> <buffer> A :call <SID>start_insert_mode(1)<CR>
-    " Buffer
-    inoremap <silent> <buffer> <Esc> <Esc>:call <SID>wipe_buffer()<CR>
-    nnoremap <silent> <buffer> <Esc> :call <SID>wipe_buffer()<CR>
-    nnoremap <silent> <buffer> q :call <SID>wipe_buffer()<CR>
-    " Candidates & cache
-    nnoremap <silent> <buffer> R :call <SID>update_candidates_n()<CR>
-    inoremap <silent> <buffer> <C-r> <Esc>:call <SID>update_candidates_i()<CR>
-    inoremap <silent> <buffer> <F5> <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>
-    nnoremap <silent> <buffer> <F5> :call <SID>clean_cache_if_it_exists()<CR>
     " Disable some default vim keys
     for k in ['<CR>', 'x', 'c', 'd', 'o', 'O']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
     endfor
+    let keys = vfinder#maps#get('_')
+    let [i, n] = [keys.i, keys.n]
+    " Prompt & movement
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_left . ' <Esc>:call <SID>move_left()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_right . ' <Esc>:call <SID>move_right()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_to_start . ' <Esc>:call <SID>move_to_edge(-1)<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_to_end . ' <Esc>:call <SID>move_to_edge(1)<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_backspace . ' <Esc>:call <SID>backspace()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
+    " Insert mode
+    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_i' :call <SID>start_insert_mode(-1)<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_I' :call <SID>start_insert_mode(-1)<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_a' :call <SID>start_insert_mode(1)<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_A' :call <SID>start_insert_mode(1)<CR>'
+    " Buffer
+    silent execute 'inoremap <silent> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
+    " Candidates & cache
+    silent execute 'nnoremap <silent> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
+    silent execute 'inoremap <silent> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
     return self
 endfun
 

@@ -1,7 +1,7 @@
 # vFinder [EXPERIMENTAL]
 
 ![Badge version](https://img.shields.io/badge/version-0.0.2-blue.svg?style=flat-square "Badge for version")
-![License version](https://img.shields.io/badge/license-mit-blue.svg?style=flat-square "Badge for license")
+![License version](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square "Badge for license")
 
 A versatile finder for vim.
 
@@ -320,3 +320,7 @@ nnoremap <silent> ,B :call vfinder#i({
 # Note
 
 There are a lot of things planned for the plugin, but as a side project, I implement what I need when I have time.
+
+# License
+
+MIT

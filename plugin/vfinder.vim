@@ -92,14 +92,12 @@ call vfinder#maps#create('directories', {
             \   'i': {
             \       'goto'  : '<CR>',
             \       'goback': '<C-v>',
-            \       'cd'    : '<C-s>',
-            \       'reload': '<C-r>'
+            \       'cd'    : '<C-s>'
             \   },
             \   'n': {
             \       'goto'  : '<CR>',
             \       'goback': 'v',
-            \       'cd'    : 's',
-            \       'reload': 'R'
+            \       'cd'    : 's'
             \   }
             \ })
 call vfinder#maps#create('files', {

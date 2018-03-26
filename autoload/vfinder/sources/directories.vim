@@ -36,6 +36,9 @@ endfun
 
 fun! vfinder#sources#directories#maps() abort
     let keys = vfinder#maps#get('directories')
+    let glob_keys = vfinder#maps#get('_')
+    let keys_reload_i = glob_keys.i.candidates_update
+    let keys_reload_n = glob_keys.n.candidates_update
     let options = {
                 \   'clear_prompt': 1,
                 \   'function'    : 1,
@@ -47,13 +50,13 @@ fun! vfinder#sources#directories#maps() abort
                 \       keys.i.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.i.goback: {'action': function('s:goback'), 'options': options},
                 \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
-                \       keys.i.reload: {'action': function('s:reload_i'), 'options': {'function': 1, 'quit': 0}}
+                \       keys_reload_i: {'action': function('s:reload_i'), 'options': {'function': 1, 'quit': 0}}
                 \   },
                 \   'n': {
                 \       keys.n.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.n.goback: {'action': function('s:goback'), 'options': options},
                 \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
-                \       keys.n.reload: {'action': function('s:reload_n'), 'options': {'function': 1, 'quit': 0}}
+                \       keys_reload_n: {'action': function('s:reload_n'), 'options': {'function': 1, 'quit': 0}}
                 \   }
                 \ }
 endfun

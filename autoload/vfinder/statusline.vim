@@ -1,8 +1,12 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-02-23
+" Last modification: 2018-03-27
 
 
 fun! vfinder#statusline#get() abort
+    return '%{vfinder#statusline#left()}%=%{vfinder#statusline#right()}'
+endfun
+
+fun! vfinder#statusline#left() abort
     let current = s:current_item()
     let count_filtered = s:count_filtered()
 
@@ -16,6 +20,11 @@ fun! vfinder#statusline#get() abort
                 \   s:count_candidates(),
                 \   count_infos
                 \ )
+endfun
+
+fun! vfinder#statusline#right() abort
+    let fuzzy = b:vf.fuzzy ? '[F]': ''
+    return printf('%3s ', fuzzy)
 endfun
 
 fun! s:name() abort

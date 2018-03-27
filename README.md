@@ -117,6 +117,8 @@ And where `scope` can be:
 | `i`  | `prompt_move_to_end`   | `<C-e>`         |
 | `i`  | `prompt_move_to_start` | `<C-a>`         |
 | `i`  | `prompt_move_up`       | `<C-p>`         |
+| `i`  | `fuzzy_toggle`         | `<C-f>`         |
+| `n`  | `fuzzy_toggle`         | `F`             |
 | `n`  | `start_insert_mode_a`  | `a`             |
 | `n`  | `start_insert_mode_A`  | `A`             |
 | `n`  | `start_insert_mode_i`  | `i`             |

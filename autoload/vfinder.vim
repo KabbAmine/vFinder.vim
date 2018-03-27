@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-28
+" Last modification: 2018-03-27
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -101,7 +101,8 @@ fun! vfinder#i(source) abort
         call buffer.goto()
         let b:vf = extend(source, {
                     \   'initial_bufnr': initial_bufnr,
-                    \   'initial_wd'   : initial_wd
+                    \   'initial_wd'   : initial_wd,
+                    \   'fuzzy'        : g:vfinder_fuzzy
                     \ })
 
         let prompt = vfinder#prompt#i()

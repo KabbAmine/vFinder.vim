@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-03-26
+" Last modification: 2018-03-27
 
 
 fun! vfinder#maps#define() abort
@@ -15,11 +15,13 @@ fun! vfinder#maps#define() abort
                 \       'prompt_delete'       : '<Del>',
                 \       'prompt_delete_word'  : '<C-w>',
                 \       'prompt_delete_line'  : '<C-u>',
+                \       'fuzzy_toggle'        : '<C-f>',
                 \       'window_quit'         : '<Esc>',
                 \       'candidates_update'   : '<C-r>',
                 \       'cache_clean'         : '<F5>'
                 \   },
                 \   'n': {
+                \       'fuzzy_toggle'       : 'F',
                 \       'start_insert_mode_i': 'i',
                 \       'start_insert_mode_I': 'I',
                 \       'start_insert_mode_a': 'a',

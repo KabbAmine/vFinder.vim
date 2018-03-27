@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-18
+" Last modification: 2018-03-27
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -12,10 +12,10 @@ fun! vfinder#helpers#is_in_prompt()
 endfun
 
 fun! vfinder#helpers#process_query(query) abort
-    let q = g:vfinder_fuzzy
+    let q = b:vf.fuzzy
                 \ ? substitute(a:query, ' ', '', 'g')
                 \ : a:query
-    let q_sep = g:vfinder_fuzzy ? '\zs' : ' '
+    let q_sep = b:vf.fuzzy ? '\zs' : ' '
     let join_pat = '.{-}'
     let to_escape = '@=?+&$.*~()|{}%[]'
     let final_regex = []

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-26
+" Last modification: 2018-03-27
 
 
 fun! vfinder#buffer#i(source) abort
@@ -94,6 +94,9 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete()<CR>'
     silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w()<CR>'
     silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
+    " Modes
+    silent execute 'inoremap <silent> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy(1)<CR>'
+    silent execute 'nnoremap <silent> <buffer> ' . n.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy()<CR>'
     " Insert mode
     silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_i' :call <SID>start_insert_mode(-1)<CR>'
     silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_I' :call <SID>start_insert_mode(-1)<CR>'
@@ -120,7 +123,7 @@ fun! s:buffer_set_autocmds() dict
 endfun
 
 fun! s:buffer_set_statusline() dict
-    setlocal statusline=%{vfinder#statusline#get()}
+    let &l:statusline = vfinder#statusline#get()
 endfun
 
 fun! s:move_down() abort
@@ -274,6 +277,15 @@ fun! s:control_u() abort
     startinsert
     call cursor(1, 3)
 endfun
+
+fun! s:toggle_fuzzy(...) abort " {{{1
+    let b:vf.fuzzy = b:vf.fuzzy ? 0 : 1
+    if exists('a:1')
+        " Insert mode
+        call s:set_insertion_position()
+    endif
+endfun
+" 1}}}
 
 fun! s:update_candidates_i() abort
     call vfinder#events#update_candidates_request()

@@ -94,7 +94,7 @@ fun! s:source_set_maps() dict
                         \ candidate_fun,
                         \ mode,
                         \ options)
-            silent execute printf('%snoremap <silent> <buffer> %s %s:call <SID>do(%s)<CR>',
+            silent execute printf('%snoremap <silent> <nowait> <buffer> %s %s:call <SID>do(%s)<CR>',
                         \  mode,
                         \  keys_{mode}[i],
                         \  (mode is# 'i' ? '<Esc>' : ''),

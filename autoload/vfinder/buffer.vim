@@ -84,32 +84,32 @@ fun! s:buffer_set_maps() dict
     let keys = vfinder#maps#get('_')
     let [i, n] = [keys.i, keys.n]
     " Prompt & movement
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_left . ' <Esc>:call <SID>move_left()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_right . ' <Esc>:call <SID>move_right()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_to_start . ' <Esc>:call <SID>move_to_edge(-1)<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_move_to_end . ' <Esc>:call <SID>move_to_edge(1)<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_backspace . ' <Esc>:call <SID>backspace()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_left . ' <Esc>:call <SID>move_left()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_right . ' <Esc>:call <SID>move_right()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_start . ' <Esc>:call <SID>move_to_edge(-1)<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_end . ' <Esc>:call <SID>move_to_edge(1)<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_backspace . ' <Esc>:call <SID>backspace()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
     " Modes
-    silent execute 'inoremap <silent> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy(1)<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy()<CR>'
     " Insert mode
-    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_i' :call <SID>start_insert_mode(-1)<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_I' :call <SID>start_insert_mode(-1)<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_a' :call <SID>start_insert_mode(1)<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.start_insert_mode_A' :call <SID>start_insert_mode(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_i . ' :call <SID>start_insert_mode(-1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_I . ' :call <SID>start_insert_mode(-1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_a . ' :call <SID>start_insert_mode(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_A . ' :call <SID>start_insert_mode(1)<CR>'
     " Buffer
-    silent execute 'inoremap <silent> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
-    silent execute 'nnoremap <silent> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
-    silent execute 'inoremap <silent> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
-    silent execute 'nnoremap <silent> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
     return self
 endfun
 

@@ -46,7 +46,7 @@ There are no mappings provided for executing sources, please define your owns (S
 
 | options                         | default value                     | description                                 |
 | --------------                  | --------------                    | --------------                              |
-| `g:vfinder_verbose`             | `1`                               | Enable/Disable showing echoed messages      |
+| `g:vfinder_verbose`             | `0`                               | Enable/Disable showing useless messages     |
 | `g:vfinder_fuzzy`               | `0`                               | Enable/Disable fuzzy matching (May be slow) |
 | `g:vfinder_cache_path`          | `$HOME . '/.cache/vfinder'`       | Directory where to store cache files        |
 | `g:vfinder_yank_source_enabled` | `1`                               | Enable/Disable yank source which use caching|

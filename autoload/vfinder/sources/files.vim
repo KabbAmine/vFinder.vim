@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-26
+" Last modification: 2018-03-27
 
 
 fun! vfinder#sources#files#check()
@@ -24,7 +24,7 @@ fun! s:files_is_valid()
     else
         let old_vf_verbose_option = g:vfinder_verbose
         let g:vfinder_verbose = 1
-        call vfinder#helpers#echo('Gathering candidates from $HOME may freeze your editor', 'Question')
+        call vfinder#helpers#echo('Gathering candidates from $HOME may freeze your editor', 'Question', 1)
         let response = vfinder#helpers#input('Do you want to proceed? [y/N] ', 'Question')
         let g:vfinder_verbose = old_vf_verbose_option
         return response =~# 'y\|Y' ? 1 : 0

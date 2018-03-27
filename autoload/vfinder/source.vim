@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-25
+" Last modification: 2018-03-27
 
 
 fun! vfinder#source#i(source) abort
@@ -124,7 +124,7 @@ fun! s:do(action, candidate_fun, mode, options)
         let target = a:candidate_fun()
     endif
 
-    if a:options.quit && !a:options.exec_in_vf
+    if a:options.quit && !a:options.execute_in_place
         silent execute 'wincmd p'
         silent execute 'bwipeout ' . buffer
     endif
@@ -150,7 +150,7 @@ fun! s:do(action, candidate_fun, mode, options)
         call histadd('cmd', to_add)
     endif
 
-    if a:options.quit && a:options.exec_in_vf
+    if a:options.quit && a:options.execute_in_place
         silent execute 'bwipeout ' . buffer
         silent execute 'wincmd p'
     elseif !a:options.quit
@@ -180,7 +180,7 @@ fun! s:set_all_options(options) abort
     let opts.echo = get(opts, 'echo', 0)
     let opts.clear_prompt = get(opts, 'clear_prompt', 0)
     let opts.goto_prompt = get(opts, 'goto_prompt', 0)
-    let opts.exec_in_vf = get(opts, 'exec_in_vf', 0)
+    let opts.execute_in_place = get(opts, 'execute_in_place', 0)
     return opts
 endfun
 

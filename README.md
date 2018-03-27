@@ -289,7 +289,7 @@ let g:vfinder_maps.spell = {
 
 - clear_prompt: `0`
 - echo        : `0`
-- exec_in_vf  : `1`
+- execute_in_place  : `1`
 - function    : `0`
 - goto_prompt : `0`
 - quit        : `1`

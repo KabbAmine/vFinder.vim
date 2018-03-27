@@ -49,13 +49,13 @@ fun! vfinder#sources#directories#maps() abort
                 \   'i': {
                 \       keys.i.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.i.goback: {'action': function('s:goback'), 'options': options},
-                \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
+                \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'execute_in_place': 1}, 'force')},
                 \       keys_reload_i: {'action': function('s:reload_i'), 'options': {'function': 1, 'quit': 0}}
                 \   },
                 \   'n': {
                 \       keys.n.goto  : {'action': function('s:goto'), 'options': options},
                 \       keys.n.goback: {'action': function('s:goback'), 'options': options},
-                \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'exec_in_vf': 1}, 'force')},
+                \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'execute_in_place': 1}, 'force')},
                 \       keys_reload_n: {'action': function('s:reload_n'), 'options': {'function': 1, 'quit': 0}}
                 \   }
                 \ }

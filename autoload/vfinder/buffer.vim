@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-27
+" Last modification: 2018-03-29
 
 
 fun! vfinder#buffer#i(source) abort
@@ -280,6 +280,7 @@ endfun
 
 fun! s:toggle_fuzzy(...) abort " {{{1
     let b:vf.fuzzy = b:vf.fuzzy ? 0 : 1
+    call vfinder#events#update_candidates_request()
     if exists('a:1')
         " Insert mode
         call s:set_insertion_position()

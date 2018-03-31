@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-03-27
+" Last modification: 2018-03-31
 
 
 fun! vfinder#maps#define() abort
@@ -93,6 +93,10 @@ fun! vfinder#maps#define() abort
                 \       'vsplit': 'v',
                 \       'tab'   : 't'
                 \   }
+                \ })
+    call s:define_gvar_maps('marks', {
+                \ 'i': {'goto' : '<CR>'},
+                \ 'n': {'goto' : '<CR>'}
                 \ })
     call s:define_gvar_maps('outline', {
                 \   'i': {

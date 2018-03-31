@@ -63,6 +63,7 @@ The plugin provides the following sources:
 - `commands`
 - `directories`
 - `files`<sup>n</sup>
+- `marks`
 - `mru`<sup>c</sup>
 - `oldfiles`
 - `outline`<sup>t</sup>

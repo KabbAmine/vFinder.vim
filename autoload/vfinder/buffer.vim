@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-29
+" Last modification: 2018-03-31
 
 
 fun! vfinder#buffer#i(source) abort
@@ -67,7 +67,7 @@ fun! s:buffer_set_syntax() dict
     syntax clear
     syntax case ignore
     syntax match vfinderPrompt =\%1l.*=
-    syntax match vfinderIndex =^\d\+\s*=
+    syntax match vfinderIndex =\%>1l^\d\+\s*=
     highlight! link vfinderPrompt ModeMsg
     highlight! link vfinderIndex Comment
     if !empty(self.source.syntax_fun)

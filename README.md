@@ -95,7 +95,8 @@ let g:vfinder_maps.scope = {
             \   }
             \ }
 
-" Note that if you re-source your vimrc often, you should add the following function to be sure that your plugin's mappings are up-to-date.
+" Note that if you re-source your vimrc often, you should add the following
+" function to be sure that your plugin's mappings are up-to-date.
 call vfinder#maps#define()
 ```
 
@@ -199,6 +200,13 @@ let g:vfinder_maps._ = {
 | `n`  | `vsplit` | `v`           |
 | `i`  | `tab`    | `<C-t>`       |
 | `n`  | `tab`    | `t`           |
+
+### Marks
+
+| mode | action   | default value |
+| ---- | ------   | -----         |
+| `i`  | `goto`   | `<CR>`        |
+| `n`  | `goto`   | `<CR>`        |
 
 ### Outline
 

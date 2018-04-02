@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-27
+" Last modification: 2018-04-02
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -80,8 +80,9 @@ fun! vfinder#enable_autocmds_for_caching() abort
     augroup END
 endfun
 
-fun! vfinder#i(source) abort
+fun! vfinder#i(source, ...) abort
     " if name is {} then its a custom source.
+    " a:1 is a {} which can contain vfinder options
 
     try
         let source = vfinder#source#i(a:source)
@@ -97,12 +98,16 @@ fun! vfinder#i(source) abort
         " Same thing goes for the working directory
         let initial_wd = getcwd() . '/'
 
+        " Options related to vfinder (Only fuzzy is available for now)
+        let win_opts = get(a:, 1, {})
+        let win_opts.fuzzy = get(win_opts, 'fuzzy', g:vfinder_fuzzy)
+
         let buffer = vfinder#buffer#i(source)
         call buffer.goto()
         let b:vf = extend(source, {
                     \   'initial_bufnr': initial_bufnr,
                     \   'initial_wd'   : initial_wd,
-                    \   'fuzzy'        : g:vfinder_fuzzy
+                    \   'fuzzy'        : win_opts.fuzzy
                     \ })
 
         let prompt = vfinder#prompt#i()

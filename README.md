@@ -22,6 +22,9 @@ The plugin:
 " Simply execute a default source
 call vfinder#i('files')
 
+" Same thing but with fuzzy mode enabled
+call vfinder#i('files', {'fuzzy': 1})
+
 " Or use a custom one
 call vfinder#i({
         \   'name'      : 'custom',

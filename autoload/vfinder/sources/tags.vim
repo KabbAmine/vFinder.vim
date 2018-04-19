@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-25
+" Last modification: 2018-04-19
 
 
 fun! vfinder#sources#tags#check()
@@ -43,10 +43,16 @@ fun! s:tags_source() abort
 endfun
 
 fun! s:tags_format(tags) abort
-    let res = []
+    let [names, res] = [[], []]
     for t in a:tags
-        let l = printf('%-50s %s', t.name, fnamemodify(t.filename, ':~'))
-        call add(res, l)
+        let name = t.name
+        call add(names, name)
+        let count_int = count(names, name)
+        call add(res, printf('%-2s %-50s %s',
+                    \   (count_int ># 1 ? string(count_int) : ''),
+                    \   name,
+                    \   fnamemodify(t.filename, ':~')
+                    \ ))
     endfor
     return res
 endfun
@@ -64,16 +70,43 @@ fun! vfinder#sources#tags#maps() abort
     let maps = {}
     let keys = vfinder#maps#get('tags')
     let maps.i = {
-                \ keys.i.goto         : {'action': 'tag %s', 'options': {}},
-                \ keys.i.splitandgoto : {'action': 'stag %s', 'options': {}},
-                \ keys.i.vsplitandgoto: {'action': 'vertical stag %s', 'options': {}},
-                \ keys.i.preview      : {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ keys.i.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
+                \ keys.i.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
+                \ keys.i.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
+                \ keys.i.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     let maps.n = {
-                \ keys.n.goto         : {'action': 'tag %s', 'options': {}},
-                \ keys.n.splitandgoto : {'action': 'stag %s', 'options': {}},
-                \ keys.n.vsplitandgoto: {'action': 'vertical stag %s', 'options': {}},
-                \ keys.n.preview      : {'action': 'ptag %s', 'options': {'quit': 0}},
+                \ keys.n.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
+                \ keys.n.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
+                \ keys.n.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
+                \ keys.n.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     return maps
+endfun
+
+fun! s:get_count_and_name(str) abort
+    return [
+                \   matchstr(a:str, '^\d\+'),
+                \   matchstr(a:str, '^\d*\s\+\zs.*$')
+                \ ]
+endfun
+
+fun! s:gototag(tag) abort
+    let [c, name] = s:get_count_and_name(a:tag)
+    silent execute c . 'tag ' . name
+endfun
+
+fun! s:splitandgoto(tag) abort
+    let [c, name] = s:get_count_and_name(a:tag)
+    silent execute c . 'stag ' . name
+endfun
+
+fun! s:vsplitandgoto(tag) abort
+    let [c, name] = s:get_count_and_name(a:tag)
+    silent execute 'vertical ' . c . 'stag ' . name
+endfun
+
+fun! s:preview(tag) abort
+    let [c, name] = s:get_count_and_name(a:tag)
+    silent execute c . 'ptag ' . name
 endfun

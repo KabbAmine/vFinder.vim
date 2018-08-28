@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-31
+" Last modification: 2018-08-28
 
 
 fun! vfinder#buffer#i(source) abort
@@ -78,7 +78,7 @@ endfun
 
 fun! s:buffer_set_maps() dict
     " Disable some default vim keys
-    for k in ['<CR>', 'x', 'c', 'd', 'o', 'O']
+    for k in ['<CR>', 'x', 'c', 'd', 'o', 'O', 'p', 'P']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
     endfor
     let keys = vfinder#maps#get('_')

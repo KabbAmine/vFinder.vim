@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-04-19
+" Last modification: 2018-09-15
 
 
 fun! vfinder#sources#tags#check()
@@ -48,9 +48,10 @@ fun! s:tags_format(tags) abort
         let name = t.name
         call add(names, name)
         let count_int = count(names, name)
-        call add(res, printf('%-2s %-50s %s',
+        call add(res, printf('%-2s %-50s %-10s %s',
                     \   (count_int ># 1 ? string(count_int) : ''),
                     \   name,
+                    \   ':' . t.kind . ':',
                     \   fnamemodify(t.filename, ':~')
                     \ ))
     endfor
@@ -58,12 +59,14 @@ fun! s:tags_format(tags) abort
 endfun
 
 fun! s:tags_candidate_fun() abort
-    return escape(matchstr(getline('.'), '^.*\ze\s\+\f\+'), '"')
+    return escape(matchstr(getline('.'), '^.*\ze\s\+:\h:\s\+\f\+'), '"')
 endfun
 
 fun! s:tags_syntax_fun() abort
     syntax match vfinderTagsFilename =\f\+$=
+    syntax match vfinderTagsKind =\s\+:\S\+:\s\+=
     highlight! link vfinderTagsFilename vfinderIndex
+    highlight! link vfinderTagsKind Identifier
 endfun
 
 fun! vfinder#sources#tags#maps() abort

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-03-25
+" Last modification: 2018-10-17
 
 
 fun! vfinder#sources#buffers#check()
@@ -30,10 +30,12 @@ fun! s:buffers_format(nrs) abort
     for nr in a:nrs
         let name = empty(bufname(nr)) ? '[No Name]' : fnamemodify(bufname(nr), ':.')
         let was_modified = getbufvar(nr, '&modified', 0)
-        call add(res, printf('%-4d %3s %s',
-                    \   nr,
+        call add(res, printf('%-4d %3s %-30s %s',
+                    \   nr . '.',
                     \   was_modified ? '[+]' : '',
-                    \   name)
+                    \   fnamemodify(name, ':t'),
+                    \   fnamemodify(name, ':h') . '/'
+                    \ )
                     \ )
     endfor
     return res
@@ -71,6 +73,8 @@ endfun
 
 fun! s:buffers_syntax_fun() abort
     syntax match vfinderBuffersModified =\[+\]=
+    syntax match vfinderBuffersName =\%>1l\v(\f+|\[No\ Name\])\ze\s+\f+$=
+    highlight! link vfinderBuffersName Statement
     highlight! link vfinderBuffersModified Identifier
 endfun
 

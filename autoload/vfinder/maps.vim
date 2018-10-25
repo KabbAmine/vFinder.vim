@@ -19,7 +19,7 @@ fun! vfinder#maps#define() abort
                 \       'window_quit'         : '<Esc>',
                 \       'candidates_update'   : '<C-r>',
                 \       'cache_clean'         : '<F5>',
-                \       'echo_maps'           : '<C-?>'
+                \       'echo_maps'           : '<F1>'
                 \   },
                 \   'n': {
                 \       'fuzzy_toggle'       : 'F',

@@ -23,7 +23,7 @@ fun! vfinder#statusline#left() abort
 endfun
 
 fun! vfinder#statusline#right() abort
-    let fuzzy = b:vf.fuzzy ? '[F]': ''
+    let fuzzy = b:vf.fuzzy ? '[fuzzy]': ''
     return printf('%3s ', fuzzy)
 endfun
 

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-04-02
+" Last modification: 2018-10-25
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -98,16 +98,15 @@ fun! vfinder#i(source, ...) abort
         " Same thing goes for the working directory
         let initial_wd = getcwd() . '/'
 
-        " Options related to vfinder (Only fuzzy is available for now)
-        let win_opts = get(a:, 1, {})
-        let win_opts.fuzzy = get(win_opts, 'fuzzy', g:vfinder_fuzzy)
+        " Options related to vfinder's buffer/window
+        let buf_win_opts = s:get_buf_win_opts(get(a:, 1, {}))
 
-        let buffer = vfinder#buffer#i(source)
+        let buffer = vfinder#buffer#i(source, buf_win_opts)
         call buffer.goto()
         let b:vf = extend(source, {
                     \   'initial_bufnr': initial_bufnr,
                     \   'initial_wd'   : initial_wd,
-                    \   'fuzzy'        : win_opts.fuzzy
+                    \   'fuzzy'        : buf_win_opts.fuzzy
                     \ })
 
         let prompt = vfinder#prompt#i()
@@ -123,4 +122,15 @@ fun! vfinder#i(source, ...) abort
     catch /^\[vfinder\].*$/
         call vfinder#helpers#echo(v:errmsg, 'Error')
     endtry
+endfun
+
+fun! s:get_buf_win_opts(opts) abort
+    " Passed 'win_pos' have priority over the global g:vfinder_win_pos
+    let win_pos = has_key(a:opts, 'win_pos')
+                \ ? a:opts.win_pos
+                \ : g:vfinder_win_pos
+    return {
+                \   'fuzzy'  : get(a:opts, 'fuzzy', g:vfinder_fuzzy),
+                \   'win_pos': win_pos
+                \ }
 endfun

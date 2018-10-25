@@ -1,19 +1,20 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-08-28
+" Last modification: 2018-10-25
 
 
-fun! vfinder#buffer#i(source) abort
+fun! vfinder#buffer#i(source, buf_win_opts) abort
     return {
-                \   'source'         : a:source,
-                \   'name'           : 'vf__' . a:source.name . '__',
-                \   'goto'           : function('s:buffer_goto'),
-                \   'new'            : function('s:buffer_new'),
-                \   'quit'           : function('s:buffer_quit'),
-                \   'set_options'    : function('s:buffer_set_options'),
-                \   'set_syntax'     : function('s:buffer_set_syntax'),
-                \   'set_maps'       : function('s:buffer_set_maps'),
-                \   'set_autocmds'   : function('s:buffer_set_autocmds'),
-                \   'set_statusline' : function('s:buffer_set_statusline')
+                \   'source'        : a:source,
+                \   'name'          : 'vf__' . a:source.name . '__',
+                \   'win_pos'       : a:buf_win_opts.win_pos,
+                \   'goto'          : function('s:buffer_goto'),
+                \   'new'           : function('s:buffer_new'),
+                \   'quit'          : function('s:buffer_quit'),
+                \   'set_options'   : function('s:buffer_set_options'),
+                \   'set_syntax'    : function('s:buffer_set_syntax'),
+                \   'set_maps'      : function('s:buffer_set_maps'),
+                \   'set_autocmds'  : function('s:buffer_set_autocmds'),
+                \   'set_statusline': function('s:buffer_set_statusline')
                 \ }
 endfun
 
@@ -38,7 +39,7 @@ fun! s:buffer_goto() dict
 endfun
 
 fun! s:buffer_new() dict
-    silent execute 'topleft split ' . self.name
+    silent execute self.win_pos . ' split ' . self.name
     call self.set_options().set_syntax().set_maps().set_autocmds()
     call self.set_statusline()
     return self

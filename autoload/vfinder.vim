@@ -101,12 +101,16 @@ fun! vfinder#i(source, ...) abort
         " Options related to vfinder's buffer/window
         let buf_win_opts = s:get_buf_win_opts(get(a:, 1, {}))
 
+        " Some sources may use flags for toggling items
+        let flags = {}
+
         let buffer = vfinder#buffer#i(source, buf_win_opts)
         call buffer.goto()
         let b:vf = extend(source, {
                     \   'initial_bufnr': initial_bufnr,
                     \   'initial_wd'   : initial_wd,
-                    \   'fuzzy'        : buf_win_opts.fuzzy
+                    \   'fuzzy'        : buf_win_opts.fuzzy,
+                    \   'flags'        : flags
                     \ })
 
         let prompt = vfinder#prompt#i()

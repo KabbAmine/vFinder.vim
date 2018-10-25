@@ -1,9 +1,9 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-03-27
+" Last modification: 2018-10-25
 
 
 fun! vfinder#statusline#get() abort
-    return '%{vfinder#statusline#left()}%=%{vfinder#statusline#right()}'
+    return '%{vfinder#statusline#left()}%=%{vfinder#statusline#search_mode()}%{vfinder#statusline#flags()} '
 endfun
 
 fun! vfinder#statusline#left() abort
@@ -22,9 +22,20 @@ fun! vfinder#statusline#left() abort
                 \ )
 endfun
 
-fun! vfinder#statusline#right() abort
+fun! vfinder#statusline#flags() abort
+    let str = ''
+    for [name, value] in items(b:vf.flags)
+        if value
+            let str .= '[' . tolower(name) . ']'
+        endif
+    endfor
+    return str
+endfun
+
+
+fun! vfinder#statusline#search_mode() abort
     let fuzzy = b:vf.fuzzy ? '[fuzzy]': ''
-    return printf('%3s ', fuzzy)
+    return printf('%3s', fuzzy)
 endfun
 
 fun! s:name() abort

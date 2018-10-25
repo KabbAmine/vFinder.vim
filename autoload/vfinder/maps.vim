@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-03-31
+" Last modification: 2018-10-25
 
 
 fun! vfinder#maps#define() abort
@@ -18,7 +18,8 @@ fun! vfinder#maps#define() abort
                 \       'fuzzy_toggle'        : '<C-f>',
                 \       'window_quit'         : '<Esc>',
                 \       'candidates_update'   : '<C-r>',
-                \       'cache_clean'         : '<F5>'
+                \       'cache_clean'         : '<F5>',
+                \       'echo_maps'           : '<C-?>'
                 \   },
                 \   'n': {
                 \       'fuzzy_toggle'       : 'F',
@@ -28,8 +29,8 @@ fun! vfinder#maps#define() abort
                 \       'start_insert_mode_A': 'A',
                 \       'window_quit'        : '<Esc>',
                 \       'candidates_update'  : 'R',
-                \       'cache_clean'        : '<F5>'
-                \
+                \       'cache_clean'        : '<F5>',
+                \       'echo_maps'          : '?'
                 \   }
                 \ })
     call s:define_gvar_maps('buffers', {
@@ -132,6 +133,10 @@ fun! vfinder#maps#define() abort
                 \ 'i': {'paste': '<CR>'},
                 \ 'n': {'paste': '<CR>'}
                 \ })
+    call s:define_gvar_maps('mru', vfinder#maps#get('files'))
+    call s:define_gvar_maps('oldfiles', vfinder#maps#get('mru'))
+    call s:define_gvar_maps('registers', vfinder#maps#get('yank'))
+    call s:define_gvar_maps('command_history', vfinder#maps#get('commands'))
 endfun
 
 fun! s:define_gvar_maps(name, def_maps) abort

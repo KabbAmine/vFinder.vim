@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-27
+" Last modification: 2018-10-25
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -67,4 +67,27 @@ endfun
 
 fun! vfinder#helpers#black_hole() abort
     return '2> /dev/null'
+endfun
+
+fun! vfinder#helpers#echo_maps_str() abort
+    if &filetype isnot# 'vfinder'
+        return ''
+    endif
+    let maps = vfinder#maps#get(b:vf.name)
+    echon '(i/n) '
+    for a in keys(maps.i)
+        echohl vfinderIndex
+        echon a . '('
+        echohl vfinderPrompt
+        echon maps.i[a]
+        echohl vfinderIndex
+        echon '/'
+        echohl vfinderPrompt
+        echon maps.n[a]
+        echohl vfinderIndex
+        echon ') '
+    endfor
+    echohl None
+    " To avoid the 'Press enter to continue...'
+    redraw
 endfun

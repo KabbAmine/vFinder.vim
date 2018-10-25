@@ -111,6 +111,9 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
+    " Echo source mappings
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.echo_maps . ' :call <SID>echo_maps()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.echo_maps . ' <Esc>:call <SID>echo_maps(1)<CR>'
     return self
 endfun
 
@@ -333,4 +336,12 @@ fun! s:get_pre_post_of_query(col) abort
     let pre_inp = query[: a:col - 3]
     let post_inp = strcharpart(query, len(pre_inp))
     return [pre_inp, post_inp]
+endfun
+
+fun! s:echo_maps(...) abort
+    let in_ins_mode = get(a:, 1, 0)
+    call vfinder#helpers#echo_maps_str()
+    if in_ins_mode
+        startinsert
+    endif
 endfun

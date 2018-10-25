@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-03-20
+" Last modification: 2018-10-25
 
 
 fun! vfinder#sources#registers#check()
@@ -13,7 +13,7 @@ fun! vfinder#sources#registers#get() abort
                 \   'format_fun'   : function('s:registers_format'),
                 \   'candidate_fun': function('s:registers_candidate_fun'),
                 \   'syntax_fun'   : function('s:registers_syntax_fun'),
-                \   'maps'         : vfinder#sources#yank#maps()
+                \   'maps'         : s:registers_maps()
                 \ }
 endfun
 
@@ -61,4 +61,12 @@ endfun
 fun! s:registers_syntax_fun() abort
     syntax match vfinderRegistersName =^\S\+:\s\+=
     highlight! link vfinderRegistersName vfinderIndex
+endfun
+
+fun! s:registers_maps() abort
+    let keys = vfinder#maps#get('registers')
+    return {
+                \   'i': {keys.i.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'n': {keys.n.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
+                \ }
 endfun

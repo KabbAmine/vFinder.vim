@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-25
+" Last modification: 2018-10-25
 
 
 fun! vfinder#sources#command_history#check()
@@ -12,7 +12,7 @@ fun! vfinder#sources#command_history#get() abort
                 \   'to_execute'   : s:command_history_source(),
                 \   'format_fun'   : function('s:command_history_format'),
                 \   'candidate_fun': function('s:command_history_candidate_fun'),
-                \   'maps'         : vfinder#sources#commands#maps()
+                \   'maps'         : s:command_history_maps()
                 \ }
 endfun
 
@@ -34,4 +34,18 @@ endfun
 
 fun! s:command_history_candidate_fun() abort
     return matchstr(getline('.'), '^\d\+\s\+\zs.*$')
+endfun
+
+fun! s:command_history_maps() abort
+    let keys = vfinder#maps#get('command_history')
+    return {
+                \   'i': {
+                \       keys.i.apply: {'action': '%s', 'options': {'silent': 0}},
+                \       keys.i.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \   },
+                \   'n': {
+                \       keys.n.apply: {'action': '%s', 'options': {'silent': 0}},
+                \       keys.n.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \   }
+                \ }
 endfun

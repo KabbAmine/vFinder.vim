@@ -118,6 +118,8 @@ fun! vfinder#i(source, ...) abort
         let b:vf.original_candidates = candidates.original_list
         redraw!
 
+        call vfinder#helpers#echo_maps_str()
+
         startinsert!
     catch /^\[vfinder\].*$/
         call vfinder#helpers#echo(v:errmsg, 'Error')

@@ -35,18 +35,20 @@ fun! vfinder#maps#define() abort
                 \ })
     call s:define_gvar_maps('buffers', {
                 \   'i': {
-                \       'edit'  : '<CR>',
-                \       'split' : '<C-s>',
-                \       'vsplit': '<C-v>',
-                \       'tab'   : '<C-t>',
-                \       'wipe'  : '<C-d>'
+                \       'edit'          : '<CR>',
+                \       'split'         : '<C-s>',
+                \       'vsplit'        : '<C-v>',
+                \       'tab'           : '<C-t>',
+                \       'wipe'          : '<C-d>',
+                \       'toggle_hiddens': '<C-o>'
                 \   },
                 \   'n': {
-                \       'edit'  : '<CR>',
-                \       'split' : 's',
-                \       'vsplit': 'v',
-                \       'tab'   : 't',
-                \       'wipe'  : 'dd'
+                \       'edit'          : '<CR>',
+                \       'split'         : 's',
+                \       'vsplit'        : 'v',
+                \       'tab'           : 't',
+                \       'wipe'          : 'dd',
+                \       'toggle_hiddens': 'o'
                 \   }
                 \ })
     call s:define_gvar_maps('colors', {

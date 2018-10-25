@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-10-17
+" Last modification: 2018-10-25
 
 
 fun! vfinder#sources#buffers#check()
@@ -18,10 +18,18 @@ fun! vfinder#sources#buffers#get() abort
 endfun
 
 fun! s:buffers_source() abort
+    let list_hiddens = get(b:vf.flags, 'list_hiddens', 0)
+    let all_bufs = range(1, bufnr('$'))
+    let bufs = list_hiddens
+                \ ? filter(all_bufs, 'bufexists(v:val)')
+                \ : filter(all_bufs, 'buflisted(v:val)')
     let nrs = []
-    for nr in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-        call add(nrs, nr)
+    for nr in bufs
+        if nr isnot# bufnr('%')
+            call add(nrs, nr)
+        endif
     endfor
+    let b:vf.flags.list_hiddens = list_hiddens
     return nrs
 endfun
 
@@ -49,24 +57,32 @@ fun! s:buffers_maps() abort
     let maps = {}
     let keys = vfinder#maps#get('buffers')
     let maps.i = {
-                \ keys.i.edit  : {'action': 'buffer %s', 'options': {}},
-                \ keys.i.split : {'action': 'sbuffer %s', 'options': {}},
-                \ keys.i.vsplit: {'action': 'vertical sbuffer %s', 'options': {}},
-                \ keys.i.tab   : {'action': 'tabnew \| buffer %s', 'options': {}},
-                \ keys.i.wipe  : {
+                \ keys.i.edit        : {'action': 'buffer %s', 'options': {}},
+                \ keys.i.split       : {'action': 'sbuffer %s', 'options': {}},
+                \ keys.i.vsplit      : {'action': 'vertical sbuffer %s', 'options': {}},
+                \ keys.i.tab         : {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ keys.i.wipe        : {
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       }
+                \       },
+                \ keys.i.toggle_hiddens: {
+                \       'action': function('s:toggle_hiddens'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       },
                 \ }
     let maps.n = {
-                \ keys.n.edit  : {'action': 'buffer %s', 'options': {}},
-                \ keys.n.split : {'action': 'sbuffer %s', 'options': {}},
-                \ keys.n.vsplit: {'action': 'vertical sbuffer %s', 'options': {}},
-                \ keys.n.tab   : {'action': 'tabnew \| buffer %s', 'options': {}},
-                \ keys.n.wipe  : {
+                \ keys.n.edit        : {'action': 'buffer %s', 'options': {}},
+                \ keys.n.split       : {'action': 'sbuffer %s', 'options': {}},
+                \ keys.n.vsplit      : {'action': 'vertical sbuffer %s', 'options': {}},
+                \ keys.n.tab         : {'action': 'tabnew \| buffer %s', 'options': {}},
+                \ keys.n.wipe        : {
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       }
+                \       },
+                \ keys.n.toggle_hiddens: {
+                \       'action': function('s:toggle_hiddens'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       },
                 \ }
     return maps
 endfun
@@ -86,4 +102,10 @@ fun! s:wipe(buffer) abort
         catch
         endtry
     endif
+endfun
+
+fun! s:toggle_hiddens(buffer) abort
+    let b:vf.flags.list_hiddens = b:vf.flags.list_hiddens
+                \ ? 0
+                \ : 1
 endfun

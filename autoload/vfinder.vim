@@ -126,7 +126,7 @@ fun! vfinder#i(source, ...) abort
 
         startinsert!
     catch /^\[vfinder\].*$/
-        call vfinder#helpers#echo(v:errmsg, 'Error')
+        call vfinder#helpers#echo(v:errmsg, 'Error', 1)
     endtry
 endfun
 

@@ -73,7 +73,11 @@ fun! vfinder#helpers#echo_maps_str() abort
     if &filetype isnot# 'vfinder'
         return ''
     endif
-    let maps = vfinder#maps#get(b:vf.name)
+    let name = b:vf.name
+    if !exists('g:vfinder_maps[name]')
+        return ''
+    endif
+    let maps = vfinder#maps#get(name)
     echon '(i/n) '
     for a in keys(maps.i)
         echohl vfinderIndex

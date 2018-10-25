@@ -1,25 +1,25 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-03-27
+" Last modification: 2018-10-25
 
 
-fun! vfinder#sources#outline#check()
+fun! vfinder#sources#tags_in_file#check()
     return v:true
 endfun
 
-fun! vfinder#sources#outline#get() abort
+fun! vfinder#sources#tags_in_file#get() abort
     return {
-                \   'name'         : 'outline',
-                \   'is_valid'     : s:outline_is_valid(),
-                \   'to_execute'   : function('s:outline_source'),
-                \   'format_fun'   : function('s:outline_format'),
-                \   'candidate_fun': function('s:outline_candidate_fun'),
-                \   'syntax_fun'   : function('s:outline_syntax_fun'),
+                \   'name'         : 'tags_in_file',
+                \   'is_valid'     : s:tags_in_file_is_valid(),
+                \   'to_execute'   : function('s:tags_in_file_source'),
+                \   'format_fun'   : function('s:tags_in_file_format'),
+                \   'candidate_fun': function('s:tags_in_file_candidate_fun'),
+                \   'syntax_fun'   : function('s:tags_in_file_syntax_fun'),
                 \   'filter_name'  : 'compact_match',
-                \   'maps'         : vfinder#sources#outline#maps()
+                \   'maps'         : vfinder#sources#tags_in_file#maps()
                 \ }
 endfun
 
-fun! s:outline_is_valid() abort
+fun! s:tags_in_file_is_valid() abort
     if !executable('ctags')
         call vfinder#helpers#echo('"ctags" was not found', 'Error', 1)
         return 0
@@ -28,7 +28,7 @@ fun! s:outline_is_valid() abort
     endif
 endfun
 
-fun! s:outline_source() abort
+fun! s:tags_in_file_source() abort
     " Set the approriate ctags command string (+ flags + filename) and execute
     " it then return the result.
     " The filename can be the current one if it is a file and was not modified,
@@ -74,7 +74,7 @@ fun! s:outline_source() abort
     return systemlist(join(cmd) . ' ' . vfinder#helpers#black_hole())
 endfun
 
-fun! s:outline_format(tags) abort
+fun! s:tags_in_file_format(tags) abort
     let res = []
     for t in a:tags
         " An example of how the output is:
@@ -90,19 +90,19 @@ fun! s:outline_format(tags) abort
     return res
 endfun
 
-fun! s:outline_candidate_fun() abort
+fun! s:tags_in_file_candidate_fun() abort
     return matchstr(getline('.'), '\d\+$')
 endfun
 
-fun! s:outline_syntax_fun() abort
-    syntax match vfinderOutlineLinenr =\d\+$=
-    syntax match vfinderOutlineKind =\s\+:\S\+:\s\+=
-    highlight! link vfinderOutlineLinenr vfinderIndex
-    highlight! link vfinderOutlineKind Identifier
+fun! s:tags_in_file_syntax_fun() abort
+    syntax match vfindertags_in_fileLinenr =\d\+$=
+    syntax match vfindertags_in_fileKind =\s\+:\S\+:\s\+=
+    highlight! link vfindertags_in_fileLinenr vfinderIndex
+    highlight! link vfindertags_in_fileKind Identifier
 endfun
 
-fun! vfinder#sources#outline#maps() abort
-    let keys = vfinder#maps#get('outline')
+fun! vfinder#sources#tags_in_file#maps() abort
+    let keys = vfinder#maps#get('tags_in_file')
     return {
                 \   'i': {
                 \       keys.i.goto         : {'action': '%s', 'options': {}},

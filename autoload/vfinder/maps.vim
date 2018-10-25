@@ -99,7 +99,7 @@ fun! vfinder#maps#define() abort
                 \ 'i': {'goto' : '<CR>'},
                 \ 'n': {'goto' : '<CR>'}
                 \ })
-    call s:define_gvar_maps('outline', {
+    call s:define_gvar_maps('tags_in_file', {
                 \   'i': {
                 \       'goto'         : '<CR>',
                 \       'splitandgoto' : '<C-s>',

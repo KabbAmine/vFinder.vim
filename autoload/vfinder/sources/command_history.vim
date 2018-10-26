@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-10-25
+" Last modification: 2018-10-26
 
 
 fun! vfinder#sources#command_history#check()
@@ -9,7 +9,7 @@ endfun
 fun! vfinder#sources#command_history#get() abort
     return {
                 \   'name'         : 'command_history',
-                \   'to_execute'   : s:command_history_source(),
+                \   'to_execute'   : function('s:command_history_source'),
                 \   'format_fun'   : function('s:command_history_format'),
                 \   'candidate_fun': function('s:command_history_candidate_fun'),
                 \   'maps'         : s:command_history_maps()
@@ -17,16 +17,14 @@ fun! vfinder#sources#command_history#get() abort
 endfun
 
 fun! s:command_history_source() abort
-    let cmd_history = split(execute('history'), "\n")[1:]
-    call remove(cmd_history, -1)
-    return reverse(cmd_history)
+    return reverse(split(execute('history'), "\n")[1:-2])
 endfun
 
 fun! s:command_history_format(commands) abort
     let res = []
     for c in a:commands
-        let index = matchstr(c, '^\s\+\zs\d\+\ze')
-        let command = matchstr(c, '^\s\+\d\+\s\+\zs.*')
+        let index = matchstr(c, '^\s\+>\?\zs\d\+\ze')
+        let command = matchstr(c, '^\s\+>\?\d\+\s\+\zs.*')
         call add(res, printf('%-5s %s', index, command))
     endfor
     return res

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-25
+" Last modification: 2018-10-27
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -110,7 +110,8 @@ fun! vfinder#i(source, ...) abort
                     \   'initial_bufnr': initial_bufnr,
                     \   'initial_wd'   : initial_wd,
                     \   'fuzzy'        : buf_win_opts.fuzzy,
-                    \   'flags'        : flags
+                    \   'flags'        : flags,
+                    \   'statusline'   : &l:statusline
                     \ })
 
         let prompt = vfinder#prompt#i()
@@ -121,8 +122,6 @@ fun! vfinder#i(source, ...) abort
         call candidates.get().populate()
         let b:vf.original_candidates = candidates.original_list
         redraw!
-
-        call vfinder#helpers#echo_maps_str()
 
         startinsert!
     catch /^\[vfinder\].*$/

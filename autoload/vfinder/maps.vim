@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-10-25
+" Last modification: 2018-10-27
 
 
 fun! vfinder#maps#define() abort
@@ -19,7 +19,7 @@ fun! vfinder#maps#define() abort
                 \       'window_quit'         : '<Esc>',
                 \       'candidates_update'   : '<C-r>',
                 \       'cache_clean'         : '<F5>',
-                \       'echo_maps'           : '<F1>'
+                \       'toggle_maps_in_sl'   : '<F1>'
                 \   },
                 \   'n': {
                 \       'fuzzy_toggle'       : 'F',
@@ -30,7 +30,7 @@ fun! vfinder#maps#define() abort
                 \       'window_quit'        : '<Esc>',
                 \       'candidates_update'  : 'R',
                 \       'cache_clean'        : '<F5>',
-                \       'echo_maps'          : '?'
+                \       'toggle_maps_in_sl'  : '?'
                 \   }
                 \ })
     call s:define_gvar_maps('buffers', {

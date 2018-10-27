@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-27
+" Last modification: 2018-10-26
 
 
 fun! vfinder#source#i(source) abort
@@ -62,7 +62,6 @@ fun! s:source_execute() dict
     endif
     if candidates is# []
         call vfinder#helpers#throw('The source ' . string(self.to_execute) . ' is not valid')
-        return ''
     endif
     let self.candidates = candidates
     return self

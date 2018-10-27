@@ -112,8 +112,8 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
     " Echo source mappings
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.echo_maps . ' :call <SID>echo_maps()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.echo_maps . ' <Esc>:call <SID>echo_maps(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.toggle_maps_in_sl . ' :call <SID>toggle_maps_in_sl()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.toggle_maps_in_sl . ' <Esc>:call <SID>toggle_maps_in_sl(1)<CR>'
     return self
 endfun
 
@@ -338,10 +338,14 @@ fun! s:get_pre_post_of_query(col) abort
     return [pre_inp, post_inp]
 endfun
 
-fun! s:echo_maps(...) abort
+fun! s:toggle_maps_in_sl(...) abort
     let in_ins_mode = get(a:, 1, 0)
     let col = col('.')
-    call vfinder#helpers#echo_maps_str()
+    let def_sl = b:vf.statusline
+    let sl = &l:statusline
+    let &l:statusline = def_sl is# sl
+                \ ? vfinder#helpers#get_maps_str()
+                \ : def_sl
     if in_ins_mode
         startinsert
         call cursor(line('.'), col + 1)

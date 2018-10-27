@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-25
+" Last modification: 2018-10-27
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -69,7 +69,7 @@ fun! vfinder#helpers#black_hole() abort
     return '2> /dev/null'
 endfun
 
-fun! vfinder#helpers#echo_maps_str() abort
+fun! vfinder#helpers#get_maps_str() abort
     if &filetype isnot# 'vfinder'
         return ''
     endif
@@ -78,20 +78,10 @@ fun! vfinder#helpers#echo_maps_str() abort
         return ''
     endif
     let maps = vfinder#maps#get(name)
-    echon '(i/n) '
+    let str = ' '
     for a in keys(maps.i)
-        echohl vfinderIndex
-        echon a . '('
-        echohl vfinderPrompt
-        echon maps.i[a]
-        echohl vfinderIndex
-        echon '/'
-        echohl vfinderPrompt
-        echon maps.n[a]
-        echohl vfinderIndex
-        echon ') '
+        let str .= printf('%s(%s/%s) | ', a, maps.i[a], maps.n[a])
     endfor
-    echohl None
-    " To avoid the 'Press enter to continue...'
-    redraw
+    " Remove the last ' | '
+    return str[:-4]
 endfun

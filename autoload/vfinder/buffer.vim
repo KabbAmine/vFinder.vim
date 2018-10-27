@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-25
+" Last modification: 2018-10-27
 
 
 fun! vfinder#buffer#i(source, buf_win_opts) abort
@@ -340,8 +340,10 @@ endfun
 
 fun! s:echo_maps(...) abort
     let in_ins_mode = get(a:, 1, 0)
+    let col = col('.')
     call vfinder#helpers#echo_maps_str()
     if in_ins_mode
         startinsert
+        call cursor(line('.'), col + 1)
     endif
 endfun

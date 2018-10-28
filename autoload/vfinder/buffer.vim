@@ -293,14 +293,21 @@ endfun
 " 1}}}
 
 fun! s:update_candidates_i() abort
+    let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
-    startinsert!
+    silent execute line
+    if vfinder#helpers#is_in_prompt()
+        call s:go_to_initial_col_in_ins_mode(col)
+    else
+        call cursor(line, 0)
+        startinsert
+    endif
 endfun
 
 fun! s:update_candidates_n() abort
-    let pos = getpos('.')
+    let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
-    call setpos('.', pos)
+    call cursor(line, col)
     stopinsert
 endfun
 
@@ -355,7 +362,11 @@ fun! s:toggle_maps_in_sl(...) abort
     endif
 
     if in_ins_mode
-        startinsert
-        call cursor(line('.'), col + 1)
+        call s:go_to_initial_col_in_ins_mode(col)
     endif
+endfun
+
+fun! s:go_to_initial_col_in_ins_mode(col) abort
+    startinsert
+    call cursor(line('.'), a:col + 1)
 endfun

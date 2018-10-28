@@ -1,6 +1,9 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-28
+" Last modification: 2018-10-29
 
+
+let s:title = '[vfinder]'
+let s:title_hi = 'vfinderPrompt'
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
     call cursor(1, 0)
@@ -25,39 +28,52 @@ fun! vfinder#helpers#process_query(query) abort
     return '\v' . join(final_regex, join_pat)
 endfun
 
-fun! vfinder#helpers#throw(msg) abort
-    let v:errmsg = s:msg(a:msg, 'error')
-    throw v:errmsg
+fun! vfinder#helpers#throw(msg, ...) abort
+    let in_messages = get(a:, 1, 0)
+    try
+        throw '--vf-- ' . a:msg
+    catch =\V--vf--=
+        " Remove the --vf--
+        let err_msg = v:exception[7:]
+        if in_messages
+            call vfinder#helpers#echomsg(err_msg, 'Error')
+        else
+            call vfinder#helpers#echo(err_msg, 'Error')
+        endif
+    endtry
 endfun
 
-fun! vfinder#helpers#echo(msg, higroup, ...) abort
-    if g:vfinder_verbose || exists('a:1') && a:1
-        let msg = a:msg =~# '^\V[vfinder]' ? a:msg : s:msg(a:msg)
-        silent execute 'echohl ' . a:higroup
-        echomsg msg
-        echohl None
-    endif
-endfun
-
-fun! vfinder#helpers#input(msg, higroup) abort
-    silent execute 'echohl ' . a:higroup
-    let response = input(a:msg)
+fun! vfinder#helpers#echomsg(msg, ...) abort
+    let higroup = get(a:, 1, s:title_hi)
+    silent execute 'echohl ' . higroup
+    echomsg s:title . ' ' . a:msg
     echohl None
-    return response
 endfun
 
-fun! vfinder#helpers#question(infos, question) abort
-    let old_vf_verbose_option = g:vfinder_verbose
-    let g:vfinder_verbose = 1
-    call vfinder#helpers#echo(a:infos, 'Question')
-    let response = vfinder#helpers#input(a:question . ' [y/N] ', 'Question')
-    let g:vfinder_verbose = old_vf_verbose_option
-    return response
+fun! vfinder#helpers#echo(msg, ...) abort
+    " a:1: higroup
+    " a:2: optional msg, respect or not g:vfinder_verbose
+
+    let higroup = empty(get(a:, 1, ''))
+                \ ? s:title_hi
+                \ : a:1
+    let optional = get(a:, 2, 0)
+
+    if optional && !g:vfinder_verbose
+        return ''
+    endif
+    execute 'echohl ' . higroup
+    echon s:title . ' '
+    echohl None | echon a:msg
 endfun
 
-fun! s:msg(content, ...) abort
-    let extra = exists('a:1') ? '[' . a:1 . '] ' : ''
-    return '[vfinder] ' . extra . a:content
+fun! vfinder#helpers#question(msg, prompt) abort
+    echohl Question
+    echon s:title . ' '
+    echohl None
+    echon a:msg
+    let response = input(a:prompt)
+    return response
 endfun
 
 fun! vfinder#helpers#empty_buffer(...) abort

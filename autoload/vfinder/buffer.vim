@@ -313,7 +313,7 @@ fun! s:clean_cache_if_it_exists(...) abort
         call vfinder#events#update_candidates_request()
         silent execute exists('a:1') ? 'startinsert!' : 'normal! 1gg$'
     else
-        call vfinder#helpers#echo('No cache for the source "' . name . '"', 'Function', 1)
+        call vfinder#helpers#echo('No cache for the source "' . name . '"', 'WarningMsg')
         if exists('a:1')
             call s:set_insertion_position()
         endif

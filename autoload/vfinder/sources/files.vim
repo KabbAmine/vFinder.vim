@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-03-27
+" Last modification: 2018-10-28
 
 
 fun! vfinder#sources#files#check()
@@ -22,8 +22,10 @@ fun! s:files_is_valid()
     if getcwd() isnot# $HOME
         return 1
     else
-        call vfinder#helpers#echo('Gathering candidates from $HOME may freeze your editor', 'Question', 1)
-        let response = vfinder#helpers#input('Do you want to proceed? [y/N] ', 'Question')
+        let response = vfinder#helpers#question(
+                    \   'Gathering candidates from $HOME may freeze your editor,',
+                    \   'do you want to proceed? [y/N] '
+                    \ )
         return response =~# 'y\|Y' ? 1 : 0
     endif
 endfun

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-10-25
+" Last modification: 2018-10-28
 
 
 fun! vfinder#sources#buffers#check()
@@ -97,10 +97,7 @@ endfun
 fun! s:wipe(buffer) abort
     let b = str2nr(a:buffer)
     if bufexists(b)
-        try
-            execute b . 'bwipeout'
-        catch
-        endtry
+        execute b . 'bwipeout'
     endif
 endfun
 

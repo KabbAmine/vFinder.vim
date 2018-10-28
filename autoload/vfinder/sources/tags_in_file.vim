@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-10-25
+" Last modification: 2018-10-28
 
 
 fun! vfinder#sources#tags_in_file#check()
@@ -21,7 +21,7 @@ endfun
 
 fun! s:tags_in_file_is_valid() abort
     if !executable('ctags')
-        call vfinder#helpers#echo('"ctags" was not found', 'Error', 1)
+        call vfinder#helpers#echo('"ctags" was not found', 'Error')
         return 0
     else
         return 1

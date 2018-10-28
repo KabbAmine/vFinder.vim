@@ -59,9 +59,10 @@ fun! s:source_execute() dict
         let candidates = self.to_execute
     elseif type(self.to_execute) is# v:t_string
         let candidates = systemlist(self.to_execute . ' ' . vfinder#helpers#black_hole())
-    endif
-    if candidates is# []
-        call vfinder#helpers#throw('The source ' . string(self.to_execute) . ' is not valid')
+        if v:shell_error
+            call vfinder#helpers#throw('"' . escape(self.to_execute, '"') . '" executed with error ' . v:shell_error, 1)
+            let candidates = []
+        endif
     endif
     let self.candidates = candidates
     return self

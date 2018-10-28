@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-03-25
+" Last modification: 2018-10-28
 
 
 fun! vfinder#sources#spell#check()
@@ -24,7 +24,7 @@ endfun
 
 fun! s:spell_is_valid()
     if !&l:spell
-        call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg', 1)
+        call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg')
         return 0
     else
         return 1

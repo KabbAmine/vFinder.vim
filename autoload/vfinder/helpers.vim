@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-27
+" Last modification: 2018-10-28
 
 
 fun! vfinder#helpers#go_to_prompt_and_startinsert()
@@ -69,18 +69,25 @@ fun! vfinder#helpers#black_hole() abort
     return '2> /dev/null'
 endfun
 
-fun! vfinder#helpers#get_maps_str() abort
+fun! vfinder#helpers#get_maps_str_for(name) abort
     if &filetype isnot# 'vfinder'
         return ''
     endif
-    let name = b:vf.name
-    if !exists('g:vfinder_maps[name]')
+    if !exists('g:vfinder_maps[a:name]')
         return ''
     endif
-    let maps = vfinder#maps#get(name)
-    let str = ' '
+    let maps = vfinder#maps#get(a:name)
+    let str = ' ' . (a:name is# '_' ? 'global' : a:name) . ': '
     for a in keys(maps.i)
-        let str .= printf('%s(%s/%s) | ', a, maps.i[a], maps.n[a])
+        if a =~# '^\(prompt\|window\)'
+            " Do not save the prompt-*/window-* mappings
+            continue
+        endif
+        let str .= printf('%s(%s/%s) | ',
+                    \   a,
+                    \   get(maps.i, a, '-'),
+                    \   get(maps.n, a, '-')
+                    \ )
     endfor
     " Remove the last ' | '
     return str[:-4]

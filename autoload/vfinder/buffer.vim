@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-27
+" Last modification: 2018-10-28
 
 
 fun! vfinder#buffer#i(source, buf_win_opts) abort
@@ -97,7 +97,7 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
     " Modes
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy(1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' :call <SID>toggle_fuzzy()<CR>'
     " Insert mode
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_i . ' :call <SID>start_insert_mode(-1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_I . ' :call <SID>start_insert_mode(-1)<CR>'
@@ -107,13 +107,13 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
-    " Echo source mappings
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.toggle_maps_in_sl . ' :call <SID>toggle_maps_in_sl()<CR>'
+    " Toggle source mappings in the statusline
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.toggle_maps_in_sl . ' <Esc>:call <SID>toggle_maps_in_sl(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.toggle_maps_in_sl . ' :call <SID>toggle_maps_in_sl()<CR>'
     return self
 endfun
 
@@ -341,11 +341,19 @@ endfun
 fun! s:toggle_maps_in_sl(...) abort
     let in_ins_mode = get(a:, 1, 0)
     let col = col('.')
-    let def_sl = b:vf.statusline
-    let sl = &l:statusline
-    let &l:statusline = def_sl is# sl
-                \ ? vfinder#helpers#get_maps_str()
-                \ : def_sl
+    let [def_sl, global_maps_sl, source_maps_sl] = [
+                \   b:vf.statusline,
+                \   vfinder#helpers#get_maps_str_for('_'),
+                \   vfinder#helpers#get_maps_str_for(b:vf.name)
+                \ ]
+    if &l:statusline is# def_sl
+        let &l:statusline = global_maps_sl
+    elseif &l:statusline is# global_maps_sl
+        let &l:statusline = source_maps_sl
+    else
+        let &l:statusline = def_sl
+    endif
+
     if in_ins_mode
         startinsert
         call cursor(line('.'), col + 1)

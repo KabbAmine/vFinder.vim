@@ -38,9 +38,26 @@ fun! vfinder#sources#marks#maps() abort
     let keys = vfinder#maps#get('marks')
     let maps.i = {
                 \ keys.i.goto  : {'action': 'normal! ''%s', 'options': {}},
+                \ keys.i.delete  : {
+                \       'action': function('s:delete_mark'),
+                \       'options': {'function': 1, 'silent': 0, 'quit': 0, 'update': 1}
+                \       }
                 \ }
     let maps.n = {
                 \ keys.n.goto  : {'action': 'normal! ''%', 'options': {}},
+                \ keys.n.delete  : {
+                \       'action': function('s:delete_mark'),
+                \       'options': {'function': 1, 'silent': 0, 'quit': 0, 'update': 1}
+                \       }
                 \ }
     return maps
+endfun
+
+fun! s:delete_mark(m) abort
+    " Only A-Z and 0-9
+    if a:m !~ '^\(\u\|\d\)$'
+        call vfinder#helpers#echo('Only marks in range A-Z or 0-9 can be deleted', 'Error', 1)
+        return ''
+    endif
+    execute 'delmarks ' . a:m
 endfun

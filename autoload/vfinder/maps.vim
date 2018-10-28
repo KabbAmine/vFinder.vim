@@ -98,8 +98,14 @@ fun! vfinder#maps#define() abort
                 \   }
                 \ })
     call s:define_gvar_maps('marks', {
-                \ 'i': {'goto' : '<CR>'},
-                \ 'n': {'goto' : '<CR>'}
+                \ 'i': {
+                \       'goto'  : '<CR>',
+                \       'delete': '<C-d>'
+                \   },
+                \ 'n': {
+                \       'goto'  : '<CR>',
+                \       'delete': 'dd'
+                \   }
                 \ })
     call s:define_gvar_maps('tags_in_file', {
                 \   'i': {

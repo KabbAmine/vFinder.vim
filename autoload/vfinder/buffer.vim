@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-28
+" Last modification: 2018-10-29
 
 
 fun! vfinder#buffer#i(source, buf_win_opts) abort
@@ -347,9 +347,9 @@ fun! s:toggle_maps_in_sl(...) abort
                 \   vfinder#helpers#get_maps_str_for(b:vf.name)
                 \ ]
     if &l:statusline is# def_sl
-        let &l:statusline = global_maps_sl
-    elseif &l:statusline is# global_maps_sl
         let &l:statusline = source_maps_sl
+    elseif &l:statusline is# source_maps_sl
+        let &l:statusline = global_maps_sl
     else
         let &l:statusline = def_sl
     endif

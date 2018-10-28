@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-03-26
+" Last modification: 2018-10-28
 
 
 fun! vfinder#sources#directories#check()
@@ -92,7 +92,8 @@ fun! s:cd(path) abort
     let goto = exists('b:vf.last_wd')
                 \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
                 \ : a:path
-    silent execute 'cd ' . goto
+    execute 'cd ' . goto
+    pwd
 endfun
 
 fun! s:reload_i(...) abort

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-28
+" Last modification: 2018-11-02
 
 
 fun! vfinder#sources#files#check()
@@ -13,6 +13,8 @@ fun! vfinder#sources#files#get() abort
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
                 \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
+                \   'format_fun'   : function('s:files_format_fun'),
+                \   'syntax_fun'   : function('s:files_syntax_fun'),
                 \   'maps'         : vfinder#sources#files#maps(),
                 \   'is_valid'     : is_valid
                 \ }
@@ -35,13 +37,41 @@ fun! s:files_source() abort
                 \ ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
-                \ : executable('git') && isdirectory('./.git')
+                \ : s:in_git_project()
                 \ ? 'git ls-files -co --exclude-standard'
                 \ : 'find * -type f'
 endfun
 
+fun! s:files_format_fun(files) abort
+    " Add git flags if the option is enabled
+    let b:vf.flags.git_flags = get(b:vf.flags, 'git_flags', 0)
+    if !s:in_git_project() || !b:vf.flags.git_flags
+        return a:files
+    endif
+    let files = []
+    let files_with_flags = s:git_status_files()
+    for file in a:files
+        let status = has_key(files_with_flags, file)
+                    \ ? ' ' . files_with_flags[file] . ' '
+                    \ : ''
+        call add(files, printf('%-3s %s', status, file))
+    endfor
+    return files
+endfun
+
+fun! s:files_syntax_fun() abort
+    syntax match vfinderAddedGitStatus =^\ +\ =
+    syntax match vfinderModifiedGitStatus =^\ \~\ =
+    syntax match vfinderRenamedGitStatus =^\ -\ =
+    syntax match vfinderUntrackedGitStatus =^\ ?\ =
+    highlight! link vfinderAddedGitStatus DiffAdded
+    highlight! link vfinderModifiedGitStatus DiffChange
+    highlight! link vfinderRenamedGitStatus DiffDelete
+    highlight! link vfinderUntrackedGitStatus vfinderIndex
+endfun
+
 fun! vfinder#sources#files#candidate_fun() abort
-    return escape(getline('.'), '%#')
+    return escape(matchstr(getline('.'), '\f\+$'), '%#')
 endfun
 
 fun! vfinder#sources#files#maps() abort
@@ -51,13 +81,57 @@ fun! vfinder#sources#files#maps() abort
                 \ keys.i.edit  : {'action': 'edit %s', 'options': {}},
                 \ keys.i.split : {'action': 'split %s', 'options': {}},
                 \ keys.i.vsplit: {'action': 'vertical split %s', 'options': {}},
-                \ keys.i.tab   : {'action': 'tabedit %s', 'options': {}}
+                \ keys.i.tab   : {'action': 'tabedit %s', 'options': {}},
+                \ keys.i.toggle_git_flags: {
+                \       'action': function('s:toggle_git_flags'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       }
                 \ }
     let maps.n = {
                 \ keys.n.edit  : {'action': 'edit %s', 'options': {}},
                 \ keys.n.split : {'action': 'split %s', 'options': {}},
                 \ keys.n.vsplit: {'action': 'vertical split %s', 'options': {}},
-                \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}}
+                \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}},
+                \ keys.n.toggle_git_flags: {
+                \       'action': function('s:toggle_git_flags'),
+                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       }
                 \ }
     return maps
+endfun
+
+" Git related
+" """""""""""
+
+let s:git_status_symbols = {
+            \   'M': '~',
+            \   'A': '+',
+            \   'R': '-',
+            \   'D': '-'
+            \ }
+
+fun! s:in_git_project() abort
+    return executable('git') && isdirectory('./.git')
+endfun
+
+fun! s:git_status_files() abort
+    let res = {}
+    for str in systemlist('git status --porcelain --untracked-files=all')
+        " -> res[file] = status
+        let [file, status] = [
+                    \   matchstr(str, '\f\+$'),
+                    \   matchstr(str, '\S')
+                    \ ]
+        " Get the appropriate symbol if it exists
+        let status = get(s:git_status_symbols, status, status)
+        let res[file] = status
+    endfor
+    return res
+endfun
+
+" Flags
+"""""""""""
+
+fun! s:toggle_git_flags(file) abort
+    let b:vf.flags.git_flags = !b:vf.flags.git_flags
 endfun

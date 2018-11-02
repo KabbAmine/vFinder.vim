@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-10-28
+" Last modification: 2018-11-02
 
 
 fun! vfinder#maps#define() abort
@@ -85,16 +85,18 @@ fun! vfinder#maps#define() abort
                 \ })
     call s:define_gvar_maps('files', {
                 \   'i': {
-                \       'edit'  : '<CR>',
-                \       'split' : '<C-s>',
-                \       'vsplit': '<C-v>',
-                \       'tab'   : '<C-t>'
+                \       'edit'             : '<CR>',
+                \       'split'            : '<C-s>',
+                \       'vsplit'           : '<C-v>',
+                \       'tab'              : '<C-t>',
+                \       'toggle_git_flags' : '<C-g>'
                 \   },
                 \   'n': {
-                \       'edit'  : '<CR>',
-                \       'split' : 's',
-                \       'vsplit': 'v',
-                \       'tab'   : 't'
+                \       'edit'             : '<CR>',
+                \       'split'            : 's',
+                \       'vsplit'           : 'v',
+                \       'tab'              : 't',
+                \       'toggle_git_flags' : 'gi'
                 \   }
                 \ })
     call s:define_gvar_maps('marks', {

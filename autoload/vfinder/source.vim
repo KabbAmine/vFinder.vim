@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-26
+" Last modification: 2018-11-02
 
 
 fun! vfinder#source#i(source) abort
@@ -160,7 +160,11 @@ fun! s:do(action, candidate_fun, mode, options)
             call clearmatches()
         endif
         if a:options.update
-            call vfinder#events#update_candidates_request()
+            if a:mode is# 'i'
+                call vfinder#buffer#update_candidates_i()
+            else
+                call vfinder#buffer#update_candidates_n()
+            endif
         endif
 
         if a:options.goto_prompt

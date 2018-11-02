@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-29
+" Last modification: 2018-11-02
 
 
 fun! vfinder#buffer#i(source, buf_win_opts) abort
@@ -107,8 +107,8 @@ fun! s:buffer_set_maps() dict
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call <SID>update_candidates_i()<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call <SID>update_candidates_n()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#buffer#update_candidates_i()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#buffer#update_candidates_n()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
     " Toggle source mappings in the statusline
@@ -283,16 +283,20 @@ fun! s:control_u() abort
 endfun
 
 fun! s:toggle_fuzzy(...) abort " {{{1
-    let b:vf.fuzzy = b:vf.fuzzy ? 0 : 1
-    call vfinder#events#update_candidates_request()
+    " a:1: insert mode
+
+    let b:vf.fuzzy = !b:vf.fuzzy
     if exists('a:1')
-        " Insert mode
-        call s:set_insertion_position()
+        call vfinder#buffer#update_candidates_i()
+    else
+        call vfinder#buffer#update_candidates_n()
     endif
 endfun
 " 1}}}
 
-fun! s:update_candidates_i() abort
+fun! vfinder#buffer#update_candidates_i() abort
+    " Update candidadates and try to set back the cursor to the initial
+    " position
     let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
     silent execute line
@@ -304,7 +308,8 @@ fun! s:update_candidates_i() abort
     endif
 endfun
 
-fun! s:update_candidates_n() abort
+fun! vfinder#buffer#update_candidates_n() abort
+    " Same as vfinder#buffer#update_candidates_i but for normal mode
     let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
     call cursor(line, col)

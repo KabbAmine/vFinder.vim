@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-10-28
+" Last modification: 2018-11-02
 
 
 fun! vfinder#sources#buffers#check()
@@ -18,9 +18,9 @@ fun! vfinder#sources#buffers#get() abort
 endfun
 
 fun! s:buffers_source() abort
-    let list_hiddens = get(b:vf.flags, 'list_hiddens', 0)
+    let list_all = get(b:vf.flags, 'list_all', 0)
     let all_bufs = range(1, bufnr('$'))
-    let bufs = list_hiddens
+    let bufs = list_all
                 \ ? filter(all_bufs, 'bufexists(v:val)')
                 \ : filter(all_bufs, 'buflisted(v:val)')
     let nrs = []
@@ -29,14 +29,16 @@ fun! s:buffers_source() abort
             call add(nrs, nr)
         endif
     endfor
-    let b:vf.flags.list_hiddens = list_hiddens
+    let b:vf.flags.list_all = list_all
     return nrs
 endfun
 
 fun! s:buffers_format(nrs) abort
     let res = []
     for nr in a:nrs
-        let name = empty(bufname(nr)) ? '[No Name]' : fnamemodify(bufname(nr), ':.')
+        let name = empty(bufname(nr))
+                    \ ? '[No Name]'
+                    \ : fnamemodify(bufname(nr), ':.')
         let was_modified = getbufvar(nr, '&modified', 0)
         call add(res, printf('%-4d %3s %-30s %s',
                     \   nr . '.',
@@ -65,8 +67,8 @@ fun! s:buffers_maps() abort
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       },
-                \ keys.i.toggle_hiddens: {
-                \       'action': function('s:toggle_hiddens'),
+                \ keys.i.toggle_all: {
+                \       'action': function('s:toggle_all'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0}
                 \       },
                 \ }
@@ -79,8 +81,8 @@ fun! s:buffers_maps() abort
                 \       'action': function('s:wipe'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       },
-                \ keys.n.toggle_hiddens: {
-                \       'action': function('s:toggle_hiddens'),
+                \ keys.n.toggle_all: {
+                \       'action': function('s:toggle_all'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0}
                 \       },
                 \ }
@@ -89,7 +91,7 @@ endfun
 
 fun! s:buffers_syntax_fun() abort
     syntax match vfinderBuffersModified =\[+\]=
-    syntax match vfinderBuffersName =\%>1l\v(\f+|\[No\ Name\])\ze\s+\f+$=
+    syntax match vfinderBuffersName =\%>9c\zs.*\s\{2,\}=
     highlight! link vfinderBuffersName Statement
     highlight! link vfinderBuffersModified Identifier
 endfun
@@ -101,8 +103,6 @@ fun! s:wipe(buffer) abort
     endif
 endfun
 
-fun! s:toggle_hiddens(buffer) abort
-    let b:vf.flags.list_hiddens = b:vf.flags.list_hiddens
-                \ ? 0
-                \ : 1
+fun! s:toggle_all(buffer) abort
+    let b:vf.flags.list_all = !b:vf.flags.list_all
 endfun

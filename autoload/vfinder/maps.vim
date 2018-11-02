@@ -40,7 +40,7 @@ fun! vfinder#maps#define() abort
                 \       'vsplit'        : '<C-v>',
                 \       'tab'           : '<C-t>',
                 \       'wipe'          : '<C-d>',
-                \       'toggle_hiddens': '<C-o>'
+                \       'toggle_all': '<C-o>'
                 \   },
                 \   'n': {
                 \       'edit'          : '<CR>',
@@ -48,7 +48,7 @@ fun! vfinder#maps#define() abort
                 \       'vsplit'        : 'v',
                 \       'tab'           : 't',
                 \       'wipe'          : 'dd',
-                \       'toggle_hiddens': 'o'
+                \       'toggle_all': 'o'
                 \   }
                 \ })
     call s:define_gvar_maps('colors', {

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-02
+" Last modification: 2018-11-03
 
 
 fun! vfinder#sources#files#check()
@@ -84,7 +84,7 @@ fun! vfinder#sources#files#maps() abort
                 \ keys.i.tab   : {'action': 'tabedit %s', 'options': {}},
                 \ keys.i.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       }
                 \ }
     let maps.n = {
@@ -94,7 +94,7 @@ fun! vfinder#sources#files#maps() abort
                 \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}},
                 \ keys.n.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       }
                 \ }
     return maps
@@ -133,5 +133,9 @@ endfun
 """""""""""
 
 fun! s:toggle_git_flags(file) abort
+    if !s:in_git_project()
+        call vfinder#helpers#echo('not in a git project')
+        return ''
+    endif
     let b:vf.flags.git_flags = !b:vf.flags.git_flags
 endfun

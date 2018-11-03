@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-10-28
+" Last modification: 2018-11-03
 
 
 fun! vfinder#sources#yank#check()
@@ -49,12 +49,18 @@ endfun
 fun! vfinder#sources#yank#maps() abort
     let keys = vfinder#maps#get('yank')
     return {
-                \   'i': {keys.i.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
-                \   'n': {keys.n.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'i': {keys.i.paste: {
+                \       'action': function('vfinder#sources#yank#paste'),
+                \       'options': {'function': 1}
+                \   }},
+                \   'n': {keys.n.paste: {
+                \       'action': function('vfinder#sources#yank#paste'),
+                \       'options': {'function': 1}
+                \   }}
                 \ }
 endfun
 
-fun! s:paste(content) abort
+fun! vfinder#sources#yank#paste(content) abort
     " a:content can be something like 'foo^@bar^@zee'
 
     let [line, col_p] = [line('.'), col('.')]

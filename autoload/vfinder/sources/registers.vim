@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-10-25
+" Last modification: 2018-11-03
 
 
 fun! vfinder#sources#registers#check()
@@ -66,7 +66,13 @@ endfun
 fun! s:registers_maps() abort
     let keys = vfinder#maps#get('registers')
     return {
-                \   'i': {keys.i.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
-                \   'n': {keys.n.paste: {'action': function('s:paste'), 'options': {'function': 1}}},
+                \   'i': {keys.i.paste: {
+                \       'action': function('vfinder#sources#yank#paste'),
+                \       'options': {'function': 1}
+                \   }},
+                \   'n': {keys.n.paste: {
+                \       'action': function('vfinder#sources#yank#paste'),
+                \       'options': {'function': 1}
+                \   }}
                 \ }
 endfun

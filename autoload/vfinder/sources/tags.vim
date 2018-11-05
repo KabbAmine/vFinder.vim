@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-09-15
+" Last modification: 2018-11-05
 
 
 fun! vfinder#sources#tags#check()
@@ -43,23 +43,17 @@ fun! s:tags_source() abort
 endfun
 
 fun! s:tags_format(tags) abort
-    let [names, res] = [[], []]
-    for t in a:tags
-        let name = t.name
-        call add(names, name)
-        let count_int = count(names, name)
-        call add(res, printf('%-2s %-50s %-10s %s',
-                    \   (count_int ># 1 ? string(count_int) : ''),
-                    \   name,
-                    \   ':' . t.kind . ':',
-                    \   fnamemodify(t.filename, ':~')
-                    \ ))
-    endfor
-    return res
+    return map(copy(a:tags), {
+                \ i, v ->
+                \       printf('%-50s %-10s %s',
+                \           v.name,
+                \           ':' . v.kind . ':',
+                \           fnamemodify(v.filename, ':~:.')
+                \ )})
 endfun
 
 fun! s:tags_candidate_fun() abort
-    return escape(matchstr(getline('.'), '^.*\ze\s\+:\h:\s\+\f\+'), '"')
+    return getline('.')
 endfun
 
 fun! s:tags_syntax_fun() abort
@@ -87,29 +81,34 @@ fun! vfinder#sources#tags#maps() abort
     return maps
 endfun
 
-fun! s:get_count_and_name(str) abort
-    return [
-                \   matchstr(a:str, '^\d\+'),
-                \   matchstr(a:str, '^\d*\s\+\zs.*$')
-                \ ]
-endfun
-
 fun! s:gototag(tag) abort
-    let [c, name] = s:get_count_and_name(a:tag)
-    silent execute c . 'tag ' . name
+    let [file, cmd] = s:filename_and_cmd(a:tag)
+    unsilent execute 'edit ' . file
+    silent execute cmd
 endfun
 
 fun! s:splitandgoto(tag) abort
-    let [c, name] = s:get_count_and_name(a:tag)
-    silent execute c . 'stag ' . name
+    let [file, cmd] = s:filename_and_cmd(a:tag)
+    unsilent execute 'split ' . file
+    silent execute cmd
 endfun
 
 fun! s:vsplitandgoto(tag) abort
-    let [c, name] = s:get_count_and_name(a:tag)
-    silent execute 'vertical ' . c . 'stag ' . name
+    let [file, cmd] = s:filename_and_cmd(a:tag)
+    unsilent execute 'vsplit ' . file
+    silent execute cmd
 endfun
 
 fun! s:preview(tag) abort
-    let [c, name] = s:get_count_and_name(a:tag)
-    silent execute c . 'ptag ' . name
+    let [file, cmd] = s:filename_and_cmd(a:tag)
+    silent execute 'pedit ' . file
+    silent wincmd P
+    silent execute cmd
+    silent wincmd p
+endfun
+
+fun! s:filename_and_cmd(tag) abort
+    let tag_name = substitute(matchstr(a:tag, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
+    let tag = taglist('\V' . tag_name)[0]
+    return [tag.filename, escape(tag.cmd, '*~')]
 endfun

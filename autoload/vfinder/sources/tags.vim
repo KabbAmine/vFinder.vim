@@ -70,12 +70,14 @@ fun! vfinder#sources#tags#maps() abort
                 \ keys.i.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
                 \ keys.i.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
                 \ keys.i.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
+                \ keys.i.tabandgoto   : {'action': function('s:tabandgoto'), 'options': {'function': 1}},
                 \ keys.i.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     let maps.n = {
                 \ keys.n.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
                 \ keys.n.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
                 \ keys.n.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
+                \ keys.n.tabandgoto   : {'action': function('s:tabandgoto'), 'options': {'function': 1}},
                 \ keys.n.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     return maps
@@ -96,6 +98,12 @@ endfun
 fun! s:vsplitandgoto(tag) abort
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'vsplit ' . file
+    silent execute cmd
+endfun
+
+fun! s:tabandgoto(tag) abort
+    let [file, cmd] = s:filename_and_cmd(a:tag)
+    unsilent execute 'tabedit ' . file
     silent execute cmd
 endfun
 

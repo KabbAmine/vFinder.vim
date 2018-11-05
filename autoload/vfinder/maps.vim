@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-11-02
+" Last modification: 2018-11-05
 
 
 fun! vfinder#maps#define() abort
@@ -130,12 +130,14 @@ fun! vfinder#maps#define() abort
                 \       'goto'         : '<CR>',
                 \       'splitandgoto' : '<C-s>',
                 \       'vsplitandgoto': '<C-v>',
+                \       'tabandgoto'   : '<C-t>',
                 \       'preview'      : '<C-o>'
                 \   },
                 \   'n': {
                 \       'goto'         : '<CR>',
                 \       'splitandgoto' : 's',
                 \       'vsplitandgoto': 'v',
+                \       'tabandgoto'   : 't',
                 \       'preview'      : 'o'
                 \   }
                 \ })

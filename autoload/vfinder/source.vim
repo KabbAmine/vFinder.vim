@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-02
+" Last modification: 2018-11-05
 
 
 fun! vfinder#source#i(source) abort
@@ -161,9 +161,9 @@ fun! s:do(action, candidate_fun, mode, options)
         endif
         if a:options.update
             if a:mode is# 'i'
-                call vfinder#buffer#update_candidates_i()
+                silent call vfinder#buffer#update_candidates_i()
             else
-                call vfinder#buffer#update_candidates_n()
+                silent call vfinder#buffer#update_candidates_n()
             endif
         endif
 

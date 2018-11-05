@@ -1,8 +1,12 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-03
+" Last modification: 2018-11-05
 
 
-fun! vfinder#buffer#i(source, buf_win_opts) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"		    main buffer object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#buffer#i(source, buf_win_opts) abort " {{{1
     return {
                 \   'source'        : a:source,
                 \   'name'          : 'vf__' . a:source.name . '__',
@@ -17,8 +21,9 @@ fun! vfinder#buffer#i(source, buf_win_opts) abort
                 \   'set_statusline': function('s:buffer_set_statusline')
                 \ }
 endfun
+" 1}}}
 
-fun! s:buffer_goto() dict
+fun! s:buffer_goto() dict " {{{1
     " If the vf buffer already exists we:
     "    - move to it if its window is in the current tab.
     "    - wipe it and create a new on in the current tab.
@@ -37,20 +42,23 @@ fun! s:buffer_goto() dict
     endif
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_new() dict
+fun! s:buffer_new() dict " {{{1
     silent execute self.win_pos . ' split ' . self.name
     call self.set_options().set_syntax().set_maps().set_autocmds()
     call self.set_statusline()
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_quit() dict
+fun! s:buffer_quit() dict " {{{1
     call s:wipe_buffer(self.name)
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_set_options() dict
+fun! s:buffer_set_options() dict " {{{1
     setfiletype vfinder
     setlocal nonumber
     setlocal nobuflisted
@@ -63,8 +71,9 @@ fun! s:buffer_set_options() dict
     setlocal textwidth=0
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_set_syntax() dict
+fun! s:buffer_set_syntax() dict " {{{1
     syntax clear
     syntax case ignore
     syntax match vfinderPrompt =\%1l.*=
@@ -76,8 +85,9 @@ fun! s:buffer_set_syntax() dict
     endif
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_set_maps() dict
+fun! s:buffer_set_maps() dict " {{{1
     " Disable some default vim keys
     for k in ['<CR>', 'x', 'c', 'd', 'o', 'O', 'p', 'P']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
@@ -85,39 +95,40 @@ fun! s:buffer_set_maps() dict
     let keys = vfinder#maps#get('_')
     let [i, n] = [keys.i, keys.n]
     " Prompt & movement
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_left . ' <Esc>:call <SID>move_left()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_right . ' <Esc>:call <SID>move_right()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_start . ' <Esc>:call <SID>move_to_edge(-1)<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_end . ' <Esc>:call <SID>move_to_edge(1)<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_backspace . ' <Esc>:call <SID>backspace()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_left . ' <Esc>:call <SID>move_left_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_right . ' <Esc>:call <SID>move_right_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_start . ' <Esc>:call <SID>move_to_edge_i(-1)<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_to_end . ' <Esc>:call <SID>move_to_edge_i(1)<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_backspace . ' <Esc>:call <SID>backspace_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w_i()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u_i()<CR>'
     " Modes
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy(1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' :call <SID>toggle_fuzzy()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy("i")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' :call <SID>toggle_fuzzy("n")<CR>'
     " Insert mode
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_i . ' :call <SID>start_insert_mode(-1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_I . ' :call <SID>start_insert_mode(-1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_a . ' :call <SID>start_insert_mode(1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_A . ' :call <SID>start_insert_mode(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_i . ' :call <SID>start_ins_mode_with_key("i")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_a . ' :call <SID>start_ins_mode_with_key("a")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_I . ' :call <SID>start_ins_mode_with_key("I")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_A . ' :call <SID>start_ins_mode_with_key("A")<CR>'
     " Buffer
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#buffer#update_candidates_i()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#buffer#update_candidates_n()<CR>'
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists(1)<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists()<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists("i")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists("n")<CR>'
     " Toggle source mappings in the statusline
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.toggle_maps_in_sl . ' <Esc>:call <SID>toggle_maps_in_sl(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.toggle_maps_in_sl . ' :call <SID>toggle_maps_in_sl()<CR>'
     return self
 endfun
+" 1}}}
 
-fun! s:buffer_set_autocmds() dict
+fun! s:buffer_set_autocmds() dict " {{{1
     augroup VFinder
         autocmd!
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
@@ -125,43 +136,53 @@ fun! s:buffer_set_autocmds() dict
         autocmd WinEnter <buffer> :call vfinder#events#update_candidates_request()
     augroup END
 endfun
+" 1}}}
 
-fun! s:buffer_set_statusline() dict
+fun! s:buffer_set_statusline() dict " {{{1
     let &l:statusline = vfinder#statusline#get()
 endfun
+" 1}}}
 
-fun! s:move_down() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"		    actions for maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:move_down_i() abort " {{{1
     let last_line = line('$')
     if line('.') is# last_line
         call cursor(1, 0)
     else
         silent execute 'normal! j'
     endif
-    call s:set_insertion_position()
+    call s:set_cursor_position_i()
 endfun
+" 1}}}
 
-fun! s:move_up() abort
+fun! s:move_up_i() abort " {{{1
     if line('.') is# 1
         call cursor(line('$'), 0)
     else
         silent execute 'normal! k'
     endif
-    call s:set_insertion_position()
+    call s:set_cursor_position_i()
 endfun
+" 1}}}
 
-fun! s:move_left() abort
+fun! s:move_left_i() abort " {{{1
     startinsert
     if s:already_near_the_prompt_char()
         return ''
     endif
 endfun
+" 1}}}
 
-fun! s:move_right() abort
+fun! s:move_right_i() abort " {{{1
     startinsert
     call cursor(1, col('.') + 2)
 endfun
+" 1}}}
 
-fun! s:move_to_edge(direction) abort
+fun! s:move_to_edge_i(direction) abort " {{{1
     if !vfinder#helpers#is_in_prompt()
         call cursor(1, 0)
     endif
@@ -169,49 +190,14 @@ fun! s:move_to_edge(direction) abort
         startinsert!
     else
         startinsert
-        call cursor(1, 3)
+        call s:go_to_start_of_prompt()
     endif
 endfun
+" 1}}}
 
-fun! s:start_insert_mode(...) abort
+fun! s:backspace_i() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
-        call vfinder#helpers#go_to_prompt_and_startinsert()
-    else
-        startinsert
-        if !exists('a:1')
-            let new_col = col('$')
-        elseif a:1 is# 1
-            let new_col = col('.') + 1
-        elseif a:1 is# -1
-            let new_col = col('.')
-        endif
-        call cursor(1, new_col)
-        call s:already_near_the_prompt_char()
-    endif
-endfun
-
-fun! s:set_insertion_position() abort
-    if vfinder#helpers#is_in_prompt()
-        startinsert!
-    else
-        silent execute 'normal! ^'
-        startinsert
-    endif
-endfun
-
-fun! s:wipe_buffer(...) abort
-    let buffer = exists('a:1') ? a:1 : bufname('%')
-    if bufexists(buffer)
-        " Be sure to go back to initial window
-        silent execute 'wincmd p'
-        silent execute 'bwipeout! ' . buffer
-    endif
-endfun
-
-fun! s:backspace() abort
-    if !vfinder#helpers#is_in_prompt()
-        call cursor(1, col('$'))
-        startinsert!
+        call s:move_to_edge_i(1)
     endif
     let origin_col = col('.')
     if s:already_near_the_prompt_char()
@@ -223,11 +209,11 @@ fun! s:backspace() abort
     startinsert
     call cursor(1, origin_col)
 endfun
+" 1}}}
 
-fun! s:delete() abort
+fun! s:delete_i() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
-        call cursor(1, col('$'))
-        startinsert!
+        call s:move_to_edge_i(1)
     endif
     let origin_col = col('.')
     if origin_col is# col('$')
@@ -243,11 +229,11 @@ fun! s:delete() abort
     startinsert
     call cursor(1, origin_col + 1)
 endfun
+" 1}}}
 
-fun! s:control_w() abort
+fun! s:control_w_i() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
-        call cursor(1, col('$'))
-        startinsert!
+        call s:move_to_edge_i(1)
     endif
     let origin_col = col('.')
     if s:already_near_the_prompt_char()
@@ -265,11 +251,11 @@ fun! s:control_w() abort
     let new_col = origin_col - len_deleted
     call cursor(1, new_col + 1)
 endfun
+" 1}}}
 
-fun! s:control_u() abort
+fun! s:control_u_i() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
-        call cursor(1, col('$'))
-        startinsert!
+        call s:move_to_edge_i(1)
     endif
     let origin_col = col('.')
     if s:already_near_the_prompt_char()
@@ -279,14 +265,23 @@ fun! s:control_u() abort
     let prompt = vfinder#prompt#i()
     call prompt.render(post_inp)
     startinsert
-    call cursor(1, 3)
+    call s:go_to_start_of_prompt()
 endfun
+" 1}}}
 
-fun! s:toggle_fuzzy(...) abort " {{{1
-    " a:1: insert mode
+fun! s:set_cursor_position_i() abort " {{{1
+    if vfinder#helpers#is_in_prompt()
+        startinsert!
+    else
+        silent execute 'normal! ^'
+        startinsert
+    endif
+endfun
+" 1}}}
 
+fun! s:toggle_fuzzy(mode) abort " {{{1
     let b:vf.fuzzy = !b:vf.fuzzy
-    if exists('a:1')
+    if a:mode is# 'i'
         call vfinder#buffer#update_candidates_i()
     else
         call vfinder#buffer#update_candidates_n()
@@ -294,63 +289,83 @@ fun! s:toggle_fuzzy(...) abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#buffer#update_candidates_i() abort
+fun! s:start_ins_mode_with_key(key) abort " {{{1
+    if a:key is# 'I'
+        call s:go_to_start_of_prompt()
+        startinsert
+    elseif a:key is# 'A'
+        call s:move_to_edge_i(1)
+        startinsert!
+    else
+        if !vfinder#helpers#is_in_prompt()
+            call vfinder#helpers#go_to_prompt_and_startinsert()
+        else
+            startinsert
+            let new_col = a:key is# 'a'
+                        \ ? col('.') + 1
+                        \ : col('.')
+            call cursor(1, new_col)
+            call s:already_near_the_prompt_char()
+        endif
+    endif
+endfun
+" 1}}}
+
+fun! s:wipe_buffer(...) abort " {{{1
+    let buffer = exists('a:1') ? a:1 : bufname('%')
+    if bufexists(buffer)
+        " Be sure to go back to the initial window
+        silent execute 'wincmd p'
+        silent execute 'bwipeout! ' . buffer
+    endif
+endfun
+" 1}}}
+
+fun! vfinder#buffer#update_candidates_i() abort " {{{1
     " Update candidadates and try to set back the cursor to the initial
     " position
     let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
     silent execute line
     if vfinder#helpers#is_in_prompt()
-        call s:go_to_initial_col_in_ins_mode(col)
+        call s:go_to_initial_col_i(col)
     else
         call cursor(line, 0)
         startinsert
     endif
+    call vfinder#helpers#echo('List of candidates updated...')
 endfun
+" 1}}}
 
-fun! vfinder#buffer#update_candidates_n() abort
+fun! vfinder#buffer#update_candidates_n() abort " {{{1
     " Same as vfinder#buffer#update_candidates_i but for normal mode
     let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()
     call cursor(line, col)
     stopinsert
+    call vfinder#helpers#echo('List of candidates updated...')
 endfun
+" 1}}}
 
-fun! s:clean_cache_if_it_exists(...) abort
-    " a:1 is when we came from insert mode
+fun! s:clean_cache_if_it_exists(mode) abort " {{{1
     " The bufname is vf__foo_bar__
     let name = bufname('%')[4:-3]
+    let ins_mode = a:mode is# 'i'
     if vfinder#cache#exists(name)
         call vfinder#cache#clean(name)
         call vfinder#events#update_candidates_request()
-        silent execute exists('a:1') ? 'startinsert!' : 'normal! 1gg$'
+        silent execute ins_mode ? 'startinsert!' : 'normal! 1gg$'
+        call vfinder#helpers#echo('Cache for "' . name . '" deleted')
     else
         call vfinder#helpers#echo('No cache for the source "' . name . '"', 'WarningMsg')
-        if exists('a:1')
-            call s:set_insertion_position()
+        if ins_mode
+            call s:set_cursor_position_i()
         endif
     endif
 endfun
+" 1}}}
 
-fun! s:already_near_the_prompt_char() abort
-    if col('.') <# 3
-        startinsert
-        call cursor(1, 3)
-        return 1
-    else
-        return 0
-    endif
-endfun
-
-fun! s:get_pre_post_of_query(col) abort
-    " From a:col split query in pre & post part and return them.
-    let query = getline('.')[2:]
-    let pre_inp = query[: a:col - 3]
-    let post_inp = strcharpart(query, len(pre_inp))
-    return [pre_inp, post_inp]
-endfun
-
-fun! s:toggle_maps_in_sl(...) abort
+fun! s:toggle_maps_in_sl(...) abort " {{{1
     let in_ins_mode = get(a:, 1, 0)
     let col = col('.')
     let [def_sl, global_maps_sl, source_maps_sl] = [
@@ -367,11 +382,45 @@ fun! s:toggle_maps_in_sl(...) abort
     endif
 
     if in_ins_mode
-        call s:go_to_initial_col_in_ins_mode(col)
+        call s:go_to_initial_col_i(col)
     endif
 endfun
+" 1}}}
 
-fun! s:go_to_initial_col_in_ins_mode(col) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"		    	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:already_near_the_prompt_char() abort " {{{1
+    if col('.') <# 3
+        startinsert
+        call s:go_to_start_of_prompt()
+        return 1
+    else
+        return 0
+    endif
+endfun
+" 1}}}
+
+fun! s:get_pre_post_of_query(col) abort " {{{1
+    " From a:col split query in pre & post part and return them.
+    let query = getline('.')[2:]
+    let pre_inp = query[: a:col - 3]
+    let post_inp = strcharpart(query, len(pre_inp))
+    return [pre_inp, post_inp]
+endfun
+" 1}}}
+
+fun! s:go_to_initial_col_i(col) abort " {{{1
     startinsert
     call cursor(line('.'), a:col + 1)
 endfun
+" 1}}}
+
+fun! s:go_to_start_of_prompt() abort " {{{1
+    call cursor(1, 3)
+endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-06
+" Last modification: 2018-11-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -16,7 +16,7 @@ fun! vfinder#i(source, ...) abort " {{{1
             return ''
         endif
 
-        " Some sources need an initial content to process (e.g tags_in_file source)
+        " Some sources need an initial content to process (e.g tags_in_buffer source)
         " to be able to be updated a 2nd time, so we store the current buffer
         " number.
         let initial_bufnr = bufnr('%')

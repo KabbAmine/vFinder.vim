@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-11-09
+" Last modification: 2018-11-10
 
 
 fun! vfinder#maps#define() abort " {{{1
@@ -109,7 +109,7 @@ fun! vfinder#maps#define() abort " {{{1
                 \       'delete': 'dd'
                 \   }
                 \ })
-    call s:define_gvar_maps('tags_in_file', {
+    call s:define_gvar_maps('tags_in_buffer', {
                 \   'i': {
                 \       'goto'         : '<CR>',
                 \       'splitandgoto' : '<C-s>',

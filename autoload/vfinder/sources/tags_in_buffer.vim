@@ -1,8 +1,8 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-09
+" Last modification: 2018-11-10
 
 
-fun! vfinder#sources#tags_in_file#check() " {{{1
+fun! vfinder#sources#tags_in_buffer#check() " {{{1
     return v:true
 endfun
 " 1}}}
@@ -11,21 +11,21 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#tags_in_file#get() abort " {{{1
+fun! vfinder#sources#tags_in_buffer#get() abort " {{{1
     return {
-                \   'name'         : 'tags_in_file',
-                \   'is_valid'     : s:tags_in_file_is_valid(),
-                \   'to_execute'   : function('s:tags_in_file_source'),
-                \   'format_fun'   : function('s:tags_in_file_format'),
-                \   'candidate_fun': function('s:tags_in_file_candidate_fun'),
-                \   'syntax_fun'   : function('s:tags_in_file_syntax_fun'),
+                \   'name'         : 'tags_in_buffer',
+                \   'is_valid'     : s:tags_in_buffer_is_valid(),
+                \   'to_execute'   : function('s:tags_in_buffer_source'),
+                \   'format_fun'   : function('s:tags_in_buffer_format'),
+                \   'candidate_fun': function('s:tags_in_buffer_candidate_fun'),
+                \   'syntax_fun'   : function('s:tags_in_buffer_syntax_fun'),
                 \   'filter_name'  : 'compact_match',
-                \   'maps'         : vfinder#sources#tags_in_file#maps()
+                \   'maps'         : vfinder#sources#tags_in_buffer#maps()
                 \ }
 endfun
 " 1}}}
 
-fun! s:tags_in_file_source() abort " {{{1
+fun! s:tags_in_buffer_source() abort " {{{1
     " Set the approriate ctags command string (+ flags + filename) and execute
     " it then return the result.
     " The filename can be the current one if it is a file and was not modified,
@@ -72,7 +72,7 @@ fun! s:tags_in_file_source() abort " {{{1
 endfun
 " 1}}}
 
-fun! s:tags_in_file_format(tags) abort " {{{1
+fun! s:tags_in_buffer_format(tags) abort " {{{1
     let res = []
     for t in a:tags
         " An example of how the output is:
@@ -89,21 +89,21 @@ fun! s:tags_in_file_format(tags) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:tags_in_file_candidate_fun() abort " {{{1
+fun! s:tags_in_buffer_candidate_fun() abort " {{{1
     return matchstr(getline('.'), '\d\+$')
 endfun
 " 1}}}
 
-fun! s:tags_in_file_syntax_fun() abort " {{{1
-    syntax match vfindertags_in_fileLinenr =\d\+$=
-    syntax match vfindertags_in_fileKind =\s\+:\S\+:\s\+=
-    highlight! link vfindertags_in_fileLinenr vfinderIndex
-    highlight! link vfindertags_in_fileKind Identifier
+fun! s:tags_in_buffer_syntax_fun() abort " {{{1
+    syntax match vfindertags_in_bufferLinenr =\d\+$=
+    syntax match vfindertags_in_bufferKind =\s\+:\S\+:\s\+=
+    highlight! link vfindertags_in_bufferLinenr vfinderIndex
+    highlight! link vfindertags_in_bufferKind Identifier
 endfun
 " 1}}}
 
-fun! vfinder#sources#tags_in_file#maps() abort " {{{1
-    let keys = vfinder#maps#get('tags_in_file')
+fun! vfinder#sources#tags_in_buffer#maps() abort " {{{1
+    let keys = vfinder#maps#get('tags_in_buffer')
     return {
                 \   'i': {
                 \       keys.i.goto         : {'action': '%s', 'options': {}},
@@ -123,7 +123,7 @@ endfun
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:tags_in_file_is_valid() abort " {{{1
+fun! s:tags_in_buffer_is_valid() abort " {{{1
     if !executable('ctags')
         call vfinder#helpers#echo('"ctags" was not found', 'Error')
         return 0

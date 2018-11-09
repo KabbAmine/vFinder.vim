@@ -2,11 +2,12 @@
 " Last modification: 2018-10-25
 
 
-fun! vfinder#sources#oldfiles#check()
+fun! vfinder#sources#oldfiles#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#oldfiles#get() abort
+fun! vfinder#sources#oldfiles#get() abort " {{{1
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
@@ -15,19 +16,22 @@ fun! vfinder#sources#oldfiles#get() abort
                 \   'maps'         : s:oldfiles_maps(),
                 \ }
 endfun
+" 1}}}
 
-fun! s:oldfiles_source() abort
+fun! s:oldfiles_source() abort " {{{1
     return filter(copy(v:oldfiles), {i, v ->
                 \   filereadable(expand(v))
                 \   && vfinder#sources#oldfiles#file_is_valid(v)
                 \ })
 endfun
+" 1}}}
 
-fun! vfinder#sources#oldfiles#file_is_valid(f) abort
+fun! vfinder#sources#oldfiles#file_is_valid(f) abort " {{{1
     return a:f !~#  '/vim.*/doc/' ? 1 : 0
 endfun
+" 1}}}
 
-fun! s:oldfiles_maps() abort
+fun! s:oldfiles_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('oldfiles')
     let maps.i = {
@@ -44,3 +48,7 @@ fun! s:oldfiles_maps() abort
                 \ }
     return maps
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

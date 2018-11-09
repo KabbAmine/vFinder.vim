@@ -2,11 +2,16 @@
 " Last modification: 2018-11-03
 
 
-fun! vfinder#sources#files#check()
+fun! vfinder#sources#files#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#files#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#files#get() abort " {{{1
     let is_valid = s:files_is_valid() ? 1 : 0
     redraw!
     return {
@@ -19,20 +24,9 @@ fun! vfinder#sources#files#get() abort
                 \   'is_valid'     : is_valid
                 \ }
 endfun
+" 1}}}
 
-fun! s:files_is_valid()
-    if getcwd() isnot# $HOME
-        return 1
-    else
-        let response = vfinder#helpers#question(
-                    \   'Gathering candidates from $HOME may freeze your editor,',
-                    \   'do you want to proceed? [y/N] '
-                    \ )
-        return response =~# 'y\|Y' ? 1 : 0
-    endif
-endfun
-
-fun! s:files_source() abort
+fun! s:files_source() abort " {{{1
     return executable('rg')
                 \ ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag')
@@ -41,8 +35,9 @@ fun! s:files_source() abort
                 \ ? 'git ls-files -co --exclude-standard'
                 \ : 'find * -type f'
 endfun
+" 1}}}
 
-fun! s:files_format_fun(files) abort
+fun! s:files_format_fun(files) abort " {{{1
     " Add git flags if the option is enabled
     let b:vf.flags.git_flags = get(b:vf.flags, 'git_flags', 0)
     if !s:in_git_project() || !b:vf.flags.git_flags
@@ -58,8 +53,9 @@ fun! s:files_format_fun(files) abort
     endfor
     return files
 endfun
+" 1}}}
 
-fun! s:files_syntax_fun() abort
+fun! s:files_syntax_fun() abort " {{{1
     syntax match vfinderAddedGitStatus =^\ +\ =
     syntax match vfinderModifiedGitStatus =^\ \~\ =
     syntax match vfinderRenamedGitStatus =^\ -\ =
@@ -69,12 +65,14 @@ fun! s:files_syntax_fun() abort
     highlight! link vfinderRenamedGitStatus DiffDelete
     highlight! link vfinderUntrackedGitStatus vfinderIndex
 endfun
+" 1}}}
 
-fun! vfinder#sources#files#candidate_fun() abort
+fun! vfinder#sources#files#candidate_fun() abort " {{{1
     return escape(matchstr(getline('.'), '\f\+$'), '%#')
 endfun
+" 1}}}
 
-fun! vfinder#sources#files#maps() abort
+fun! vfinder#sources#files#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('files')
     let maps.i = {
@@ -99,22 +97,40 @@ fun! vfinder#sources#files#maps() abort
                 \ }
     return maps
 endfun
+" 1}}}
 
-" Git related
-" """""""""""
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+fun! s:toggle_git_flags(file) abort " {{{1
+    if !s:in_git_project()
+        call vfinder#helpers#echo('not in a git project')
+        return ''
+    endif
+    let b:vf.flags.git_flags = !b:vf.flags.git_flags
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            git related
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Git status symbols {{{1
 let s:git_status_symbols = {
             \   'M': '~',
             \   'A': '+',
             \   'R': '-',
             \   'D': '-'
             \ }
+" 1}}}
 
-fun! s:in_git_project() abort
+fun! s:in_git_project() abort " {{{1
     return executable('git') && isdirectory('./.git')
 endfun
+" 1}}}
 
-fun! s:git_status_files() abort
+fun! s:git_status_files() abort " {{{1
     let res = {}
     for str in systemlist('git status --porcelain --untracked-files=all')
         " -> res[file] = status
@@ -128,14 +144,24 @@ fun! s:git_status_files() abort
     endfor
     return res
 endfun
+" 1}}}
 
-" Flags
-"""""""""""
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:toggle_git_flags(file) abort
-    if !s:in_git_project()
-        call vfinder#helpers#echo('not in a git project')
-        return ''
+fun! s:files_is_valid() " {{{1
+    if getcwd() isnot# $HOME
+        return 1
+    else
+        let response = vfinder#helpers#question(
+                    \   'Gathering candidates from $HOME may freeze your editor,',
+                    \   'do you want to proceed? [y/N] '
+                    \ )
+        return response =~# 'y\|Y' ? 1 : 0
     endif
-    let b:vf.flags.git_flags = !b:vf.flags.git_flags
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

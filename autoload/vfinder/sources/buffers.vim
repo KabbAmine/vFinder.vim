@@ -1,12 +1,17 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-11-02
+" Last modification: 2018-11-09
 
 
-fun! vfinder#sources#buffers#check()
+fun! vfinder#sources#buffers#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#buffers#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#buffers#get() abort " {{{1
      return {
                 \   'name'         : 'buffers',
                 \   'to_execute'   : function('s:buffers_source'),
@@ -16,8 +21,9 @@ fun! vfinder#sources#buffers#get() abort
                 \   'maps'         : s:buffers_maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:buffers_source() abort
+fun! s:buffers_source() abort " {{{1
     let list_all = get(b:vf.flags, 'list_all', 0)
     let all_bufs = range(1, bufnr('$'))
     let bufs = list_all
@@ -32,8 +38,9 @@ fun! s:buffers_source() abort
     let b:vf.flags.list_all = list_all
     return nrs
 endfun
+" 1}}}
 
-fun! s:buffers_format(nrs) abort
+fun! s:buffers_format(nrs) abort " {{{1
     let res = []
     for nr in a:nrs
         let name = empty(bufname(nr))
@@ -50,12 +57,14 @@ fun! s:buffers_format(nrs) abort
     endfor
     return res
 endfun
+" 1}}}
 
-fun! s:buffers_candidate_fun() abort
+fun! s:buffers_candidate_fun() abort " {{{1
     return matchstr(getline('.'), '^\d\+\ze')
 endfun
+" 1}}}
 
-fun! s:buffers_maps() abort
+fun! s:buffers_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('buffers')
     let maps.i = {
@@ -88,21 +97,32 @@ fun! s:buffers_maps() abort
                 \ }
     return maps
 endfun
+" 1}}}
 
-fun! s:buffers_syntax_fun() abort
+fun! s:buffers_syntax_fun() abort " {{{1
     syntax match vfinderBuffersModified =\[+\]=
     syntax match vfinderBuffersName =\%>9c\zs.*\s\{2,\}=
     highlight! link vfinderBuffersName Statement
     highlight! link vfinderBuffersModified Identifier
 endfun
+" 1}}}
 
-fun! s:wipe(buffer) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:wipe(buffer) abort " {{{1
     let b = str2nr(a:buffer)
     if bufexists(b)
         execute b . 'bwipeout'
     endif
 endfun
+" 1}}}
 
-fun! s:toggle_all(buffer) abort
+fun! s:toggle_all(buffer) abort " {{{1
     let b:vf.flags.list_all = !b:vf.flags.list_all
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -2,11 +2,16 @@
 " Last modification: 2018-11-03
 
 
-fun! vfinder#sources#yank#check()
+fun! vfinder#sources#yank#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#yank#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#yank#get() abort " {{{1
     return {
                 \   'name'         : 'yank',
                 \   'to_execute'   : function('s:yank_source'),
@@ -16,13 +21,15 @@ fun! vfinder#sources#yank#get() abort
                 \   'maps'         : vfinder#sources#yank#maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:yank_source() abort
+fun! s:yank_source() abort " {{{1
     let yanked = vfinder#cache#get_and_set_elements('yank', 500)
     return yanked
 endfun
+" 1}}}
 
-fun! s:yank_format(yank_l) abort
+fun! s:yank_format(yank_l) abort " {{{1
     let res = []
     for i in range(0, len(a:yank_l) - 1)
         call add(res, printf(
@@ -33,20 +40,23 @@ fun! s:yank_format(yank_l) abort
     endfor
     return res
 endfun
+" 1}}}
 
-fun! s:yank_candidate_fun() abort
+fun! s:yank_candidate_fun() abort " {{{1
     " the text is like: '100- Foo bar'
     return substitute(getline('.')[5:], '\\n', '\n', 'g')
 endfun
+" 1}}}
 
-fun! s:yank_syntax_fun() abort
+fun! s:yank_syntax_fun() abort " {{{1
     syntax match vfinderYankIndex =^\d\+\s*:\s\+=
     syntax match vfinderYankEndofline =\\n=
     highlight! link vfinderYankIndex vfinderIndex
     highlight! link vfinderYankEndofline vfinderYankIndex
 endfun
+" 1}}}
 
-fun! vfinder#sources#yank#maps() abort
+fun! vfinder#sources#yank#maps() abort " {{{1
     let keys = vfinder#maps#get('yank')
     return {
                 \   'i': {keys.i.paste: {
@@ -59,8 +69,13 @@ fun! vfinder#sources#yank#maps() abort
                 \   }}
                 \ }
 endfun
+" 1}}}
 
-fun! vfinder#sources#yank#paste(content) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#yank#paste(content) abort " {{{1
     " a:content can be something like 'foo^@bar^@zee'
 
     let [line, col_p] = [line('.'), col('.')]
@@ -71,3 +86,7 @@ fun! vfinder#sources#yank#paste(content) abort
     call append(line - 1, new_lines)
     call cursor(go_to_line, go_to_col)
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

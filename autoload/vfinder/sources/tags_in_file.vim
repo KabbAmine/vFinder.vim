@@ -1,12 +1,17 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-10-28
+" Last modification: 2018-11-09
 
 
-fun! vfinder#sources#tags_in_file#check()
+fun! vfinder#sources#tags_in_file#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#tags_in_file#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#tags_in_file#get() abort " {{{1
     return {
                 \   'name'         : 'tags_in_file',
                 \   'is_valid'     : s:tags_in_file_is_valid(),
@@ -18,17 +23,9 @@ fun! vfinder#sources#tags_in_file#get() abort
                 \   'maps'         : vfinder#sources#tags_in_file#maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:tags_in_file_is_valid() abort
-    if !executable('ctags')
-        call vfinder#helpers#echo('"ctags" was not found', 'Error')
-        return 0
-    else
-        return 1
-    endif
-endfun
-
-fun! s:tags_in_file_source() abort
+fun! s:tags_in_file_source() abort " {{{1
     " Set the approriate ctags command string (+ flags + filename) and execute
     " it then return the result.
     " The filename can be the current one if it is a file and was not modified,
@@ -73,8 +70,9 @@ fun! s:tags_in_file_source() abort
     endif
     return systemlist(join(cmd) . ' ' . vfinder#helpers#black_hole())
 endfun
+" 1}}}
 
-fun! s:tags_in_file_format(tags) abort
+fun! s:tags_in_file_format(tags) abort " {{{1
     let res = []
     for t in a:tags
         " An example of how the output is:
@@ -89,19 +87,22 @@ fun! s:tags_in_file_format(tags) abort
     endfor
     return res
 endfun
+" 1}}}
 
-fun! s:tags_in_file_candidate_fun() abort
+fun! s:tags_in_file_candidate_fun() abort " {{{1
     return matchstr(getline('.'), '\d\+$')
 endfun
+" 1}}}
 
-fun! s:tags_in_file_syntax_fun() abort
+fun! s:tags_in_file_syntax_fun() abort " {{{1
     syntax match vfindertags_in_fileLinenr =\d\+$=
     syntax match vfindertags_in_fileKind =\s\+:\S\+:\s\+=
     highlight! link vfindertags_in_fileLinenr vfinderIndex
     highlight! link vfindertags_in_fileKind Identifier
 endfun
+" 1}}}
 
-fun! vfinder#sources#tags_in_file#maps() abort
+fun! vfinder#sources#tags_in_file#maps() abort " {{{1
     let keys = vfinder#maps#get('tags_in_file')
     return {
                 \   'i': {
@@ -116,3 +117,21 @@ fun! vfinder#sources#tags_in_file#maps() abort
                 \   }
                 \ }
 endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:tags_in_file_is_valid() abort " {{{1
+    if !executable('ctags')
+        call vfinder#helpers#echo('"ctags" was not found', 'Error')
+        return 0
+    else
+        return 1
+    endif
+endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

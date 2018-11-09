@@ -2,18 +2,20 @@
 " Last modification: 2018-02-26
 
 
-fun! vfinder#events#char_inserted() abort
+fun! vfinder#events#char_inserted() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
         call vfinder#helpers#go_to_prompt_and_startinsert()
     endif
 endfun
+" 1}}}
 
-fun! vfinder#events#update_candidates_request() abort
+fun! vfinder#events#update_candidates_request() abort " {{{1
     let b:vf.update = 1
     call s:filter_and_update()
 endfun
+" 1}}}
 
-fun! vfinder#events#query_modified() abort
+fun! vfinder#events#query_modified() abort " {{{1
     " This event is called after a manual update, so we ensure to stop it if
     " its the case.
     let col = col('.')
@@ -29,8 +31,9 @@ fun! vfinder#events#query_modified() abort
         call cursor(1, col)
     endif
 endfun
+" 1}}}
 
-fun! s:filter_and_update() abort
+fun! s:filter_and_update() abort " {{{1
     let update = exists('b:vf.update')
     let prompt = vfinder#prompt#i()
     call prompt.render()
@@ -46,3 +49,7 @@ fun! s:filter_and_update() abort
     call candidates.populate().highlight_matched()
     let b:vf.original_candidates = candidates.original_list
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

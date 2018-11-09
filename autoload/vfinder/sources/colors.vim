@@ -2,23 +2,26 @@
 " Last modification: 2018-03-25
 
 
-fun! vfinder#sources#colors#check()
+fun! vfinder#sources#colors#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#colors#get() abort
+fun! vfinder#sources#colors#get() abort " {{{1
     return {
                 \   'name'         : 'colors',
                 \   'to_execute'   : function('s:colors_source'),
                 \   'maps'         : vfinder#sources#colors#maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:colors_source() abort
+fun! s:colors_source() abort " {{{1
     return getcompletion('', 'color')
 endfun
+" 1}}}
 
-fun! vfinder#sources#colors#maps() abort
+fun! vfinder#sources#colors#maps() abort " {{{1
     let keys = vfinder#maps#get('colors')
     return {
                 \   'i': {
@@ -31,3 +34,7 @@ fun! vfinder#sources#colors#maps() abort
                 \   }
                 \ }
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

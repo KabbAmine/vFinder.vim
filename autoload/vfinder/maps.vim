@@ -1,8 +1,8 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-11-05
+" Last modification: 2018-11-09
 
 
-fun! vfinder#maps#define() abort
+fun! vfinder#maps#define() abort " {{{1
     call s:define_gvar_maps('_', {
                 \   'i': {
                 \       'prompt_move_down'    : '<C-n>',
@@ -150,15 +150,21 @@ fun! vfinder#maps#define() abort
     call s:define_gvar_maps('registers', vfinder#maps#get('yank'))
     call s:define_gvar_maps('command_history', vfinder#maps#get('commands'))
 endfun
+" 1}}}
 
-fun! s:define_gvar_maps(name, def_maps) abort
+fun! vfinder#maps#get(name) abort " {{{1
+    return g:vfinder_maps[a:name]
+endfun
+" 1}}}
+
+fun! s:define_gvar_maps(name, def_maps) abort " {{{1
     let g:vfinder_maps[a:name] = get(g:vfinder_maps, a:name, {})
     let g:vfinder_maps[a:name].i = get(g:vfinder_maps[a:name], 'i', {})
     let g:vfinder_maps[a:name].i = extend(copy(a:def_maps.i), g:vfinder_maps[a:name].i, 'force')
     let g:vfinder_maps[a:name].n = get(g:vfinder_maps[a:name], 'n', {})
     let g:vfinder_maps[a:name].n = extend(copy(a:def_maps.n), g:vfinder_maps[a:name].n, 'force')
 endfun
+" 1}}}
 
-fun! vfinder#maps#get(name) abort
-    return g:vfinder_maps[a:name]
-endfun
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

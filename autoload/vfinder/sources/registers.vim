@@ -2,11 +2,12 @@
 " Last modification: 2018-11-03
 
 
-fun! vfinder#sources#registers#check()
+fun! vfinder#sources#registers#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#registers#get() abort
+fun! vfinder#sources#registers#get() abort " {{{1
     return {
                 \   'name'         : 'registers',
                 \   'to_execute'   : function('s:registers_source'),
@@ -16,8 +17,9 @@ fun! vfinder#sources#registers#get() abort
                 \   'maps'         : s:registers_maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:registers_source() abort
+fun! s:registers_source() abort " {{{1
     " registers: +, *, ", 0-9, a-z, -, ., %, /
 
     let regs = []
@@ -49,21 +51,25 @@ fun! s:registers_source() abort
     endfor
     return regs
 endfun
+" 1}}}
 
-fun! s:registers_format(regs) abort
+fun! s:registers_format(regs) abort " {{{1
     return map(copy(a:regs), 'printf("%s: %s", v:val[0], v:val[2:])')
 endfun
+" 1}}}
 
-fun! s:registers_candidate_fun() abort
+fun! s:registers_candidate_fun() abort " {{{1
     return getline('.')[3:]
 endfun
+" 1}}}
 
-fun! s:registers_syntax_fun() abort
+fun! s:registers_syntax_fun() abort " {{{1
     syntax match vfinderRegistersName =^\S\+:\s\+=
     highlight! link vfinderRegistersName vfinderIndex
 endfun
+" 1}}}
 
-fun! s:registers_maps() abort
+fun! s:registers_maps() abort " {{{1
     let keys = vfinder#maps#get('registers')
     return {
                 \   'i': {keys.i.paste: {
@@ -76,3 +82,7 @@ fun! s:registers_maps() abort
                 \   }}
                 \ }
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

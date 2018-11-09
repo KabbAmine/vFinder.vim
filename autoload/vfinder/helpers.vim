@@ -1,34 +1,32 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-29
+" Last modification: 2018-11-09
 
 
+" s:vars {{{1
 let s:title = '[vfinder]'
 let s:title_hi = 'vfinderPrompt'
+" 1}}}
 
-fun! vfinder#helpers#go_to_prompt_and_startinsert()
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	prompt
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#helpers#go_to_prompt_and_startinsert() " {{{1
     call cursor(1, 0)
     startinsert!
 endfun
+" 1}}}
 
-fun! vfinder#helpers#is_in_prompt()
+fun! vfinder#helpers#is_in_prompt() " {{{1
     return line('.') is# 1 ? 1 : 0
 endfun
+" 1}}}
 
-fun! vfinder#helpers#process_query(query) abort
-    let q = b:vf.fuzzy
-                \ ? substitute(a:query, ' ', '', 'g')
-                \ : a:query
-    let q_sep = b:vf.fuzzy ? '\zs' : ' '
-    let join_pat = '.{-}'
-    let to_escape = '@=?+&$.*~()|{}%[]'
-    let final_regex = []
-    for item in split(q, q_sep)
-        call add(final_regex, escape(item, to_escape))
-    endfor
-    return '\v' . join(final_regex, join_pat)
-endfun
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	ui
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#helpers#throw(msg, ...) abort
+fun! vfinder#helpers#throw(msg, ...) abort " {{{1
     let in_messages = get(a:, 1, 0)
     try
         throw '--vf-- ' . a:msg
@@ -42,15 +40,17 @@ fun! vfinder#helpers#throw(msg, ...) abort
         endif
     endtry
 endfun
+" 1}}}
 
-fun! vfinder#helpers#echomsg(msg, ...) abort
+fun! vfinder#helpers#echomsg(msg, ...) abort " {{{1
     let higroup = get(a:, 1, s:title_hi)
     silent execute 'echohl ' . higroup
     echomsg s:title . ' ' . a:msg
     echohl None
 endfun
+" 1}}}
 
-fun! vfinder#helpers#echo(msg, ...) abort
+fun! vfinder#helpers#echo(msg, ...) abort " {{{1
     " a:1: higroup
     " a:2: optional msg, respect or not g:vfinder_verbose
 
@@ -66,8 +66,9 @@ fun! vfinder#helpers#echo(msg, ...) abort
     echon s:title . ' '
     echohl None | echon a:msg
 endfun
+" 1}}}
 
-fun! vfinder#helpers#question(msg, prompt) abort
+fun! vfinder#helpers#question(msg, prompt) abort " {{{1
     echohl Question
     echon s:title . ' '
     echohl None
@@ -75,17 +76,44 @@ fun! vfinder#helpers#question(msg, prompt) abort
     let response = input(a:prompt)
     return response
 endfun
+" 1}}}
 
-fun! vfinder#helpers#empty_buffer(...) abort
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	system
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#helpers#black_hole() abort " {{{1
+    return '2> /dev/null'
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	misc
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#helpers#process_query(query) abort " {{{1
+    let q = b:vf.fuzzy
+                \ ? substitute(a:query, ' ', '', 'g')
+                \ : a:query
+    let q_sep = b:vf.fuzzy ? '\zs' : ' '
+    let join_pat = '.{-}'
+    let to_escape = '@=?+&$.*~()|{}%[]'
+    let final_regex = []
+    for item in split(q, q_sep)
+        call add(final_regex, escape(item, to_escape))
+    endfor
+    return '\v' . join(final_regex, join_pat)
+endfun
+" 1}}}
+
+fun! vfinder#helpers#empty_buffer(...) abort " {{{1
     let buf_nr = exists('a:1') ? a:1 : bufnr('%')
     return join(getbufline(buf_nr, 1, '$')) =~# '^\s*$'
 endfun
+" 1}}}
 
-fun! vfinder#helpers#black_hole() abort
-    return '2> /dev/null'
-endfun
-
-fun! vfinder#helpers#get_maps_str_for(name) abort
+fun! vfinder#helpers#get_maps_str_for(name) abort " {{{1
     if &filetype isnot# 'vfinder'
         return ''
     endif
@@ -108,3 +136,7 @@ fun! vfinder#helpers#get_maps_str_for(name) abort
     " Remove the last ' | '
     return str[:-4]
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

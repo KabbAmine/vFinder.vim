@@ -1,12 +1,13 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-10-25
+" Last modification: 2018-11-07
 
 
-fun! vfinder#statusline#get() abort
+fun! vfinder#statusline#get() abort " {{{1
     return '%{vfinder#statusline#left()}%=%{vfinder#statusline#search_mode()}%{vfinder#statusline#flags()} '
 endfun
+" 1}}}
 
-fun! vfinder#statusline#left() abort
+fun! vfinder#statusline#left() abort " {{{1
     let current = s:current_item()
     let count_filtered = s:count_filtered()
 
@@ -21,8 +22,9 @@ fun! vfinder#statusline#left() abort
                 \   count_infos
                 \ )
 endfun
+" 1}}}
 
-fun! vfinder#statusline#flags() abort
+fun! vfinder#statusline#flags() abort " {{{1
     let str = ''
     for [name, value] in items(b:vf.flags)
         if value
@@ -31,27 +33,32 @@ fun! vfinder#statusline#flags() abort
     endfor
     return str
 endfun
+" 1}}}
 
-
-fun! vfinder#statusline#search_mode() abort
+fun! vfinder#statusline#search_mode() abort " {{{1
     let fuzzy = b:vf.fuzzy ? '[fuzzy]': ''
     return printf('%3s', fuzzy)
 endfun
+" 1}}}
 
-fun! s:name() abort
+
+fun! s:name() abort " {{{1
     return bufname('%')
 endfun
+" 1}}}
 
-fun! s:mode() abort
+fun! s:mode() abort " {{{1
     return toupper(mode())
 endfun
+" 1}}}
 
-fun! s:count_candidates() abort
+fun! s:count_candidates() abort " {{{1
     let count_candidates = len(b:vf.original_candidates)
     return count_candidates ? count_candidates : '-'
 endfun
+" 1}}}
 
-fun! s:current_item() abort
+fun! s:current_item() abort " {{{1
     if line('$') is# 1
         return ''
     else
@@ -59,8 +66,13 @@ fun! s:current_item() abort
         return l is# 1 ? 1 : l - 1
     endif
 endfun
+" 1}}}
 
-fun! s:count_filtered() abort
+fun! s:count_filtered() abort " {{{1
     let count_candidates = line('$') - 1
     return count_candidates ? count_candidates : 0
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

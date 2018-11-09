@@ -1,12 +1,16 @@
 " Creation         : 2018-02-12
-" Last modification: 2018-03-16
+" Last modification: 2018-11-09
 
 
 " The cache is used for the sources:
 " * yank
 " * mru
 
-fun! vfinder#cache#get_and_set_elements(name, limit) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	main
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#cache#get_and_set_elements(name, limit) abort " {{{1
     let elements = g:vf_cache[a:name]
     if empty(elements)
         let elements = vfinder#cache#read(a:name)
@@ -17,22 +21,26 @@ fun! vfinder#cache#get_and_set_elements(name, limit) abort
     endif
     return elements
 endfun
+" 1}}}
 
-fun! vfinder#cache#read(name) abort
+fun! vfinder#cache#read(name) abort " {{{1
     return readfile(vfinder#cache#get(a:name))
 endfun
+" 1}}}
 
-fun! vfinder#cache#exists(name) abort
+fun! vfinder#cache#exists(name) abort " {{{1
     return filereadable(vfinder#cache#get() . '/' . a:name)
 endfun
+" 1}}}
 
-fun! vfinder#cache#write(name, content, ...) abort
+fun! vfinder#cache#write(name, content, ...) abort " {{{1
     let limit = exists('a:1') ? a:1 - 1 : 99
     let cache_file = vfinder#cache#get(a:name)
     call writefile(a:content[:limit], cache_file)
 endfun
+" 1}}}
 
-fun! vfinder#cache#clean(...) abort
+fun! vfinder#cache#clean(...) abort " {{{1
     " Clean all cache files and temp cache variables if a:1 does not exit,
     " otherwise clean only a:1.
 
@@ -53,8 +61,9 @@ fun! vfinder#cache#clean(...) abort
         call writefile([], f)
     endfor
 endfun
+" 1}}}
 
-fun! vfinder#cache#get(...) abort
+fun! vfinder#cache#get(...) abort " {{{1
     " Create, and return the cache dir if a:1 does not exist, otherwise create
     " and return the cache file a:1.
     let cache_dir = s:cache_create_dir()
@@ -65,19 +74,29 @@ fun! vfinder#cache#get(...) abort
         return cache_dir
     endif
 endfun
+" 1}}}
 
-fun! s:cache_create_dir() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:cache_create_dir() abort " {{{1
     let cache_dir = g:vfinder_cache_path
     if !isdirectory(cache_dir)
         call mkdir(cache_dir)
     endif
     return cache_dir
 endfun
+" 1}}}
 
-fun! s:cache_create_file(name, parent) abort
+fun! s:cache_create_file(name, parent) abort " {{{1
     let cache_file = a:parent . '/' . a:name
     if !filereadable(cache_file)
         call writefile([], cache_file)
     endif
     return cache_file
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

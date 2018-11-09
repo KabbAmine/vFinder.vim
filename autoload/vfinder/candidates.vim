@@ -1,8 +1,12 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-02-28
+" Last modification: 2018-11-09
 
 
-fun! vfinder#candidates#i(source) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        main candidates object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#candidates#i(source) abort " {{{1
     return {
                 \   'source'           : a:source,
                 \   'query'            : '',
@@ -17,23 +21,26 @@ fun! vfinder#candidates#i(source) abort
                 \   'highlight_matched': function('s:candidates_highlight_matched'),
                 \ }
 endfun
+" 1}}}
 
-fun! s:candidates_get() dict
+fun! s:candidates_get() dict " {{{1
     if self.original_list ==# []
         let self.original_list = self.source.prepare().candidates
     endif
     let self.current = getline(2, '$')
     return self
 endfun
+" 1}}}
 
-fun! s:candidates_delete() dict
+fun! s:candidates_delete() dict " {{{1
     if line('$') ># 1
         silent execute '2,$delete_'
     endif
     return self
 endfun
+" 1}}}
 
-fun! s:candidates_populate() dict
+fun! s:candidates_populate() dict " {{{1
     call self.delete()
     if self.was_filtered
         let candidates = self.filtered_list
@@ -44,8 +51,9 @@ fun! s:candidates_populate() dict
     call setline(2, candidates)
     return self
 endfun
+" 1}}}
 
-fun! s:candidates_filter(query) dict
+fun! s:candidates_filter(query) dict " {{{1
     call self.get()
     let self.query = vfinder#helpers#process_query(a:query)
     " There is no need to filter all the original candidates if we added
@@ -60,8 +68,9 @@ fun! s:candidates_filter(query) dict
     let self.was_filtered = 1
     return self
 endfun
+" 1}}}
 
-fun! s:candidates_highlight_matched() dict
+fun! s:candidates_highlight_matched() dict " {{{1
     call clearmatches()
     if !empty(self.query) && self.query isnot# '\v'
         let case = self.query =~# '\u' ? '\C' : '\c'
@@ -69,7 +78,16 @@ fun! s:candidates_highlight_matched() dict
     endif
     return self
 endfun
+" 1}}}
 
-fun! s:filter(query, candidates) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:filter(query, candidates) abort " {{{1
     return vfinder#filter#i(b:vf.filter_name, a:candidates, a:query)
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

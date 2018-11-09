@@ -1,8 +1,12 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-05
+" Last modification: 2018-11-07
 
 
-fun! vfinder#source#i(source) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main source object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#source#i(source) abort " {{{1
     " if a:source is a:
     "     - string: Its the name of a source/name.vim file
     "     - dictionnary: Its a custom source
@@ -40,13 +44,15 @@ fun! vfinder#source#i(source) abort
                 \   'candidates'    : [],
                 \ }
 endfun
+" 1}}}
 
-fun! s:source_prepare() dict
+fun! s:source_prepare() dict " {{{1
     call self.execute().format().set_maps()
     return self
 endfun
+" 1}}}
 
-fun! s:source_execute() dict
+fun! s:source_execute() dict " {{{1
     let candidates = []
     if type(self.to_execute) is# v:t_string && filereadable(self.to_execute)
         " We delay the file reading a little to be sure that the writing
@@ -67,15 +73,17 @@ fun! s:source_execute() dict
     let self.candidates = candidates
     return self
 endfun
+" 1}}}
 
-fun! s:source_format() dict
+fun! s:source_format() dict " {{{1
     if !empty(self.format_fun) && !empty(self.candidates)
         let self.candidates = call(self.format_fun, [self.candidates])
     endif
     return self
 endfun
+" 1}}}
 
-fun! s:source_set_maps() dict
+fun! s:source_set_maps() dict " {{{1
     for mode in ['i', 'n']
         let maps_{mode} = self.maps[mode]
         let keys_{mode} = keys(maps_{mode})
@@ -104,8 +112,13 @@ fun! s:source_set_maps() dict
     endfor
     return self
 endfun
+" 1}}}
 
-fun! s:do(action, candidate_fun, mode, options)
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            action related
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:do(action, candidate_fun, mode, options) " {{{1
     let line = line('.')
     let buffer = bufnr('%')
     let in_prompt = vfinder#helpers#is_in_prompt()
@@ -174,8 +187,9 @@ fun! s:do(action, candidate_fun, mode, options)
         endif
     endif
 endfun
+" 1}}}
 
-fun! s:set_all_options(options) abort
+fun! s:set_all_options(options) abort " {{{1
     let opts = copy(a:options)
     let opts.quit = get(opts, 'quit', 1)
     let opts.update = get(opts, 'update', 0)
@@ -187,10 +201,15 @@ fun! s:set_all_options(options) abort
     let opts.execute_in_place = get(opts, 'execute_in_place', 0)
     return opts
 endfun
+" 1}}}
 
-fun! s:set_mode(line, mode) abort
+fun! s:set_mode(line, mode) abort " {{{1
     if a:mode is# 'i'
         call cursor(a:line, 0)
         silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
     endif
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -1,12 +1,17 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-10-28
+" Last modification: 2018-11-09
 
 
-fun! vfinder#sources#directories#check()
+fun! vfinder#sources#directories#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#directories#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#directories#get() abort " {{{1
      return {
                 \   'name'         : 'directories',
                 \   'to_execute'   : function('s:directories_source'),
@@ -15,26 +20,30 @@ fun! vfinder#sources#directories#get() abort
                 \   'maps'         : vfinder#sources#directories#maps(),
                 \ }
 endfun
+" 1}}}
 
-fun! s:directories_source() abort
+fun! s:directories_source() abort " {{{1
     let wd = getcwd() . '/'
     let dirs = glob(wd . '*/', 1, 1)
     let dirs += glob(wd . '.*/', 1, 1)[2:]
     return ['../'] + map(copy(dirs), 'fnamemodify(v:val, ":.")')
 endfun
+" 1}}}
 
-fun! s:directories_format(dirs) abort
+fun! s:directories_format(dirs) abort " {{{1
     return map(copy(a:dirs), 'v:val !~# "/$" ? v:val . "/" : v:val')
 endfun
+" 1}}}
 
-fun! s:directories_syntax_fun() abort
+fun! s:directories_syntax_fun() abort " {{{1
     syntax match vfinderDirectoriesHidden =^\.\f\+$=
     syntax match vfinderDirectoriesGoback =\%2l\.\./=
     highlight! link vfinderDirectoriesHidden Comment
     highlight! link vfinderDirectoriesGoback CursorLineNr
 endfun
+" 1}}}
 
-fun! vfinder#sources#directories#maps() abort
+fun! vfinder#sources#directories#maps() abort " {{{1
     let keys = vfinder#maps#get('directories')
     let glob_keys = vfinder#maps#get('_')
     let keys_reload_i = glob_keys.i.candidates_update
@@ -60,8 +69,13 @@ fun! vfinder#sources#directories#maps() abort
                 \   }
                 \ }
 endfun
+" 1}}}
 
-fun! s:goto(path) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:goto(path) abort " {{{1
     if a:path is# '../'
         call s:goback('../')
     else
@@ -71,15 +85,41 @@ fun! s:goto(path) abort
         call s:set_path_to(goto)
     endif
 endfun
+" 1}}}
 
-fun! s:goback(path) abort
+fun! s:goback(path) abort " {{{1
     let goto = exists('b:vf.last_wd') && b:vf.last_wd isnot# '/..'
                 \ ? b:vf.last_wd . '../'
                 \ : b:vf.initial_wd . '../'
     call s:set_path_to(goto)
 endfun
+" 1}}}
 
-fun! s:set_path_to(dir) abort
+fun! s:cd(path) abort " {{{1
+    let goto = exists('b:vf.last_wd')
+                \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
+                \ : a:path
+    execute 'cd ' . goto
+    pwd
+endfun
+" 1}}}
+
+fun! s:reload_i(...) abort " {{{1
+    call s:reload()
+    startinsert!
+endfun
+" 1}}}
+
+fun! s:reload_n(...) abort " {{{1
+    call s:reload()
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:set_path_to(dir) abort " {{{1
     let path = fnamemodify(a:dir, ':p')
     silent execute 'cd ' . path
     call vfinder#prompt#i().render('')
@@ -87,27 +127,15 @@ fun! s:set_path_to(dir) abort
     silent execute 'cd ' . b:vf.initial_wd
     let b:vf.last_wd = path
 endfun
+" 1}}}
 
-fun! s:cd(path) abort
-    let goto = exists('b:vf.last_wd')
-                \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
-                \ : a:path
-    execute 'cd ' . goto
-    pwd
-endfun
-
-fun! s:reload_i(...) abort
-    call s:reload()
-    startinsert!
-endfun
-
-fun! s:reload_n(...) abort
-    call s:reload()
-endfun
-
-fun! s:reload() abort
+fun! s:reload() abort " {{{1
     if exists('b:vf.last_wd')
         call remove(b:vf, 'last_wd')
     endif
     call vfinder#events#update_candidates_request()
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

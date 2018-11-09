@@ -2,11 +2,12 @@
 " Last modification: 2018-10-28
 
 
-fun! vfinder#sources#mru#check()
+fun! vfinder#sources#mru#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#mru#get() abort
+fun! vfinder#sources#mru#get() abort " {{{1
     return {
                 \   'name'         : 'mru',
                 \   'to_execute'   : function('s:mru_source'),
@@ -15,20 +16,23 @@ fun! vfinder#sources#mru#get() abort
                 \   'maps'         : s:mru_maps()
                 \ }
 endfun
+" 1}}}
 
-fun! s:mru_source() abort
+fun! s:mru_source() abort " {{{1
     let files = vfinder#cache#get_and_set_elements('mru', 500)
     return filter(copy(files), {i, v ->
                 \   filereadable(v)
                 \   && vfinder#sources#oldfiles#file_is_valid(v)
                 \ })
 endfun
+" 1}}}
 
-fun! s:mru_format(files) abort
+fun! s:mru_format(files) abort " {{{1
     return map(copy(a:files), 'fnamemodify(v:val, ":~")')
 endfun
+" 1}}}
 
-fun! s:mru_maps() abort
+fun! s:mru_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('mru')
     let maps.i = {
@@ -45,3 +49,7 @@ fun! s:mru_maps() abort
                 \ }
     return maps
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

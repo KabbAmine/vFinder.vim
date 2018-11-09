@@ -1,12 +1,17 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-10-28
+" Last modification: 2018-11-09
 
 
-fun! vfinder#sources#marks#check()
+fun! vfinder#sources#marks#check() " {{{1
     return v:true
 endfun
+" 1}}}
 
-fun! vfinder#sources#marks#get() abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#marks#get() abort " {{{1
     return {
                 \   'name'         : 'marks',
                 \   'to_execute'   : function('s:marks_source'),
@@ -15,25 +20,29 @@ fun! vfinder#sources#marks#get() abort
                 \   'maps'         : vfinder#sources#marks#maps(),
                 \ }
 endfun
+" 1}}}
 
-fun! s:marks_source() abort
+fun! s:marks_source() abort " {{{1
     " Go to the initial window to get its marks
     silent execute bufwinnr(b:vf.initial_bufnr) . 'wincmd w'
     let marks = split(execute('marks'), "\n")[1:]
     silent execute 'wincmd p'
     return map(marks, {i, v -> substitute(v, '^\s\+', '', '')})
 endfun
+" 1}}}
 
-fun! s:marks_candidate_fun() abort
+fun! s:marks_candidate_fun() abort " {{{1
     return matchstr(getline('.'), '^\S\+')
 endfun
+" 1}}}
 
-fun! s:marks_syntax_fun() abort
+fun! s:marks_syntax_fun() abort " {{{1
     syntax match vfinderMarksLine =\%>1l^\S\+\s\+\d\+\s\+\d\+\s\+=
     highlight! link vfinderMarksLine vfinderIndex
 endfun
+" 1}}}
 
-fun! vfinder#sources#marks#maps() abort
+fun! vfinder#sources#marks#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('marks')
     let maps.i = {
@@ -52,8 +61,13 @@ fun! vfinder#sources#marks#maps() abort
                 \ }
     return maps
 endfun
+" 1}}}
 
-fun! s:delete_mark(m) abort
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:delete_mark(m) abort " {{{1
     " Only A-Z and 0-9
     if a:m !~ '^\(\u\|\d\)$'
         call vfinder#helpers#echo('Only marks in range A-Z or 0-9 can be deleted', 'Error')
@@ -61,3 +75,7 @@ fun! s:delete_mark(m) abort
     endif
     execute 'delmarks ' . a:m
 endfun
+" 1}}}
+
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-09
+" Last modification: 2018-11-10
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -83,28 +83,28 @@ endfun
 fun! s:gototag(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'edit ' . file
-    silent execute cmd
+    call s:execute_cmd_and_unfold(cmd)
 endfun
 " 1}}}
 
 fun! s:splitandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'split ' . file
-    silent execute cmd
+    call s:execute_cmd_and_unfold(cmd)
 endfun
 " 1}}}
 
 fun! s:vsplitandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'vsplit ' . file
-    silent execute cmd
+    call s:execute_cmd_and_unfold(cmd)
 endfun
 " 1}}}
 
 fun! s:tabandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'tabedit ' . file
-    silent execute cmd
+    call s:execute_cmd_and_unfold(cmd)
 endfun
 " 1}}}
 
@@ -112,8 +112,9 @@ fun! s:preview(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     silent execute 'pedit ' . file
     silent wincmd P
-    silent execute cmd
+    call s:execute_cmd_and_unfold(cmd)
     silent wincmd p
+    call s:autoclose_pwindow_autocmd()
 endfun
 " 1}}}
 
@@ -143,9 +144,28 @@ endfun
 fun! s:filename_and_cmd(tag) abort " {{{1
     let tag_name = substitute(matchstr(a:tag, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
     let tag = taglist('\V' . tag_name)[0]
-    return [tag.filename, escape(tag.cmd, '*~')]
+    return [tag.filename, tag.cmd]
 endfun
 " 1}}}
+
+fun! s:execute_cmd_and_unfold(cmd) abort " {{{1
+    let [magic, &magic] = [&magic, 0]
+    execute a:cmd
+    let &magic = magic
+    normal! zv
+endfun
+" 1}}}
+
+fun! s:autoclose_pwindow_autocmd() abort
+    augroup VFAutoClosePWindow
+        autocmd!
+        autocmd BufDelete,BufWipeout <buffer> pclose!
+                    \| augroup VFAutoClosePWindow
+                    \|  autocmd!
+                    \| augroup End
+                    \| augroup! VFAutoClosePWindow
+    augroup END
+endfun
 
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-10-25
+" Last modification: 2018-11-10
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -19,6 +19,7 @@ set cpoptions&vim
 let g:vfinder_verbose = get(g:, 'vfinder_verbose', 0)
 let g:vfinder_fuzzy = get(g:, 'vfinder_fuzzy', 0)
 let g:vfinder_win_pos = get(g:, 'vfinder_win_pos', 'topleft')
+let g:vfinder_flash = get(g:, 'vfinder_flash', 1)
 let g:vfinder_cache_path = get(g:, 'vfinder_cache_path', $HOME . '/.cache/vfinder')
 let g:vfinder_yank_source_enabled = get(g:, 'vfinder_yank_source_enabled', 1)
 let g:vfinder_mru_source_enabled = get(g:, 'vfinder_mru_source_enabled', 1)

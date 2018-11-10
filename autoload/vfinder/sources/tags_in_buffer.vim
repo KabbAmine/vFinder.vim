@@ -104,18 +104,44 @@ endfun
 
 fun! vfinder#sources#tags_in_buffer#maps() abort " {{{1
     let keys = vfinder#maps#get('tags_in_buffer')
+    let options = {'function': 1}
     return {
                 \   'i': {
-                \       keys.i.goto         : {'action': '%s', 'options': {}},
-                \       keys.i.splitandgoto : {'action': 'split \| %s', 'options': {}},
-                \       keys.i.vsplitandgoto: {'action': 'vertical split \| %s', 'options': {}}
+                \       keys.i.goto         : {'action': function('s:goto_tag'), 'options': options},
+                \       keys.i.splitandgoto : {'action': function('s:split_and_goto_tag'), 'options': options},
+                \       keys.i.vsplitandgoto : {'action': function('s:vsplit_and_goto_tag'), 'options': options}
                 \   },
                 \   'n': {
-                \       keys.n.goto         : {'action': '%s', 'options': {}},
-                \       keys.n.splitandgoto : {'action': 'split \| %s', 'options': {}},
-                \       keys.n.vsplitandgoto: {'action': 'vertical split \| %s', 'options': {}}
+                \       keys.n.goto         : {'action': function('s:goto_tag'), 'options': options},
+                \       keys.n.splitandgoto : {'action': function('s:split_and_goto_tag'), 'options': options},
+                \       keys.n.vsplitandgoto : {'action': function('s:vsplit_and_goto_tag'), 'options': options}
                 \   }
                 \ }
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	actions
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:goto_tag(tag_line) abort " {{{1
+    execute a:tag_line
+    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#flash_line(winnr())
+endfun
+" 1}}}
+
+fun! s:split_and_goto_tag(tag_line) abort " {{{1
+    execute 'split +' . a:tag_line
+    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#flash_line(winnr())
+endfun
+" 1}}}
+
+fun! s:vsplit_and_goto_tag(tag_line) abort " {{{1
+    execute 'vsplit +' . a:tag_line
+    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#flash_line(winnr())
 endfun
 " 1}}}
 

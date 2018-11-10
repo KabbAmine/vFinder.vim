@@ -83,28 +83,28 @@ endfun
 fun! s:gototag(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'edit ' . file
-    call s:execute_cmd_and_unfold(cmd)
+    call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
 fun! s:splitandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'split ' . file
-    call s:execute_cmd_and_unfold(cmd)
+    call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
 fun! s:vsplitandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'vsplit ' . file
-    call s:execute_cmd_and_unfold(cmd)
+    call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
 fun! s:tabandgoto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'tabedit ' . file
-    call s:execute_cmd_and_unfold(cmd)
+    call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
@@ -112,7 +112,7 @@ fun! s:preview(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     silent execute 'pedit ' . file
     silent wincmd P
-    call s:execute_cmd_and_unfold(cmd)
+    call s:execute_cmd_unfold_and_flash(cmd)
     silent wincmd p
     call s:autoclose_pwindow_autocmd()
 endfun
@@ -148,11 +148,12 @@ fun! s:filename_and_cmd(tag) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:execute_cmd_and_unfold(cmd) abort " {{{1
+fun! s:execute_cmd_unfold_and_flash(cmd) abort " {{{1
     let [magic, &magic] = [&magic, 0]
     execute a:cmd
     let &magic = magic
-    normal! zv
+    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#flash_line(winnr())
 endfun
 " 1}}}
 

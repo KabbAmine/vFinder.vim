@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-09
+" Last modification: 2018-11-10
 
 
 " s:vars {{{1
@@ -78,6 +78,46 @@ fun! vfinder#helpers#question(msg, prompt) abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
+    " Flash the current line of a:win_nr by toggling the cursorline option a
+    " few times.
+    if !g:vfinder_flash
+        return ''
+    endif
+    let s:initial_cl_hi = matchstr(
+                \   split(execute('highlight cursorline'), "\n")[0],
+                \   'xxx\s\+\zs.*'
+                \ )
+    let s:initial_cursorline = getwinvar(a:win_nr, '&cursorline')
+    let s:buf_nr = bufnr('%')
+    let s:initial_line = line('.')
+    highlight! link CursorLine IncSearch
+    let s:flash_timer = timer_start(100, {t ->
+                \    setwinvar(
+                \       a:win_nr,
+                \       '&cursorline',
+                \       !getwinvar(a:win_nr, '&cursorline'))
+                \ }, {'repeat': 4})
+    " Stop the flashing when the line changes, set back the initial
+    " cursorline's higroup and unlet all the s:vars.
+    " This augroup is executed once, then it deletes itself.
+    augroup VFPostFlashLine
+        autocmd!
+        autocmd CursorMoved,CursorMovedI <buffer>
+                    \ if exists('s:flash_timer') && line('.') isnot# s:initial_line
+                    \|  call s:clean_flash_setup()
+                    \|  augroup VFPostFlashLine | autocmd! | augroup END
+                    \|  augroup! VFPostFlashLine
+                    \| endif
+        autocmd CursorHold,CursorHoldI <buffer>
+                    \ if exists('s:flash_timer')
+                    \|  call s:clean_flash_setup()
+                    \|  augroup VFPostFlashLine | autocmd! | augroup END
+                    \|  augroup! VFPostFlashLine
+                    \| endif
+    augroup END
+endfun
+" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	system
@@ -138,5 +178,26 @@ fun! vfinder#helpers#get_maps_str_for(name) abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#unfold_and_put_line(...) abort " {{{1
+    " a:1: (t)op, (b)ottom, (z)middle
+
+    normal! zv
+    if exists('a:1')
+        execute 'normal! z' . a:1
+    endif
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:clean_flash_setup() abort " {{{1
+    call timer_stop(s:flash_timer)
+    call setbufvar(s:buf_nr, '&cursorline', s:initial_cursorline)
+    execute 'highlight CursorLine ' . s:initial_cl_hi
+    unlet! s:initial_cursorline s:initial_cl_hi s:win_nr s:initial_line s:flash_timer
+endfun
+" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

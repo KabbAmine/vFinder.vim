@@ -1,5 +1,5 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-11-09
+" Last modification: 2018-11-10
 
 
 fun! vfinder#sources#marks#check() " {{{1
@@ -46,14 +46,20 @@ fun! vfinder#sources#marks#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('marks')
     let maps.i = {
-                \ keys.i.goto  : {'action': 'normal! ''%s', 'options': {}},
+                \ keys.i.goto  : {
+                \       'action': function('s:go_to_mark'),
+                \       'options': {'function': 1}
+                \       },
                 \ keys.i.delete  : {
                 \       'action': function('s:delete_mark'),
                 \       'options': {'function': 1, 'silent': 0, 'quit': 0, 'update': 1}
                 \       }
                 \ }
     let maps.n = {
-                \ keys.n.goto  : {'action': 'normal! ''%', 'options': {}},
+                \ keys.n.goto  : {
+                \       'action': function('s:go_to_mark'),
+                \       'options': {'function': 1}
+                \       },
                 \ keys.n.delete  : {
                 \       'action': function('s:delete_mark'),
                 \       'options': {'function': 1, 'silent': 0, 'quit': 0, 'update': 1}
@@ -66,6 +72,13 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	actions
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:go_to_mark(m) abort " {{{1
+    execute "normal! '" . a:m
+    call vfinder#helpers#unfold_and_put_line()
+    call vfinder#helpers#flash_line(winnr())
+endfun
+" 1}}}
 
 fun! s:delete_mark(m) abort " {{{1
     " Only A-Z and 0-9

@@ -52,16 +52,10 @@ endfun
 
 fun! vfinder#helpers#echo(msg, ...) abort " {{{1
     " a:1: higroup
-    " a:2: optional msg, respect or not g:vfinder_verbose
 
     let higroup = empty(get(a:, 1, ''))
                 \ ? s:title_hi
                 \ : a:1
-    let optional = get(a:, 2, 0)
-
-    if optional && !g:vfinder_verbose
-        return ''
-    endif
     execute 'echohl ' . higroup
     echon s:title . ' '
     echohl None | echon a:msg

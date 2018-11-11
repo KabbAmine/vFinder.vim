@@ -16,7 +16,6 @@ set cpoptions&vim
 " 1}}}
 
 " Global options {{{1
-let g:vfinder_verbose = get(g:, 'vfinder_verbose', 0)
 let g:vfinder_fuzzy = get(g:, 'vfinder_fuzzy', 0)
 let g:vfinder_win_pos = get(g:, 'vfinder_win_pos', 'topleft')
 let g:vfinder_flash = get(g:, 'vfinder_flash', 1)

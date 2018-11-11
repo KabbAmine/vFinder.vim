@@ -1,5 +1,5 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-11-07
+" Last modification: 2018-11-10
 
 
 fun! vfinder#statusline#get() abort " {{{1
@@ -53,7 +53,11 @@ endfun
 " 1}}}
 
 fun! s:count_candidates() abort " {{{1
-    let count_candidates = len(b:vf.original_candidates)
+    " The check is here to avoid errors popping when the candidates gathering
+    " process is interrupted
+    let count_candidates = exists('b:vf.original_candidates')
+                \ ? len(b:vf.original_candidates)
+                \ : 0
     return count_candidates ? count_candidates : '-'
 endfun
 " 1}}}

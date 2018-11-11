@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-10
+" Last modification: 2018-11-11
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -43,15 +43,15 @@ fun! vfinder#i(source, ...) abort " {{{1
         let prompt = vfinder#prompt#i()
         call prompt.render()
 
-        call vfinder#helpers#echo('Candidates gathering...', '', 1)
+        call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.name)
         let candidates = vfinder#candidates#i(b:vf)
         call candidates.get().populate()
         let b:vf.original_candidates = candidates.original_list
-        redraw!
 
+        redraw!
         startinsert!
     catch
-        call vfinder#helpers#throw(v:exception)
+        call vfinder#helpers#echomsg(v:exception, 'Error')
     endtry
 endfun
 " 1}}}

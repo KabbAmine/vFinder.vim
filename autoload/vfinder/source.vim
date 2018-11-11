@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-07
+" Last modification: 2018-11-11
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -17,15 +17,15 @@ fun! vfinder#source#i(source) abort " {{{1
         " executing it, at least AFAIK.
         let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
         if empty(fun_result)
-            call vfinder#helpers#throw('No source "' . a:source . '" found')
-            return ''
+            call vfinder#helpers#echo('no source "' . a:source . '" found', 'Error')
+            return s:is_not_valid()
         endif
         let options = call(fun_name_prefix . '#get', [])
     elseif type(a:source) is# v:t_dict
         let options = a:source
     else
-        call vfinder#helpers#throw('The source ' . string(a:source) . ' is not valid')
-        return ''
+        call vfinder#helpers#echo('the source ' . string(a:source) . ' is not valid', 'Error')
+        return s:is_not_valid()
     endif
 
     return {
@@ -66,7 +66,7 @@ fun! s:source_execute() dict " {{{1
     elseif type(self.to_execute) is# v:t_string
         let candidates = systemlist(self.to_execute . ' ' . vfinder#helpers#black_hole())
         if v:shell_error
-            call vfinder#helpers#throw('"' . escape(self.to_execute, '"') . '" executed with error ' . v:shell_error, 1)
+            call vfinder#helpers#echomsg('"' . escape(self.to_execute, '"') . '" executed with error ' . v:shell_error, 'Error')
             let candidates = []
         endif
     endif
@@ -208,6 +208,15 @@ fun! s:set_mode(line, mode) abort " {{{1
         call cursor(a:line, 0)
         silent execute line('.') is# 1 ? 'startinsert!' : 'startinsert'
     endif
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:is_not_valid() abort " {{{1
+    return {'is_valid': 0}
 endfun
 " 1}}}
 

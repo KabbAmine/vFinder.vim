@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-10
+" Last modification: 2018-11-11
 
 
 " s:vars {{{1
@@ -26,22 +26,6 @@ endfun
 " 	        	ui
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#helpers#throw(msg, ...) abort " {{{1
-    let in_messages = get(a:, 1, 0)
-    try
-        throw '--vf-- ' . a:msg
-    catch =\V--vf--=
-        " Remove the --vf--
-        let err_msg = v:exception[7:]
-        if in_messages
-            call vfinder#helpers#echomsg(err_msg, 'Error')
-        else
-            call vfinder#helpers#echo(err_msg, 'Error')
-        endif
-    endtry
-endfun
-" 1}}}
-
 fun! vfinder#helpers#echomsg(msg, ...) abort " {{{1
     let higroup = get(a:, 1, s:title_hi)
     silent execute 'echohl ' . higroup
@@ -52,12 +36,17 @@ endfun
 
 fun! vfinder#helpers#echo(msg, ...) abort " {{{1
     " a:1: higroup
+    " a:2: extra to title
 
     let higroup = empty(get(a:, 1, ''))
                 \ ? s:title_hi
                 \ : a:1
+    let extra_title = get(a:, 2, '')
+    let title = !empty(extra_title)
+                \ ? s:title[:-2] . '-' . extra_title . ']'
+                \ : s:title
     execute 'echohl ' . higroup
-    echon s:title . ' '
+    echon title . ' '
     echohl None | echon a:msg
 endfun
 " 1}}}

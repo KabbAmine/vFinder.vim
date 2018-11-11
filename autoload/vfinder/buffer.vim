@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-05
+" Last modification: 2018-11-11
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -333,7 +333,7 @@ fun! vfinder#buffer#update_candidates_i() abort " {{{1
         call cursor(line, 0)
         startinsert
     endif
-    call vfinder#helpers#echo('List of candidates updated...')
+    call s:echo_candidates_updated()
 endfun
 " 1}}}
 
@@ -343,7 +343,7 @@ fun! vfinder#buffer#update_candidates_n() abort " {{{1
     call vfinder#events#update_candidates_request()
     call cursor(line, col)
     stopinsert
-    call vfinder#helpers#echo('List of candidates updated...')
+    call s:echo_candidates_updated()
 endfun
 " 1}}}
 
@@ -355,9 +355,9 @@ fun! s:clean_cache_if_it_exists(mode) abort " {{{1
         call vfinder#cache#clean(name)
         call vfinder#events#update_candidates_request()
         silent execute ins_mode ? 'startinsert!' : 'normal! 1gg$'
-        call vfinder#helpers#echo('Cache for "' . name . '" deleted')
+        call vfinder#helpers#echo('cache for "' . name . '" deleted')
     else
-        call vfinder#helpers#echo('No cache for the source "' . name . '"', 'WarningMsg')
+        call vfinder#helpers#echo('no cache for the source "' . name . '"', 'WarningMsg')
         if ins_mode
             call s:set_cursor_position_i()
         endif
@@ -419,6 +419,11 @@ endfun
 
 fun! s:go_to_start_of_prompt() abort " {{{1
     call cursor(1, 3)
+endfun
+" 1}}}
+
+fun! s:echo_candidates_updated() abort " {{{1
+    call vfinder#helpers#echo('list of candidates updated...')
 endfun
 " 1}}}
 

@@ -83,7 +83,7 @@ endfun
 fun! s:delete_mark(m) abort " {{{1
     " Only A-Z and 0-9
     if a:m !~ '^\(\u\|\d\)$'
-        call vfinder#helpers#echo('Only marks in range A-Z or 0-9 can be deleted', 'Error')
+        call vfinder#helpers#echo('only marks in range A-Z or 0-9 can be deleted', 'Error')
         return ''
     endif
     execute 'delmarks ' . a:m

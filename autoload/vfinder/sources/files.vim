@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-03
+" Last modification: 2018-11-10
 
 
 fun! vfinder#sources#files#check() " {{{1
@@ -12,16 +12,13 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#files#get() abort " {{{1
-    let is_valid = s:files_is_valid() ? 1 : 0
-    redraw!
     return {
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
                 \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
                 \   'format_fun'   : function('s:files_format_fun'),
                 \   'syntax_fun'   : function('s:files_syntax_fun'),
-                \   'maps'         : vfinder#sources#files#maps(),
-                \   'is_valid'     : is_valid
+                \   'maps'         : vfinder#sources#files#maps()
                 \ }
 endfun
 " 1}}}
@@ -143,23 +140,6 @@ fun! s:git_status_files() abort " {{{1
         let res[file] = status
     endfor
     return res
-endfun
-" 1}}}
-
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 	        	helpers
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! s:files_is_valid() " {{{1
-    if getcwd() isnot# $HOME
-        return 1
-    else
-        let response = vfinder#helpers#question(
-                    \   'Gathering candidates from $HOME may freeze your editor,',
-                    \   'do you want to proceed? [y/N] '
-                    \ )
-        return response =~# 'y\|Y' ? 1 : 0
-    endif
 endfun
 " 1}}}
 

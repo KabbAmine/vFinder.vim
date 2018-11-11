@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-10
+" Last modification: 2018-11-11
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -12,11 +12,8 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#tags#get() abort " {{{1
-    let is_valid = s:tags_is_valid()
-    redraw!
     return {
                 \   'name'         : 'tags',
-                \   'is_valid'     : is_valid,
                 \   'to_execute'   : function('s:tags_source'),
                 \   'format_fun'   : function('s:tags_format'),
                 \   'candidate_fun': function('s:tags_candidate_fun'),
@@ -27,6 +24,8 @@ endfun
 " 1}}}
 
 fun! s:tags_source() abort " {{{1
+    " a simple hack to keep the previous echoed msg shown
+    sleep 1m
     return taglist('.*')
 endfun
 " 1}}}
@@ -122,25 +121,6 @@ endfun
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:tags_is_valid() abort " {{{1
-    let tag_count = 0
-    let wc = executable('wc') ? 1 : 0
-    for tf in tagfiles()
-        let tag_count += wc
-                    \ ? matchstr(split(system('wc -l ' . tf), "\n")[0], '^\d\+')
-                    \ : len(readfile(tf))
-    endfor
-    if tag_count <=# 70000
-        return 1
-    else
-        let info = 'There are near ' . tag_count . ' tags, which may freeze your editor'
-        let question = 'Do you want to proceed?'
-        let response = vfinder#helpers#question(info, question)
-        return response =~# 'y\|Y' ? 1 : 0
-    endif
-endfun
-" 1}}}
-
 fun! s:filename_and_cmd(tag) abort " {{{1
     let tag_name = substitute(matchstr(a:tag, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
     let tag = taglist('\V' . tag_name)[0]
@@ -157,7 +137,7 @@ fun! s:execute_cmd_unfold_and_flash(cmd) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:autoclose_pwindow_autocmd() abort
+fun! s:autoclose_pwindow_autocmd() abort "{{{1
     augroup VFAutoClosePWindow
         autocmd!
         autocmd BufDelete,BufWipeout <buffer> pclose!
@@ -167,6 +147,7 @@ fun! s:autoclose_pwindow_autocmd() abort
                     \| augroup! VFAutoClosePWindow
     augroup END
 endfun
+" 1}}}
 
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

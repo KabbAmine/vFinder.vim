@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-10
+" Last modification: 2018-11-11
 
 
 fun! vfinder#sources#tags_in_buffer#check() " {{{1
@@ -107,14 +107,14 @@ fun! vfinder#sources#tags_in_buffer#maps() abort " {{{1
     let options = {'function': 1}
     return {
                 \   'i': {
-                \       keys.i.goto         : {'action': function('s:goto_tag'), 'options': options},
-                \       keys.i.splitandgoto : {'action': function('s:split_and_goto_tag'), 'options': options},
-                \       keys.i.vsplitandgoto : {'action': function('s:vsplit_and_goto_tag'), 'options': options}
+                \       keys.i.goto           : {'action': function('s:goto_tag'), 'options': options},
+                \       keys.i.split_and_goto : {'action': function('s:split_and_goto_tag'), 'options': options},
+                \       keys.i.vsplit_and_goto: {'action': function('s:vsplit_and_goto_tag'), 'options': options}
                 \   },
                 \   'n': {
-                \       keys.n.goto         : {'action': function('s:goto_tag'), 'options': options},
-                \       keys.n.splitandgoto : {'action': function('s:split_and_goto_tag'), 'options': options},
-                \       keys.n.vsplitandgoto : {'action': function('s:vsplit_and_goto_tag'), 'options': options}
+                \       keys.n.goto           : {'action': function('s:goto_tag'), 'options': options},
+                \       keys.n.split_and_goto : {'action': function('s:split_and_goto_tag'), 'options': options},
+                \       keys.n.vsplit_and_goto: {'action': function('s:vsplit_and_goto_tag'), 'options': options}
                 \   }
                 \ }
 endfun

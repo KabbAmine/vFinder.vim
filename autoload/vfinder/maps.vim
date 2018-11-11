@@ -1,5 +1,5 @@
 " Creation         : 2018-03-25
-" Last modification: 2018-11-10
+" Last modification: 2018-11-11
 
 
 fun! vfinder#maps#define() abort " {{{1
@@ -35,19 +35,19 @@ fun! vfinder#maps#define() abort " {{{1
                 \ })
     call s:define_gvar_maps('buffers', {
                 \   'i': {
-                \       'edit'          : '<CR>',
-                \       'split'         : '<C-s>',
-                \       'vsplit'        : '<C-v>',
-                \       'tab'           : '<C-t>',
-                \       'wipe'          : '<C-d>',
+                \       'edit'      : '<CR>',
+                \       'split'     : '<C-s>',
+                \       'vsplit'    : '<C-v>',
+                \       'tab'       : '<C-t>',
+                \       'wipe'      : '<C-d>',
                 \       'toggle_all': '<C-o>'
                 \   },
                 \   'n': {
-                \       'edit'          : '<CR>',
-                \       'split'         : 's',
-                \       'vsplit'        : 'v',
-                \       'tab'           : 't',
-                \       'wipe'          : 'dd',
+                \       'edit'      : '<CR>',
+                \       'split'     : 's',
+                \       'vsplit'    : 'v',
+                \       'tab'       : 't',
+                \       'wipe'      : 'dd',
                 \       'toggle_all': 'o'
                 \   }
                 \ })
@@ -74,12 +74,12 @@ fun! vfinder#maps#define() abort " {{{1
     call s:define_gvar_maps('directories', {
                 \   'i': {
                 \       'goto'  : '<CR>',
-                \       'goback': '<C-v>',
+                \       'go_back': '<C-v>',
                 \       'cd'    : '<C-s>'
                 \   },
                 \   'n': {
                 \       'goto'  : '<CR>',
-                \       'goback': 'v',
+                \       'go_back': 'v',
                 \       'cd'    : 's'
                 \   }
                 \ })
@@ -111,14 +111,14 @@ fun! vfinder#maps#define() abort " {{{1
                 \ })
     call s:define_gvar_maps('tags_in_buffer', {
                 \   'i': {
-                \       'goto'         : '<CR>',
-                \       'splitandgoto' : '<C-s>',
-                \       'vsplitandgoto': '<C-v>'
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : '<C-s>',
+                \       'vsplit_and_goto': '<C-v>'
                 \   },
                 \   'n': {
-                \       'goto'         : '<CR>',
-                \       'splitandgoto' : 's',
-                \       'vsplitandgoto': 'v'
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : 's',
+                \       'vsplit_and_goto': 'v'
                 \   }
                 \ })
     call s:define_gvar_maps('spell', {
@@ -127,18 +127,18 @@ fun! vfinder#maps#define() abort " {{{1
                 \ })
     call s:define_gvar_maps('tags', {
                 \   'i': {
-                \       'goto'         : '<CR>',
-                \       'splitandgoto' : '<C-s>',
-                \       'vsplitandgoto': '<C-v>',
-                \       'tabandgoto'   : '<C-t>',
-                \       'preview'      : '<C-o>'
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : '<C-s>',
+                \       'vsplit_and_goto': '<C-v>',
+                \       'tab_and_goto'   : '<C-t>',
+                \       'preview'        : '<C-o>'
                 \   },
                 \   'n': {
-                \       'goto'         : '<CR>',
-                \       'splitandgoto' : 's',
-                \       'vsplitandgoto': 'v',
-                \       'tabandgoto'   : 't',
-                \       'preview'      : 'o'
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : 's',
+                \       'vsplit_and_goto': 'v',
+                \       'tab_and_goto'   : 't',
+                \       'preview'        : 'o'
                 \   }
                 \ })
     call s:define_gvar_maps('yank', {

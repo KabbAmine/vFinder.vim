@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-09
+" Last modification: 2018-11-11
 
 
 fun! vfinder#sources#directories#check() " {{{1
@@ -57,13 +57,13 @@ fun! vfinder#sources#directories#maps() abort " {{{1
     return {
                 \   'i': {
                 \       keys.i.goto  : {'action': function('s:goto'), 'options': options},
-                \       keys.i.goback: {'action': function('s:goback'), 'options': options},
+                \       keys.i.go_back: {'action': function('s:go_back'), 'options': options},
                 \       keys.i.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'execute_in_place': 1}, 'force')},
                 \       keys_reload_i: {'action': function('s:reload_i'), 'options': {'function': 1, 'quit': 0}}
                 \   },
                 \   'n': {
                 \       keys.n.goto  : {'action': function('s:goto'), 'options': options},
-                \       keys.n.goback: {'action': function('s:goback'), 'options': options},
+                \       keys.n.go_back: {'action': function('s:go_back'), 'options': options},
                 \       keys.n.cd    : {'action': function('s:cd'), 'options': extend(copy(options), {'quit': 1, 'execute_in_place': 1}, 'force')},
                 \       keys_reload_n: {'action': function('s:reload_n'), 'options': {'function': 1, 'quit': 0}}
                 \   }
@@ -77,7 +77,7 @@ endfun
 
 fun! s:goto(path) abort " {{{1
     if a:path is# '../'
-        call s:goback('../')
+        call s:go_back('../')
     else
         let goto = exists('b:vf.last_wd')
                     \ ? b:vf.last_wd . a:path
@@ -87,7 +87,7 @@ fun! s:goto(path) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:goback(path) abort " {{{1
+fun! s:go_back(path) abort " {{{1
     let goto = exists('b:vf.last_wd') && b:vf.last_wd isnot# '/..'
                 \ ? b:vf.last_wd . '../'
                 \ : b:vf.initial_wd . '../'

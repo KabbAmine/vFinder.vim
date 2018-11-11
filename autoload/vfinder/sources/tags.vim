@@ -58,18 +58,18 @@ fun! vfinder#sources#tags#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('tags')
     let maps.i = {
-                \ keys.i.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
-                \ keys.i.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
-                \ keys.i.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
-                \ keys.i.tabandgoto   : {'action': function('s:tabandgoto'), 'options': {'function': 1}},
-                \ keys.i.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
+                \ keys.i.goto           : {'action': function('s:gototag'), 'options': {'function': 1}},
+                \ keys.i.split_and_goto : {'action': function('s:split_and_goto'), 'options': {'function': 1}},
+                \ keys.i.vsplit_and_goto: {'action': function('s:vsplit_and_goto'), 'options': {'function': 1}},
+                \ keys.i.tab_and_goto   : {'action': function('s:tab_and_goto'), 'options': {'function': 1}},
+                \ keys.i.preview        : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     let maps.n = {
-                \ keys.n.goto         : {'action': function('s:gototag'), 'options': {'function': 1}},
-                \ keys.n.splitandgoto : {'action': function('s:splitandgoto'), 'options': {'function': 1}},
-                \ keys.n.vsplitandgoto: {'action': function('s:vsplitandgoto'), 'options': {'function': 1}},
-                \ keys.n.tabandgoto   : {'action': function('s:tabandgoto'), 'options': {'function': 1}},
-                \ keys.n.preview      : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
+                \ keys.n.goto           : {'action': function('s:gototag'), 'options': {'function': 1}},
+                \ keys.n.split_and_goto : {'action': function('s:split_and_goto'), 'options': {'function': 1}},
+                \ keys.n.vsplit_and_goto: {'action': function('s:vsplit_and_goto'), 'options': {'function': 1}},
+                \ keys.n.tab_and_goto   : {'action': function('s:tab_and_goto'), 'options': {'function': 1}},
+                \ keys.n.preview        : {'action': function('s:preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
     return maps
 endfun
@@ -86,21 +86,21 @@ fun! s:gototag(tag) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:splitandgoto(tag) abort " {{{1
+fun! s:split_and_goto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'split ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:vsplitandgoto(tag) abort " {{{1
+fun! s:vsplit_and_goto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'vsplit ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:tabandgoto(tag) abort " {{{1
+fun! s:tab_and_goto(tag) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:tag)
     unsilent execute 'tabedit ' . file
     call s:execute_cmd_unfold_and_flash(cmd)

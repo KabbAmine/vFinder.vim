@@ -127,7 +127,7 @@ endfun
 
 fun! s:goto_tag(tag_line) abort " {{{1
     execute a:tag_line
-    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())
 endfun
 " 1}}}

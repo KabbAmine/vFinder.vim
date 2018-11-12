@@ -133,7 +133,7 @@ fun! s:execute_cmd_unfold_and_flash(cmd) abort " {{{1
     let [magic, &magic] = [&magic, 0]
     execute a:cmd
     let &magic = magic
-    call vfinder#helpers#unfold_and_put_line('z')
+    call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())
 endfun
 " 1}}}

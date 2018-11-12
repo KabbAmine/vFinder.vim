@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-11
+" Last modification: 2018-11-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -16,32 +16,25 @@ fun! vfinder#i(source, ...) abort " {{{1
             return ''
         endif
 
-        " Some sources need an initial content to process (e.g tags_in_buffer source)
-        " to be able to be updated a 2nd time, so we store the current buffer
-        " number.
-        let initial_bufnr = bufnr('%')
+        " Some sources need an initial content to process (e.g tags_in_buffer
+        " source) to be updated more than once, so we store the current
+        " buffer number (same goes for the working directory).
+        let [initial_bufnr, initial_wd] = [bufnr('%'), getcwd() . '/']
 
-        " Same thing goes for the working directory
-        let initial_wd = getcwd() . '/'
+        let ctx = s:get_ctx_opts_from(get(a:, 1, {}))
 
-        " Options related to vfinder's buffer/window
-        let buf_win_opts = s:get_buf_win_opts(get(a:, 1, {}))
-
-        " Some sources may use flags for toggling items
-        let flags = {}
-
-        let buffer = vfinder#buffer#i(source, buf_win_opts)
+        let buffer = vfinder#buffer#i(source, ctx)
         call buffer.goto()
         let b:vf = extend(source, {
                     \   'initial_bufnr': initial_bufnr,
                     \   'initial_wd'   : initial_wd,
-                    \   'fuzzy'        : buf_win_opts.fuzzy,
-                    \   'flags'        : flags,
+                    \   'fuzzy'        : ctx.fuzzy,
+                    \   'flags'        : {},
                     \   'statusline'   : &l:statusline
                     \ })
 
         let prompt = vfinder#prompt#i()
-        call prompt.render()
+        call prompt.render(ctx.query)
 
         call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.name)
         let candidates = vfinder#candidates#i(b:vf)
@@ -140,13 +133,19 @@ endfun
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:get_buf_win_opts(opts) abort " {{{1
+fun! s:get_ctx_opts_from(opts) abort " {{{1
+    " a:opts can have the following keys:
+    " - fuzzy
+    " - win_pos
+    " - query
+
     " Passed 'win_pos' have priority over the global g:vfinder_win_pos
     let win_pos = has_key(a:opts, 'win_pos')
                 \ ? a:opts.win_pos
                 \ : g:vfinder_win_pos
     return {
                 \   'fuzzy'  : get(a:opts, 'fuzzy', g:vfinder_fuzzy),
+                \   'query'  : get(a:opts, 'query', ''),
                 \   'win_pos': win_pos
                 \ }
 endfun

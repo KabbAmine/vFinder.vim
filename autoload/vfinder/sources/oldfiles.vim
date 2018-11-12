@@ -7,7 +7,12 @@ fun! vfinder#sources#oldfiles#check() " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! vfinder#sources#oldfiles#get() abort " {{{1
+    call s:oldfiles_define_maps()
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
@@ -47,6 +52,30 @@ fun! s:oldfiles_maps() abort " {{{1
                 \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}}
                 \ }
     return maps
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:oldfiles_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('oldfiles', {
+                \   'i': {
+                \       'edit'             : '<CR>',
+                \       'split'            : '<C-s>',
+                \       'vsplit'           : '<C-v>',
+                \       'tab'              : '<C-t>',
+                \       'toggle_git_flags' : '<C-g>'
+                \   },
+                \   'n': {
+                \       'edit'             : '<CR>',
+                \       'split'            : 's',
+                \       'vsplit'           : 'v',
+                \       'tab'              : 't',
+                \       'toggle_git_flags' : 'gi'
+                \   }
+                \ })
 endfun
 " 1}}}
 

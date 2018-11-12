@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-10-26
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#command_history#check() " {{{1
@@ -7,7 +7,12 @@ fun! vfinder#sources#command_history#check() " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! vfinder#sources#command_history#get() abort " {{{1
+    call s:command_history_define_maps()
     return {
                 \   'name'         : 'command_history',
                 \   'to_execute'   : function('s:command_history_source'),
@@ -51,6 +56,24 @@ fun! s:command_history_maps() abort " {{{1
                 \       keys.n.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
                 \   }
                 \ }
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:command_history_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('command_history', {
+                \   'i': {
+                \       'apply': '<CR>',
+                \       'echo' : '<C-o>'
+                \   },
+                \   'n': {
+                \       'apply': '<CR>',
+                \       'echo' : 'o'
+                \   }
+                \ })
 endfun
 " 1}}}
 

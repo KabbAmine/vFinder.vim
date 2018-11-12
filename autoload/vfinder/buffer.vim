@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-11
+" Last modification: 2018-11-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -7,6 +7,7 @@
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#buffer#i(source, buf_win_opts) abort " {{{1
+    call s:buffer_define_maps()
     return {
                 \   'source'        : a:source,
                 \   'name'          : 'vf__' . a:source.name . '__',
@@ -424,6 +425,44 @@ endfun
 
 fun! s:echo_candidates_updated() abort " {{{1
     call vfinder#helpers#echo('list of candidates updated...')
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            global maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:buffer_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('_', {
+                \   'i': {
+                \       'prompt_move_down'    : '<C-n>',
+                \       'prompt_move_up'      : '<C-p>',
+                \       'prompt_move_left'    : '<C-h>',
+                \       'prompt_move_right'   : '<C-l>',
+                \       'prompt_move_to_start': '<C-a>',
+                \       'prompt_move_to_end'  : '<C-e>',
+                \       'prompt_backspace'    : '<BS>',
+                \       'prompt_delete'       : '<Del>',
+                \       'prompt_delete_word'  : '<C-w>',
+                \       'prompt_delete_line'  : '<C-u>',
+                \       'fuzzy_toggle'        : '<C-f>',
+                \       'window_quit'         : '<Esc>',
+                \       'candidates_update'   : '<C-r>',
+                \       'cache_clean'         : '<F5>',
+                \       'toggle_maps_in_sl'   : '<F1>'
+                \   },
+                \   'n': {
+                \       'fuzzy_toggle'       : 'F',
+                \       'start_insert_mode_i': 'i',
+                \       'start_insert_mode_I': 'I',
+                \       'start_insert_mode_a': 'a',
+                \       'start_insert_mode_A': 'A',
+                \       'window_quit'        : '<Esc>',
+                \       'candidates_update'  : 'R',
+                \       'cache_clean'        : '<F5>',
+                \       'toggle_maps_in_sl'  : '<F1>'
+                \   }
+                \ })
 endfun
 " 1}}}
 

@@ -12,7 +12,8 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#buffers#get() abort " {{{1
-     return {
+    call s:buffer_define_maps()
+    return {
                 \   'name'         : 'buffers',
                 \   'to_execute'   : function('s:buffers_source'),
                 \   'format_fun'   : function('s:buffers_format'),
@@ -122,6 +123,32 @@ endfun
 
 fun! s:toggle_all(buffer) abort " {{{1
     let b:vf.flags.list_all = !b:vf.flags.list_all
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:buffer_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('buffers', {
+                \   'i': {
+                \       'edit'      : '<CR>',
+                \       'split'     : '<C-s>',
+                \       'vsplit'    : '<C-v>',
+                \       'tab'       : '<C-t>',
+                \       'wipe'      : '<C-d>',
+                \       'toggle_all': '<C-o>'
+                \   },
+                \   'n': {
+                \       'edit'      : '<CR>',
+                \       'split'     : 's',
+                \       'vsplit'    : 'v',
+                \       'tab'       : 't',
+                \       'wipe'      : 'dd',
+                \       'toggle_all': 'o'
+                \   }
+                \ })
 endfun
 " 1}}}
 

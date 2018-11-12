@@ -1,5 +1,5 @@
 " Creation         : 2018-02-16
-" Last modification: 2018-10-28
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#mru#check() " {{{1
@@ -7,7 +7,12 @@ fun! vfinder#sources#mru#check() " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! vfinder#sources#mru#get() abort " {{{1
+    call s:mru_define_maps()
     return {
                 \   'name'         : 'mru',
                 \   'to_execute'   : function('s:mru_source'),
@@ -48,6 +53,30 @@ fun! s:mru_maps() abort " {{{1
                 \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}}
                 \ }
     return maps
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:mru_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('mru', {
+                \   'i': {
+                \       'edit'             : '<CR>',
+                \       'split'            : '<C-s>',
+                \       'vsplit'           : '<C-v>',
+                \       'tab'              : '<C-t>',
+                \       'toggle_git_flags' : '<C-g>'
+                \   },
+                \   'n': {
+                \       'edit'             : '<CR>',
+                \       'split'            : 's',
+                \       'vsplit'           : 'v',
+                \       'tab'              : 't',
+                \       'toggle_git_flags' : 'gi'
+                \   }
+                \ })
 endfun
 " 1}}}
 

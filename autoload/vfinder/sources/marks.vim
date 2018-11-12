@@ -1,5 +1,5 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-11-10
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#marks#check() " {{{1
@@ -12,6 +12,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#marks#get() abort " {{{1
+    call s:marks_define_maps()
     return {
                 \   'name'         : 'marks',
                 \   'to_execute'   : function('s:marks_source'),
@@ -87,6 +88,24 @@ fun! s:delete_mark(m) abort " {{{1
         return ''
     endif
     execute 'delmarks ' . a:m
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:marks_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('marks', {
+                \ 'i': {
+                \       'goto'  : '<CR>',
+                \       'delete': '<C-d>'
+                \   },
+                \ 'n': {
+                \       'goto'  : '<CR>',
+                \       'delete': 'dd'
+                \   }
+                \ })
 endfun
 " 1}}}
 

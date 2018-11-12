@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-11
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#directories#check() " {{{1
@@ -12,7 +12,8 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#directories#get() abort " {{{1
-     return {
+    call s:directories_define_maps()
+    return {
                 \   'name'         : 'directories',
                 \   'to_execute'   : function('s:directories_source'),
                 \   'format_fun'   : function('s:directories_format'),
@@ -134,6 +135,26 @@ fun! s:reload() abort " {{{1
         call remove(b:vf, 'last_wd')
     endif
     call vfinder#events#update_candidates_request()
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:directories_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('directories', {
+                \   'i': {
+                \       'goto'  : '<CR>',
+                \       'go_back': '<C-v>',
+                \       'cd'    : '<C-s>'
+                \   },
+                \   'n': {
+                \       'goto'  : '<CR>',
+                \       'go_back': 'v',
+                \       'cd'    : 's'
+                \   }
+                \ })
 endfun
 " 1}}}
 

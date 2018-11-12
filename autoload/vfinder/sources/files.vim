@@ -12,6 +12,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#files#get() abort " {{{1
+    call s:files_define_maps()
     return {
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
@@ -144,5 +145,28 @@ fun! s:git_status_files() abort " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:files_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('files', {
+                \   'i': {
+                \       'edit'             : '<CR>',
+                \       'split'            : '<C-s>',
+                \       'vsplit'           : '<C-v>',
+                \       'tab'              : '<C-t>',
+                \       'toggle_git_flags' : '<C-g>'
+                \   },
+                \   'n': {
+                \       'edit'             : '<CR>',
+                \       'split'            : 's',
+                \       'vsplit'           : 'v',
+                \       'tab'              : 't',
+                \       'toggle_git_flags' : 'gi'
+                \   }
+                \ })
+endfun
+" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

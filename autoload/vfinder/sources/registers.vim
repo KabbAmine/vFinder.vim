@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-03
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#registers#check() " {{{1
@@ -7,7 +7,12 @@ fun! vfinder#sources#registers#check() " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	            main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! vfinder#sources#registers#get() abort " {{{1
+    call s:registers_define_maps()
     return {
                 \   'name'         : 'registers',
                 \   'to_execute'   : function('s:registers_source'),
@@ -81,6 +86,18 @@ fun! s:registers_maps() abort " {{{1
                 \       'options': {'function': 1}
                 \   }}
                 \ }
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:registers_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('registers', {
+                \ 'i': {'paste': '<CR>'},
+                \ 'n': {'paste': '<CR>'}
+                \ })
 endfun
 " 1}}}
 

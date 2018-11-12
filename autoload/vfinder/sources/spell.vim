@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-11-09
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#spell#check() " {{{1
@@ -17,6 +17,7 @@ fun! vfinder#sources#spell#get() abort " {{{1
     let to_execute = is_valid
                 \ ? s:spell_source()
                 \ : []
+    call s:spell_define_maps()
     return {
                 \   'name'         : 'spell',
                 \   'to_execute'   : to_execute,
@@ -83,6 +84,18 @@ fun! s:spell_is_valid() " {{{1
     else
         return 1
     endif
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:spell_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('spell', {
+                \ 'i': {'use': '<CR>'},
+                \ 'n': {'use': '<CR>'}
+                \ })
 endfun
 " 1}}}
 

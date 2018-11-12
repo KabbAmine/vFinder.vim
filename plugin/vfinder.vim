@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-10
+" Last modification: 2018-11-12
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -26,7 +26,6 @@ let g:vfinder_maps = get(g:, 'vfinder_maps', {})
 " 1}}}
 
 " Initialization {{{1
-call vfinder#maps#define()
 call vfinder#enable_autocmds_for_caching()
 " 1}}}
 

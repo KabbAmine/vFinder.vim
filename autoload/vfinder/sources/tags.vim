@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-11
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -12,6 +12,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#tags#get() abort " {{{1
+    call s:tags_define_maps()
     return {
                 \   'name'         : 'tags',
                 \   'to_execute'   : function('s:tags_source'),
@@ -149,5 +150,28 @@ fun! s:autoclose_pwindow_autocmd() abort "{{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:tags_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('tags', {
+                \   'i': {
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : '<C-s>',
+                \       'vsplit_and_goto': '<C-v>',
+                \       'tab_and_goto'   : '<C-t>',
+                \       'preview'        : '<C-o>'
+                \   },
+                \   'n': {
+                \       'goto'           : '<CR>',
+                \       'split_and_goto' : 's',
+                \       'vsplit_and_goto': 'v',
+                \       'tab_and_goto'   : 't',
+                \       'preview'        : 'o'
+                \   }
+                \ })
+endfun
+" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

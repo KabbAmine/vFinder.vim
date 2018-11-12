@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-03
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#yank#check() " {{{1
@@ -12,6 +12,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#yank#get() abort " {{{1
+    call s:yank_define_maps()
     return {
                 \   'name'         : 'yank',
                 \   'to_execute'   : function('s:yank_source'),
@@ -88,5 +89,16 @@ fun! vfinder#sources#yank#paste(content) abort " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:yank_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('yank', {
+                \ 'i': {'paste': '<CR>'},
+                \ 'n': {'paste': '<CR>'}
+                \ })
+endfun
+" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

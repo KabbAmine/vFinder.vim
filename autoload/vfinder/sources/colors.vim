@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-03-25
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#colors#check() " {{{1
@@ -7,7 +7,12 @@ fun! vfinder#sources#colors#check() " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	main object
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! vfinder#sources#colors#get() abort " {{{1
+    call s:colors_define_maps()
     return {
                 \   'name'         : 'colors',
                 \   'to_execute'   : function('s:colors_source'),
@@ -33,6 +38,24 @@ fun! vfinder#sources#colors#maps() abort " {{{1
                 \       keys.n.preview: {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
                 \   }
                 \ }
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	maps
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:colors_define_maps() abort " {{{1
+    call vfinder#maps#define_gvar_maps('colors', {
+                \   'i': {
+                \       'apply'  : '<CR>',
+                \       'preview': '<C-o>'
+                \   },
+                \   'n': {
+                \       'apply'  : '<CR>',
+                \       'preview': 'o'
+                \   }
+                \ })
 endfun
 " 1}}}
 

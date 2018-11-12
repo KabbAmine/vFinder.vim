@@ -53,8 +53,9 @@ endfun
 fun! vfinder#sources#spell#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('spell')
-    let maps.i = {keys.i.use: {'action': function('s:use_suggestion'), 'options': {'function': 1}} }
-    let maps.n = {keys.n.use: {'action': function('s:use_suggestion'), 'options': {'function': 1}} }
+    let options = {'function': 1, 'silent': 0}
+    let maps.i = {keys.i.use: {'action': function('s:use_suggestion'), 'options': options}}
+    let maps.n = {keys.n.use: {'action': function('s:use_suggestion'), 'options': options}}
     return maps
 endfun
 " 1}}}

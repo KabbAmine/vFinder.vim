@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-10
+" Last modification: 2018-11-12
 
 
 fun! vfinder#sources#files#check() " {{{1
@@ -72,21 +72,22 @@ endfun
 fun! vfinder#sources#files#maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('files')
+    let options = {'silent': 0}
     let maps.i = {
-                \ keys.i.edit  : {'action': 'edit %s', 'options': {}},
-                \ keys.i.split : {'action': 'split %s', 'options': {}},
-                \ keys.i.vsplit: {'action': 'vertical split %s', 'options': {}},
-                \ keys.i.tab   : {'action': 'tabedit %s', 'options': {}},
+                \ keys.i.edit  : {'action': 'edit %s', 'options': options},
+                \ keys.i.split : {'action': 'split %s', 'options': options},
+                \ keys.i.vsplit: {'action': 'vertical split %s', 'options': options},
+                \ keys.i.tab   : {'action': 'tabedit %s', 'options': options},
                 \ keys.i.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       }
                 \ }
     let maps.n = {
-                \ keys.n.edit  : {'action': 'edit %s', 'options': {}},
-                \ keys.n.split : {'action': 'split %s', 'options': {}},
-                \ keys.n.vsplit: {'action': 'vertical split %s', 'options': {}},
-                \ keys.n.tab   : {'action': 'tabedit %s', 'options': {}},
+                \ keys.n.edit  : {'action': 'edit %s', 'options': options},
+                \ keys.n.split : {'action': 'split %s', 'options': options},
+                \ keys.n.vsplit: {'action': 'vertical split %s', 'options': options},
+                \ keys.n.tab   : {'action': 'tabedit %s', 'options': options},
                 \ keys.n.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
                 \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}

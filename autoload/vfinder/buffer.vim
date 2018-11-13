@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-12
+" Last modification: 2018-11-13
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -283,9 +283,9 @@ endfun
 fun! s:toggle_fuzzy(mode) abort " {{{1
     let b:vf.fuzzy = !b:vf.fuzzy
     if a:mode is# 'i'
-        call vfinder#buffer#update_candidates_i()
+        silent call vfinder#buffer#update_candidates_i()
     else
-        call vfinder#buffer#update_candidates_n()
+        silent call vfinder#buffer#update_candidates_n()
     endif
 endfun
 " 1}}}

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-12
+" Last modification: 2018-11-13
 
 
 fun! vfinder#sources#files#check() " {{{1
@@ -81,7 +81,7 @@ fun! vfinder#sources#files#maps() abort " {{{1
                 \ keys.i.tab   : {'action': 'tabedit %s', 'options': options},
                 \ keys.i.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       }
                 \ }
     let maps.n = {
@@ -91,7 +91,7 @@ fun! vfinder#sources#files#maps() abort " {{{1
                 \ keys.n.tab   : {'action': 'tabedit %s', 'options': options},
                 \ keys.n.toggle_git_flags: {
                 \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
                 \       }
                 \ }
     return maps

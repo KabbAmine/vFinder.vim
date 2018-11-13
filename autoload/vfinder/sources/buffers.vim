@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-11-12
+" Last modification: 2018-11-13
 
 
 fun! vfinder#sources#buffers#check() " {{{1
@@ -80,7 +80,7 @@ fun! s:buffers_maps() abort " {{{1
                 \       },
                 \ keys.i.toggle_all: {
                 \       'action': function('s:toggle_all'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
                 \       },
                 \ }
     let maps.n = {
@@ -94,7 +94,7 @@ fun! s:buffers_maps() abort " {{{1
                 \       },
                 \ keys.n.toggle_all: {
                 \       'action': function('s:toggle_all'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
+                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
                 \       },
                 \ }
     return maps

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-11
+" Last modification: 2018-11-13
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -126,7 +126,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
     let action = !empty(a:action) ? a:action : '%s'
 
     if in_prompt
-        if no_candidates
+        if no_candidates && !a:options.flag
             call s:set_mode(line, a:mode)
             return ''
         endif
@@ -173,11 +173,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
             call clearmatches()
         endif
         if a:options.update
-            if a:mode is# 'i'
-                silent call vfinder#buffer#update_candidates_i()
-            else
-                silent call vfinder#buffer#update_candidates_n()
-            endif
+            call s:update_candidates(a:mode)
         endif
 
         if a:options.goto_prompt
@@ -190,6 +186,17 @@ endfun
 " 1}}}
 
 fun! s:set_all_options(options) abort " {{{1
+    " Return a dictionnary of options related to the action:
+    " quit            : quit after executing the action
+    " update          : update the candidates after executing the action
+    " silent          : silent the action
+    " function        : the action is a funcref instead of a string
+    " echo            : echo the action instead of executing it
+    " clear_prompt    : delete the prompt after executing the action
+    " goto_prompt     : go to the prompt after executing the action
+    " execute_in_place: execute the action in the vfinder buffer
+    " flag            : execute the action even if there are no candidates
+
     let opts = copy(a:options)
     let opts.quit = get(opts, 'quit', 1)
     let opts.update = get(opts, 'update', 0)
@@ -199,6 +206,7 @@ fun! s:set_all_options(options) abort " {{{1
     let opts.clear_prompt = get(opts, 'clear_prompt', 0)
     let opts.goto_prompt = get(opts, 'goto_prompt', 0)
     let opts.execute_in_place = get(opts, 'execute_in_place', 0)
+    let opts.flag = get(opts, 'flag', 0)
     return opts
 endfun
 " 1}}}
@@ -217,6 +225,15 @@ endfun
 
 fun! s:is_not_valid() abort " {{{1
     return {'is_valid': 0}
+endfun
+" 1}}}
+
+fun! s:update_candidates(mode) abort " {{{1
+    if a:mode is# 'i'
+        silent call vfinder#buffer#update_candidates_i()
+    else
+        silent call vfinder#buffer#update_candidates_n()
+    endif
 endfun
 " 1}}}
 

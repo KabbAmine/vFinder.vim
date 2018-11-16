@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-11
+" Last modification: 2018-11-17
 
 
 " s:vars {{{1
@@ -87,18 +87,18 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
     augroup VFPostFlashLine
         autocmd!
         autocmd CursorMoved,CursorMovedI <buffer>
-                    \ if exists('s:flash_timer') && line('.') isnot# s:initial_line
+                    \ if exists('s:initial_line') && line('.') isnot# s:initial_line
                     \|  call s:clean_flash_setup()
                     \|  augroup VFPostFlashLine | autocmd! | augroup END
                     \|  augroup! VFPostFlashLine
                     \| endif
         autocmd CursorHold,CursorHoldI <buffer>
-                    \ if exists('s:flash_timer')
-                    \|  call s:clean_flash_setup()
-                    \|  augroup VFPostFlashLine | autocmd! | augroup END
-                    \|  augroup! VFPostFlashLine
-                    \| endif
+                    \| call s:clean_flash_setup()
+                    \| augroup VFPostFlashLine | autocmd! | augroup END
+                    \| augroup! VFPostFlashLine
     augroup END
+    " Ensure to set back the cursor line initial higroup
+    call timer_start(600, {t -> s:clean_flash_setup()})
 endfun
 " 1}}}
 
@@ -171,11 +171,26 @@ fun! vfinder#helpers#unfold_and_put_line(...) abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#autoclose_pwindow_autocmd() abort " {{{1
+    augroup VFAutoClosePWindow
+        autocmd!
+        autocmd BufDelete,BufWipeout <buffer> pclose!
+                    \| augroup VFAutoClosePWindow
+                    \|  autocmd!
+                    \| augroup End
+                    \| augroup! VFAutoClosePWindow
+    augroup END
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:clean_flash_setup() abort " {{{1
+    if !exists('s:flash_timer')
+        return
+    endif
     call timer_stop(s:flash_timer)
     call setbufvar(s:buf_nr, '&cursorline', s:initial_cursorline)
     execute 'highlight CursorLine ' . s:initial_cl_hi

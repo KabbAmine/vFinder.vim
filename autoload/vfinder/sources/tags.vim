@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-12
+" Last modification: 2018-11-17
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -114,7 +114,7 @@ fun! s:preview(tag) abort " {{{1
     silent wincmd P
     call s:execute_cmd_unfold_and_flash(cmd)
     silent wincmd p
-    call s:autoclose_pwindow_autocmd()
+    call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun
 " 1}}}
 
@@ -135,18 +135,6 @@ fun! s:execute_cmd_unfold_and_flash(cmd) abort " {{{1
     let &magic = magic
     call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())
-endfun
-" 1}}}
-
-fun! s:autoclose_pwindow_autocmd() abort "{{{1
-    augroup VFAutoClosePWindow
-        autocmd!
-        autocmd BufDelete,BufWipeout <buffer> pclose!
-                    \| augroup VFAutoClosePWindow
-                    \|  autocmd!
-                    \| augroup End
-                    \| augroup! VFAutoClosePWindow
-    augroup END
 endfun
 " 1}}}
 

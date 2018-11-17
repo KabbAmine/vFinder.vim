@@ -125,6 +125,9 @@ fun! s:buffer_set_maps() dict " {{{1
     " Toggle source mappings in the statusline
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.toggle_maps_in_sl . ' <Esc>:call <SID>toggle_maps_in_sl(1)<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.toggle_maps_in_sl . ' :call <SID>toggle_maps_in_sl()<CR>'
+    " Misc
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.send_to_qf . ' <Esc>:call <SID>send_to_quickfix(1)<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.send_to_qf . ' :call <SID>send_to_quickfix()<CR>'
     return self
 endfun
 " 1}}}
@@ -395,6 +398,23 @@ fun! s:toggle_maps_in_sl(...) abort " {{{1
 endfun
 " 1}}}
 
+fun! s:send_to_quickfix(...) abort " {{{1
+    let in_ins_mode = get(a:, 1, 0)
+    let [win_nr, col] = [winnr(), col('.')]
+    let lines = getline(2, '$')
+    if lines !=# []
+        cgetexpr lines
+        if getqflist() !=# []
+            copen
+            silent execute win_nr . 'wincmd w'
+        endif
+    endif
+    if in_ins_mode
+        call s:go_to_initial_col_i(col)
+    endif
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "		    	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -456,7 +476,8 @@ fun! s:buffer_define_maps() abort " {{{1
                 \       'window_quit'         : '<Esc>',
                 \       'candidates_update'   : '<C-r>',
                 \       'cache_clean'         : '<F5>',
-                \       'toggle_maps_in_sl'   : '<F1>'
+                \       'toggle_maps_in_sl'   : '<F1>',
+                \       'send_to_qf'          : '<C-q>'
                 \   },
                 \   'n': {
                 \       'fuzzy_toggle'       : 'F',
@@ -467,7 +488,8 @@ fun! s:buffer_define_maps() abort " {{{1
                 \       'window_quit'        : '<Esc>',
                 \       'candidates_update'  : 'R',
                 \       'cache_clean'        : '<F5>',
-                \       'toggle_maps_in_sl'  : '<F1>'
+                \       'toggle_maps_in_sl'  : '<F1>',
+                \       'send_to_qf'         : 'Q'
                 \   }
                 \ })
 endfun

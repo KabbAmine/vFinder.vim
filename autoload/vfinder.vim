@@ -31,7 +31,8 @@ fun! vfinder#i(source, ...) abort " {{{1
                     \   'fuzzy'        : ctx.fuzzy,
                     \   'flags'        : {},
                     \   'statusline'   : &l:statusline,
-                    \   'last_pos'     : []
+                    \   'last_pos'     : [],
+                    \   'do_not_update': 0
                     \ })
 
         let prompt = vfinder#prompt#i()

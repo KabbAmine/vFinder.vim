@@ -97,16 +97,16 @@ endfun
 fun! s:preview(line) abort " {{{1
     let [buf_nr, p_line, p_col] = s:set_and_get_qf_values(a:line)
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
-
+    " Prevent future update on WinEnter
+    let b:vf.do_not_update = 1
     silent pclose
     execute vfinder#helpers#pedit_cmd(bufname(buf_nr))
-
     silent wincmd P
     call cursor(p_line, p_col)
     call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())
     silent execute win_nr . 'wincmd w'
-
+    let b:vf.do_not_update = 0
     call cursor(line, col)
     call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun

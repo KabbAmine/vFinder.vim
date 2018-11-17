@@ -133,9 +133,11 @@ fun! s:buffer_set_autocmds() dict " {{{1
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
         autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
         autocmd WinEnter <buffer>
-                    \ call vfinder#events#update_candidates_request()
-                    \| if b:vf.last_pos !=# []
-                    \|  call cursor(b:vf.last_pos[0], b:vf.last_pos[1])
+                    \ if !get(b:vf, 'do_not_update', 0)
+                    \|  call vfinder#events#update_candidates_request()
+                    \|  if b:vf.last_pos !=# []
+                    \|      call cursor(b:vf.last_pos[0], b:vf.last_pos[1])
+                    \|  endif
                     \| endif
         autocmd WinLeave <buffer> :let b:vf.last_pos = [line('.'), col('.')]
     augroup END

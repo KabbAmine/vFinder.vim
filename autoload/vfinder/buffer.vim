@@ -79,8 +79,6 @@ fun! s:buffer_set_syntax() dict " {{{1
     syntax case ignore
     syntax match vfinderPrompt =\%1l.*=
     syntax match vfinderIndex =\%>1l^\d\+\s\+=
-    highlight! link vfinderPrompt ModeMsg
-    highlight! link vfinderIndex Comment
     if !empty(self.source.syntax_fun)
         call call(self.source.syntax_fun, [])
     endif

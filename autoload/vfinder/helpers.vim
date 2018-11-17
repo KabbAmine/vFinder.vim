@@ -74,7 +74,7 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
     let s:initial_cursorline = getwinvar(a:win_nr, '&cursorline')
     let s:buf_nr = bufnr('%')
     let s:initial_line = line('.')
-    highlight! link CursorLine IncSearch
+    highlight! link CursorLine vfinderPreviewCursorLine
     let s:flash_timer = timer_start(100, {t ->
                 \    setwinvar(
                 \       a:win_nr,

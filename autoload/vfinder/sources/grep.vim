@@ -142,7 +142,7 @@ endfun
 
 fun! s:get_query() abort " {{{1
     call inputsave()
-    echohl ModeMsg
+    echohl vfinderPrompt
     let query = input('VFGrep> ')
     echohl None
     call inputrestore()

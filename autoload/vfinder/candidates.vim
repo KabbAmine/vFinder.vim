@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-09
+" Last modification: 2018-11-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -74,7 +74,7 @@ fun! s:candidates_highlight_matched() dict " {{{1
     call clearmatches()
     if !empty(self.query) && self.query isnot# '\v'
         let case = self.query =~# '\u' ? '\C' : '\c'
-        call matchadd('CursorLineNr', case . self.query)
+        call matchadd('vfinderMatched', case . self.query)
     endif
     return self
 endfun

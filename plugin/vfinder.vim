@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-12
+" Last modification: 2018-11-17
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -27,6 +27,7 @@ let g:vfinder_maps = get(g:, 'vfinder_maps', {})
 
 " Initialization {{{1
 call vfinder#enable_autocmds_for_caching()
+call vfinder#set_global_higroups()
 " 1}}}
 
 " Restore default vim options {{{1

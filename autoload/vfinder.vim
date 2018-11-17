@@ -50,6 +50,14 @@ fun! vfinder#i(source, ...) abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#set_global_higroups() abort " {{{1
+    highlight! link vfinderPrompt ModeMsg
+    highlight! link vfinderIndex Comment
+    highlight! link vfinderPreviewCursorLine IncSearch
+    highlight! link vfinderMatched CursorLineNr
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "			caching
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""

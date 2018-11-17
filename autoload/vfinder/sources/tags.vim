@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-17
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -17,7 +17,6 @@ fun! vfinder#sources#tags#get() abort " {{{1
                 \   'name'         : 'tags',
                 \   'to_execute'   : function('s:tags_source'),
                 \   'format_fun'   : function('s:tags_format'),
-                \   'candidate_fun': function('s:tags_candidate_fun'),
                 \   'syntax_fun'   : function('s:tags_syntax_fun'),
                 \   'maps'         : vfinder#sources#tags#maps(),
                 \ }
@@ -39,11 +38,6 @@ fun! s:tags_format(tags) abort " {{{1
                 \           ':' . v.kind . ':',
                 \           fnamemodify(v.filename, ':~:.')
                 \ )})
-endfun
-" 1}}}
-
-fun! s:tags_candidate_fun() abort " {{{1
-    return getline('.')
 endfun
 " 1}}}
 
@@ -80,37 +74,37 @@ endfun
 " 	        	actions
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:gototag(tag) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:tag)
-    unsilent execute 'edit ' . file
+fun! s:gototag(line) abort " {{{1
+    let [file, cmd] = s:filename_and_cmd(a:line)
+    execute 'edit ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:split_and_goto(tag) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:tag)
+fun! s:split_and_goto(line) abort " {{{1
+    let [file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'split ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:vsplit_and_goto(tag) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:tag)
+fun! s:vsplit_and_goto(line) abort " {{{1
+    let [file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'vsplit ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:tab_and_goto(tag) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:tag)
+fun! s:tab_and_goto(line) abort " {{{1
+    let [file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'tabedit ' . file
     call s:execute_cmd_unfold_and_flash(cmd)
 endfun
 " 1}}}
 
-fun! s:preview(tag) abort " {{{1
+fun! s:preview(line) abort " {{{1
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
-    let [file, cmd] = s:filename_and_cmd(a:tag)
+    let [file, cmd] = s:filename_and_cmd(a:line)
     let b:vf.do_not_update = 1
     " Always close the pwindow before to get width/height as expected
     silent pclose
@@ -128,10 +122,16 @@ endfun
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:filename_and_cmd(tag) abort " {{{1
-    let tag_name = substitute(matchstr(a:tag, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
-    let tag = taglist('\V' . tag_name)[0]
-    return [tag.filename, tag.cmd]
+fun! s:filename_and_cmd(line) abort " {{{1
+    let tag_name = substitute(matchstr(a:line, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
+    let filename = matchstr(a:line, '\f\+$')
+    for t in taglist('\V' . tag_name)
+        if t.filename is# fnamemodify(filename, ':p')
+            let tag_cmd = t.cmd
+            break
+        endif
+    endfor
+    return [filename, tag_cmd]
 endfun
 " 1}}}
 
@@ -167,5 +167,6 @@ fun! s:tags_define_maps() abort " {{{1
                 \ })
 endfun
 " 1}}}
+
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

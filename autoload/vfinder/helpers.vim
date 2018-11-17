@@ -102,6 +102,18 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#pedit_cmd(...) abort " {{{1
+    let file = get(a:, 1, '')
+    let win_nr = winnr()
+    let [w, h] = [winwidth(win_nr), winheight(win_nr)]
+
+    let pos = w / 2 ># h ? 'v' : 's'
+    return pos is# 'v'
+                \ ? 'vertical pedit +vertical\ resize\ ' . (w / 2) . ' ' . file
+                \ : 'pedit +resize\ ' . (h / 2) . ' ' . file
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	system
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -197,5 +209,6 @@ fun! s:clean_flash_setup() abort " {{{1
     unlet! s:initial_cursorline s:initial_cl_hi s:win_nr s:initial_line s:flash_timer
 endfun
 " 1}}}
+
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

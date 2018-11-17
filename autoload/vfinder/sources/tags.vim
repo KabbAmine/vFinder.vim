@@ -109,11 +109,15 @@ endfun
 " 1}}}
 
 fun! s:preview(tag) abort " {{{1
+    let [win_nr, line, col] = [winnr(), line('.'), col('.')]
     let [file, cmd] = s:filename_and_cmd(a:tag)
-    silent execute 'pedit ' . file
+    " Always close the pwindow before to get width/height as expected
+    silent pclose
+    execute vfinder#helpers#pedit_cmd(file)
     silent wincmd P
     call s:execute_cmd_unfold_and_flash(cmd)
-    silent wincmd p
+    silent execute win_nr . 'wincmd w'
+    call cursor(line, col)
     call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun
 " 1}}}

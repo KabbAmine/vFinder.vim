@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-17
+" Last modification: 2018-11-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -70,6 +70,8 @@ fun! s:buffer_set_options() dict " {{{1
     setlocal nowrap
     setlocal foldcolumn=0
     setlocal textwidth=0
+    setlocal omnifunc=
+    setlocal complete=
     return self
 endfun
 " 1}}}

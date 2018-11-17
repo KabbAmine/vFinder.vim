@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-13
+" Last modification: 2018-11-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -134,7 +134,12 @@ fun! s:buffer_set_autocmds() dict " {{{1
         autocmd!
         autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
         autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
-        autocmd WinEnter <buffer> :call vfinder#events#update_candidates_request()
+        autocmd WinEnter <buffer>
+                    \ call vfinder#events#update_candidates_request()
+                    \| if b:vf.last_pos !=# []
+                    \|  call cursor(b:vf.last_pos[0], b:vf.last_pos[1])
+                    \| endif
+        autocmd WinLeave <buffer> :let b:vf.last_pos = [line('.'), col('.')]
     augroup END
 endfun
 " 1}}}

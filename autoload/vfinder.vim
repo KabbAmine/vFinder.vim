@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-12
+" Last modification: 2018-11-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -30,7 +30,8 @@ fun! vfinder#i(source, ...) abort " {{{1
                     \   'initial_wd'   : initial_wd,
                     \   'fuzzy'        : ctx.fuzzy,
                     \   'flags'        : {},
-                    \   'statusline'   : &l:statusline
+                    \   'statusline'   : &l:statusline,
+                    \   'last_pos'     : []
                     \ })
 
         let prompt = vfinder#prompt#i()

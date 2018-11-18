@@ -130,9 +130,9 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
             call s:set_mode(line, a:mode)
             return ''
         endif
-        silent normal! j
+        silent execute 'normal! j'
         let target = a:candidate_fun()
-        silent normal! k
+        silent execute 'normal! k'
     else
         let target = a:candidate_fun()
     endif

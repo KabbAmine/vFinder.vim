@@ -107,9 +107,9 @@ fun! s:preview(line) abort " {{{1
     let [file, cmd] = s:filename_and_cmd(a:line)
     let b:vf.do_not_update = 1
     " Always close the pwindow before to get width/height as expected
-    silent pclose
+    silent execute 'pclose'
     execute vfinder#helpers#pedit_cmd(file)
-    silent wincmd P
+    silent execute 'wincmd P'
     call s:execute_cmd_unfold_and_flash(cmd)
     silent execute win_nr . 'wincmd w'
     let b:vf.do_not_update = 0

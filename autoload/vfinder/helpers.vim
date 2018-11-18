@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-17
+" Last modification: 2018-11-18
 
 
 " s:vars {{{1
@@ -176,9 +176,9 @@ endfun
 fun! vfinder#helpers#unfold_and_put_line(...) abort " {{{1
     " a:1: (t)op, (b)ottom, (z)middle
 
-    normal! zv
+    silent execute 'normal! zv'
     if exists('a:1')
-        execute 'normal! z' . a:1
+        silent execute 'normal! z' . a:1
     endif
 endfun
 " 1}}}

@@ -101,9 +101,9 @@ fun! s:preview(line) abort " {{{1
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
     " Prevent future update on WinEnter
     let b:vf.do_not_update = 1
-    silent pclose
+    silent execute 'pclose'
     execute vfinder#helpers#pedit_cmd(bufname(buf_nr))
-    silent wincmd P
+    silent execute 'wincmd P'
     call cursor(p_line, p_col)
     call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())

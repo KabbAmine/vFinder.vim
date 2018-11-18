@@ -13,6 +13,7 @@ endfun
 
 fun! vfinder#sources#tags_in_buffer#get(...) abort " {{{1
     call s:tags_in_buffer_define_maps()
+    " TODO: filter_name
     return {
                 \   'name'         : 'tags_in_buffer',
                 \   'is_valid'     : s:tags_in_buffer_is_valid(),
@@ -21,7 +22,7 @@ fun! vfinder#sources#tags_in_buffer#get(...) abort " {{{1
                 \   'candidate_fun': function('s:tags_in_buffer_candidate_fun'),
                 \   'syntax_fun'   : function('s:tags_in_buffer_syntax_fun'),
                 \   'filter_name'  : 'compact_match',
-                \   'maps'         : vfinder#sources#tags_in_buffer#maps()
+                \   'maps'         : s:tags_in_buffer_maps()
                 \ }
 endfun
 " 1}}}
@@ -103,7 +104,7 @@ fun! s:tags_in_buffer_syntax_fun() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#tags_in_buffer#maps() abort " {{{1
+fun! s:tags_in_buffer_maps() abort " {{{1
     let keys = vfinder#maps#get('tags_in_buffer')
     let options = {'function': 1}
     return {

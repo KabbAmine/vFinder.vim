@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -131,7 +131,7 @@ endfun
 fun! s:filter_mru(files) abort " {{{1
     let res = []
     for f in a:files
-        if index(res, f) is# -1 && filereadable(f) && vfinder#sources#oldfiles#file_is_valid(f)
+        if index(res, f) is# -1 && filereadable(f) && vfinder#global#file_is_valid(f)
             call add(res, f)
         endif
     endfor

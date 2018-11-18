@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#files#check() " {{{1
@@ -16,10 +16,10 @@ fun! vfinder#sources#files#get(...) abort " {{{1
     return {
                 \   'name'         : 'files',
                 \   'to_execute'   : s:files_source(),
-                \   'candidate_fun': function('vfinder#sources#files#candidate_fun'),
+                \   'candidate_fun': function('vfinder#global#candidate_fun_get_filepath'),
                 \   'format_fun'   : function('s:files_format_fun'),
                 \   'syntax_fun'   : function('s:files_syntax_fun'),
-                \   'maps'         : vfinder#sources#files#maps()
+                \   'maps'         : s:files_maps()
                 \ }
 endfun
 " 1}}}
@@ -65,34 +65,27 @@ fun! s:files_syntax_fun() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#files#candidate_fun() abort " {{{1
-    return escape(matchstr(getline('.'), '\f\+$'), '%#')
-endfun
-" 1}}}
-
-fun! vfinder#sources#files#maps() abort " {{{1
+fun! s:files_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('files')
-    let options = {'silent': 0}
+    let actions = extend(vfinder#actions#get('files'), {
+                \ 'toggle_git_flags': {
+                \   'action' : function('s:toggle_git_flags'),
+                \   'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \ }})
     let maps.i = {
-                \ keys.i.edit  : {'action': 'edit %s', 'options': options},
-                \ keys.i.split : {'action': 'split %s', 'options': options},
-                \ keys.i.vsplit: {'action': 'vertical split %s', 'options': options},
-                \ keys.i.tab   : {'action': 'tabedit %s', 'options': options},
-                \ keys.i.toggle_git_flags: {
-                \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       }
+                \   keys.i.edit            : actions.edit,
+                \   keys.i.split           : actions.split,
+                \   keys.i.vsplit          : actions.vsplit,
+                \   keys.i.tab             : actions.tab,
+                \   keys.i.toggle_git_flags: actions.toggle_git_flags
                 \ }
     let maps.n = {
-                \ keys.n.edit  : {'action': 'edit %s', 'options': options},
-                \ keys.n.split : {'action': 'split %s', 'options': options},
-                \ keys.n.vsplit: {'action': 'vertical split %s', 'options': options},
-                \ keys.n.tab   : {'action': 'tabedit %s', 'options': options},
-                \ keys.n.toggle_git_flags: {
-                \       'action': function('s:toggle_git_flags'),
-                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
-                \       }
+                \   keys.n.edit            : actions.edit,
+                \   keys.n.split           : actions.split,
+                \   keys.n.vsplit          : actions.vsplit,
+                \   keys.n.tab             : actions.tab,
+                \   keys.n.toggle_git_flags: actions.toggle_git_flags
                 \ }
     return maps
 endfun

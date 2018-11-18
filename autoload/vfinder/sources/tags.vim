@@ -18,7 +18,7 @@ fun! vfinder#sources#tags#get(...) abort " {{{1
                 \   'to_execute'   : function('s:tags_source'),
                 \   'format_fun'   : function('s:tags_format'),
                 \   'syntax_fun'   : function('s:tags_syntax_fun'),
-                \   'maps'         : vfinder#sources#tags#maps(),
+                \   'maps'         : s:tags_maps(),
                 \ }
 endfun
 " 1}}}
@@ -49,7 +49,7 @@ fun! s:tags_syntax_fun() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#tags#maps() abort " {{{1
+fun! s:tags_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('tags')
     let maps.i = {

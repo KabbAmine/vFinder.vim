@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#yank#check() " {{{1
@@ -19,7 +19,7 @@ fun! vfinder#sources#yank#get(...) abort " {{{1
                 \   'format_fun'   : function('s:yank_format'),
                 \   'candidate_fun': function('s:yank_candidate_fun'),
                 \   'syntax_fun'   : function('s:yank_syntax_fun'),
-                \   'maps'         : vfinder#sources#yank#maps()
+                \   'maps'         : s:yank_maps()
                 \ }
 endfun
 " 1}}}
@@ -57,35 +57,13 @@ fun! s:yank_syntax_fun() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#yank#maps() abort " {{{1
+fun! s:yank_maps() abort " {{{1
     let keys = vfinder#maps#get('yank')
+    let actions = vfinder#actions#get('yank')
     return {
-                \   'i': {keys.i.paste: {
-                \       'action': function('vfinder#sources#yank#paste'),
-                \       'options': {'function': 1}
-                \   }},
-                \   'n': {keys.n.paste: {
-                \       'action': function('vfinder#sources#yank#paste'),
-                \       'options': {'function': 1}
-                \   }}
+                \   'i': {keys.i.paste: actions.paste},
+                \   'n': {keys.n.paste: actions.paste}
                 \ }
-endfun
-" 1}}}
-
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 	        	actions
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! vfinder#sources#yank#paste(content) abort " {{{1
-    " a:content can be something like 'foo^@bar^@zee'
-
-    let [line, col_p] = [line('.'), col('.')]
-    let new_lines = split(getline('.')[: col_p - 1] . a:content . getline('.')[col_p :], "\n")
-    let go_to_line = line + len(new_lines) - 1
-    let go_to_col = col_p + len(split(a:content, "\n")[-1])
-    silent execute 'keepjumps ' . line . 'delete_'
-    call append(line - 1, new_lines)
-    call cursor(go_to_line, go_to_col)
 endfun
 " 1}}}
 

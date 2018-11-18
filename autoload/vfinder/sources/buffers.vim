@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#buffers#check() " {{{1
@@ -17,7 +17,7 @@ fun! vfinder#sources#buffers#get(...) abort " {{{1
                 \   'name'         : 'buffers',
                 \   'to_execute'   : function('s:buffers_source'),
                 \   'format_fun'   : function('s:buffers_format'),
-                \   'candidate_fun': function('s:buffers_candidate_fun'),
+                \   'candidate_fun': function('vfinder#global#candidate_fun_get_index'),
                 \   'syntax_fun'   : function('s:buffers_syntax_fun'),
                 \   'maps'         : s:buffers_maps()
                 \ }
@@ -60,42 +60,29 @@ fun! s:buffers_format(nrs) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:buffers_candidate_fun() abort " {{{1
-    return matchstr(getline('.'), '^\d\+\ze')
-endfun
-" 1}}}
-
 fun! s:buffers_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('buffers')
-    let options = {'silent': 0}
+    let actions = extend(vfinder#actions#get('buffers'), {
+                \ 'toggle_all': {
+                \   'action' : function('s:toggle_all'),
+                \   'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
+                \ }})
     let maps.i = {
-                \ keys.i.edit        : {'action': 'buffer %s', 'options': options},
-                \ keys.i.split       : {'action': 'sbuffer %s', 'options': options},
-                \ keys.i.vsplit      : {'action': 'vertical sbuffer %s', 'options': options},
-                \ keys.i.tab         : {'action': 'tabnew \| buffer %s', 'options': options},
-                \ keys.i.wipe        : {
-                \       'action': function('s:wipe'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
-                \       },
-                \ keys.i.toggle_all: {
-                \       'action': function('s:toggle_all'),
-                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
-                \       },
+                \ keys.i.edit      : actions.edit,
+                \ keys.i.split     : actions.split,
+                \ keys.i.vsplit    : actions.vsplit,
+                \ keys.i.tab       : actions.tab,
+                \ keys.i.wipe      : actions.wipe,
+                \ keys.i.toggle_all: actions.toggle_all
                 \ }
     let maps.n = {
-                \ keys.n.edit        : {'action': 'buffer %s', 'options': options},
-                \ keys.n.split       : {'action': 'sbuffer %s', 'options': options},
-                \ keys.n.vsplit      : {'action': 'vertical sbuffer %s', 'options': options},
-                \ keys.n.tab         : {'action': 'tabnew \| buffer %s', 'options': options},
-                \ keys.n.wipe        : {
-                \       'action': function('s:wipe'),
-                \       'options': {'function': 1, 'update': 1, 'quit': 0}
-                \       },
-                \ keys.n.toggle_all: {
-                \       'action': function('s:toggle_all'),
-                \       'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
-                \       },
+                \ keys.n.edit      : actions.edit,
+                \ keys.n.split     : actions.split,
+                \ keys.n.vsplit    : actions.vsplit,
+                \ keys.n.tab       : actions.tab,
+                \ keys.n.wipe      : actions.wipe,
+                \ keys.n.toggle_all: actions.toggle_all
                 \ }
     return maps
 endfun
@@ -112,14 +99,6 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	actions
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! s:wipe(buffer) abort " {{{1
-    let b = str2nr(a:buffer)
-    if bufexists(b)
-        unsilent execute b . 'bwipeout'
-    endif
-endfun
-" 1}}}
 
 fun! s:toggle_all(buffer) abort " {{{1
     let b:vf.flags.list_all = !b:vf.flags.list_all

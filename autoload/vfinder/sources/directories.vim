@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#directories#check() " {{{1
@@ -18,7 +18,7 @@ fun! vfinder#sources#directories#get(...) abort " {{{1
                 \   'to_execute'   : function('s:directories_source'),
                 \   'format_fun'   : function('s:directories_format'),
                 \   'syntax_fun'   : function('s:directories_syntax_fun'),
-                \   'maps'         : vfinder#sources#directories#maps(),
+                \   'maps'         : s:directories_maps(),
                 \ }
 endfun
 " 1}}}
@@ -44,7 +44,7 @@ fun! s:directories_syntax_fun() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#directories#maps() abort " {{{1
+fun! s:directories_maps() abort " {{{1
     let keys = vfinder#maps#get('directories')
     let glob_keys = vfinder#maps#get('_')
     let keys_reload_i = glob_keys.i.candidates_update

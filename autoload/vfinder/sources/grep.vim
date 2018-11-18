@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#grep#check() " {{{1
@@ -20,7 +20,7 @@ fun! vfinder#sources#grep#get(...) abort " {{{1
                 \   'name'      : 'grep',
                 \   'to_execute': s:grep_source(query),
                 \   'syntax_fun': function('s:grep_syntax_fun', [query]),
-                \   'maps'      : vfinder#sources#grep#maps(),
+                \   'maps'      : s:grep_maps(),
                 \   'is_valid'  : !empty(query)
                 \ }
 endfun
@@ -45,7 +45,7 @@ fun! s:grep_syntax_fun(query) abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#grep#maps() abort " {{{1
+fun! s:grep_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('grep')
     let maps.i = {

@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#spell#check() " {{{1
@@ -22,8 +22,8 @@ fun! vfinder#sources#spell#get(...) abort " {{{1
                 \   'name'         : 'spell',
                 \   'to_execute'   : to_execute,
                 \   'format_fun'   : function('s:spell_format'),
-                \   'candidate_fun': function('s:spell_candidate_fun'),
-                \   'maps'         : vfinder#sources#spell#maps(),
+                \   'candidate_fun': function('vfinder#global#candidate_fun_get_index'),
+                \   'maps'         : s:spell_maps(),
                 \   'is_valid'     : is_valid,
                 \ }
 endfun
@@ -46,12 +46,7 @@ fun! s:spell_format(suggestions) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:spell_candidate_fun() abort " {{{1
-    return matchstr(getline('.'), '^\d\+\ze')
-endfun
-" 1}}}
-
-fun! vfinder#sources#spell#maps() abort " {{{1
+fun! s:spell_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('spell')
     let options = {'function': 1, 'silent': 0}

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#colors#check() " {{{1
@@ -16,7 +16,7 @@ fun! vfinder#sources#colors#get(...) abort " {{{1
     return {
                 \   'name'         : 'colors',
                 \   'to_execute'   : function('s:colors_source'),
-                \   'maps'         : vfinder#sources#colors#maps()
+                \   'maps'         : s:colors_maps()
                 \ }
 endfun
 " 1}}}
@@ -26,16 +26,17 @@ fun! s:colors_source() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#sources#colors#maps() abort " {{{1
+fun! s:colors_maps() abort " {{{1
     let keys = vfinder#maps#get('colors')
+    let actions = vfinder#actions#get('colors')
     return {
                 \   'i': {
-                \       keys.i.apply  : {'action': 'colorscheme %s', 'options': {'silent': 0}},
-                \       keys.i.preview: {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
+                \       keys.i.apply  : actions.apply,
+                \       keys.i.preview: actions.preview
                 \   },
                 \   'n': {
-                \       keys.n.apply: {'action': 'colorscheme %s', 'options': {'silent': 0}},
-                \       keys.n.preview: {'action': 'colorscheme %s', 'options': {'silent': 0, 'quit': 0}}
+                \       keys.n.apply  : actions.apply,
+                \       keys.n.preview: actions.preview
                 \   }
                 \ }
 endfun

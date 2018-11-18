@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 fun! vfinder#sources#command_history#check() " {{{1
@@ -46,14 +46,15 @@ endfun
 
 fun! s:command_history_maps() abort " {{{1
     let keys = vfinder#maps#get('command_history')
+    let actions = vfinder#actions#get('commands')
     return {
                 \   'i': {
-                \       keys.i.apply: {'action': '%s', 'options': {'silent': 0}},
-                \       keys.i.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \       keys.i.apply: actions.apply,
+                \       keys.i.echo : actions.echo
                 \   },
                 \   'n': {
-                \       keys.n.apply: {'action': '%s', 'options': {'silent': 0}},
-                \       keys.n.echo : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
+                \       keys.n.apply: actions.apply,
+                \       keys.n.echo : actions.echo
                 \   }
                 \ }
 endfun

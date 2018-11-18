@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-12
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#registers#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#registers#get() abort " {{{1
+fun! vfinder#sources#registers#get(...) abort " {{{1
     call s:registers_define_maps()
     return {
                 \   'name'         : 'registers',

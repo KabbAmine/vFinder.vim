@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-11-17
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#grep#check() " {{{1
@@ -11,9 +11,11 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#grep#get() abort " {{{1
+fun! vfinder#sources#grep#get(...) abort " {{{1
     call s:grep_define_maps()
-    let query = s:get_query()
+    let query = exists('a:1') && !empty(a:1)
+                \ ? a:1
+                \ : s:get_query()
     return {
                 \   'name'      : 'grep',
                 \   'to_execute': s:grep_source(query),
@@ -25,7 +27,7 @@ endfun
 " 1}}}
 
 fun! s:grep_source(query) abort " {{{1
-    return &grepprg . ' ' . a:query
+    return &grepprg . ' "' . a:query . '"'
 endfun
 " 1}}}
 
@@ -147,7 +149,7 @@ fun! s:get_query() abort " {{{1
     echohl None
     call inputrestore()
     return !empty(query)
-                \ ? '"' . query . '"'
+                \ ? query
                 \ : ''
 endfun
 " 1}}}

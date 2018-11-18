@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#tags#get() abort " {{{1
+fun! vfinder#sources#tags#get(...) abort " {{{1
     call s:tags_define_maps()
     return {
                 \   'name'         : 'tags',

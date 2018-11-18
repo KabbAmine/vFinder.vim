@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-12
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#tags_in_buffer#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#tags_in_buffer#get() abort " {{{1
+fun! vfinder#sources#tags_in_buffer#get(...) abort " {{{1
     call s:tags_in_buffer_define_maps()
     return {
                 \   'name'         : 'tags_in_buffer',

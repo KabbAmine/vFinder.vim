@@ -1,5 +1,5 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-11-12
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#marks#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#marks#get() abort " {{{1
+fun! vfinder#sources#marks#get(...) abort " {{{1
     call s:marks_define_maps()
     return {
                 \   'name'         : 'marks',

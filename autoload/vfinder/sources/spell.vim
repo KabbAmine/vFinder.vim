@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-11-12
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#spell#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#spell#get() abort " {{{1
+fun! vfinder#sources#spell#get(...) abort " {{{1
     redraw!
     let is_valid = s:spell_is_valid()
     let to_execute = is_valid

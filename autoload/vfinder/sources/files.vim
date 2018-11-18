@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-13
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#files#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#files#get() abort " {{{1
+fun! vfinder#sources#files#get(...) abort " {{{1
     call s:files_define_maps()
     return {
                 \   'name'         : 'files',

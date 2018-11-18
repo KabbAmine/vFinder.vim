@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-17
+" Last modification: 2018-11-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -11,7 +11,9 @@ fun! vfinder#i(source, ...) abort " {{{1
     " a:1 is a {} which can contain vfinder options
 
     try
-        let source = vfinder#source#i(a:source)
+        let ctx = s:get_ctx_opts_from(get(a:, 1, {}))
+
+        let source = vfinder#source#i(a:source, ctx.args)
         if !source.is_valid
             return ''
         endif
@@ -20,8 +22,6 @@ fun! vfinder#i(source, ...) abort " {{{1
         " source) to be updated more than once, so we store the current
         " buffer number (same goes for the working directory).
         let [initial_bufnr, initial_wd] = [bufnr('%'), getcwd() . '/']
-
-        let ctx = s:get_ctx_opts_from(get(a:, 1, {}))
 
         let buffer = vfinder#buffer#i(source, ctx)
         call buffer.goto()
@@ -148,6 +148,7 @@ fun! s:get_ctx_opts_from(opts) abort " {{{1
     " - fuzzy
     " - win_pos
     " - query
+    " - args
 
     " Passed 'win_pos' have priority over the global g:vfinder_win_pos
     let win_pos = has_key(a:opts, 'win_pos')
@@ -156,6 +157,7 @@ fun! s:get_ctx_opts_from(opts) abort " {{{1
     return {
                 \   'fuzzy'  : get(a:opts, 'fuzzy', g:vfinder_fuzzy),
                 \   'query'  : get(a:opts, 'query', ''),
+                \   'args'   : get(a:opts, 'args', ''),
                 \   'win_pos': win_pos
                 \ }
 endfun

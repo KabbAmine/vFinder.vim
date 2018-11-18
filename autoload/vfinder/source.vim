@@ -1,12 +1,12 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-13
+" Last modification: 2018-11-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	            main source object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#source#i(source) abort " {{{1
+fun! vfinder#source#i(source, args) abort " {{{1
     " if a:source is a:
     "     - string: Its the name of a source/name.vim file
     "     - dictionnary: Its a custom source
@@ -20,7 +20,7 @@ fun! vfinder#source#i(source) abort " {{{1
             call vfinder#helpers#echo('no source "' . a:source . '" found', 'Error')
             return s:is_not_valid()
         endif
-        let options = call(fun_name_prefix . '#get', [])
+        let options = call(fun_name_prefix . '#get', [a:args])
     elseif type(a:source) is# v:t_dict
         let options = a:source
     else

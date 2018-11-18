@@ -1,5 +1,5 @@
 " Creation         : 2018-02-16
-" Last modification: 2018-11-12
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#mru#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	            main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#mru#get() abort " {{{1
+fun! vfinder#sources#mru#get(...) abort " {{{1
     call s:mru_define_maps()
     return {
                 \   'name'         : 'mru',

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-11-13
+" Last modification: 2018-11-18
 
 
 fun! vfinder#sources#buffers#check() " {{{1
@@ -11,7 +11,7 @@ endfun
 " 	        	main object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#sources#buffers#get() abort " {{{1
+fun! vfinder#sources#buffers#get(...) abort " {{{1
     call s:buffer_define_maps()
     return {
                 \   'name'         : 'buffers',

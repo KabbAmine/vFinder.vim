@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-18
+" Last modification: 2018-11-19
 
 
 " s:vars {{{1
@@ -192,6 +192,13 @@ fun! vfinder#helpers#autoclose_pwindow_autocmd() abort " {{{1
                     \| augroup End
                     \| augroup! VFAutoClosePWindow
     augroup END
+endfun
+" 1}}}
+
+fun! vfinder#helpers#get_bufname(nr) abort " {{{1
+    return empty(bufname(a:nr))
+                \ ? '[No Name]'
+                \ : fnamemodify(bufname(a:nr), ':~:.')
 endfun
 " 1}}}
 

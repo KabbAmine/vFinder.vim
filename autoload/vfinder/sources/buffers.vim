@@ -12,7 +12,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#sources#buffers#get(...) abort " {{{1
-    call s:buffer_define_maps()
+    call s:buffers_define_maps()
     return {
                 \   'name'         : 'buffers',
                 \   'to_execute'   : function('s:buffers_source'),
@@ -44,9 +44,7 @@ endfun
 fun! s:buffers_format(nrs) abort " {{{1
     let res = []
     for nr in a:nrs
-        let name = empty(bufname(nr))
-                    \ ? '[No Name]'
-                    \ : fnamemodify(bufname(nr), ':.')
+        let name = vfinder#helpers#get_bufname(nr)
         let was_modified = getbufvar(nr, '&modified', 0)
         call add(res, printf('%-4d %3s %-30s %s',
                     \   nr . '.',
@@ -109,7 +107,7 @@ endfun
 " 	        	maps
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:buffer_define_maps() abort " {{{1
+fun! s:buffers_define_maps() abort " {{{1
     call vfinder#maps#define_gvar_maps('buffers', {
                 \   'i': {
                 \       'edit'      : '<CR>',

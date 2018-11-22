@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-19
+" Last modification: 2018-11-21
 
 
 " s:vars {{{1
@@ -48,16 +48,6 @@ fun! vfinder#helpers#echo(msg, ...) abort " {{{1
     execute 'echohl ' . higroup
     echon title . ' '
     echohl None | echon a:msg
-endfun
-" 1}}}
-
-fun! vfinder#helpers#question(msg, prompt) abort " {{{1
-    echohl Question
-    echon s:title . ' '
-    echohl None
-    echon a:msg
-    let response = input(a:prompt)
-    return response
 endfun
 " 1}}}
 

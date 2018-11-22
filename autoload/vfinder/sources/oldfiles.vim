@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-19
+" Last modification: 2018-11-22
 
 
 fun! vfinder#sources#oldfiles#check() " {{{1
@@ -13,12 +13,10 @@ endfun
 
 fun! vfinder#sources#oldfiles#get(...) abort " {{{1
     call s:oldfiles_define_maps()
-    " TODO: filter_name
     return {
                 \   'name'         : 'oldfiles',
                 \   'to_execute'   : s:oldfiles_source(),
                 \   'candidate_fun': function('vfinder#global#candidate_fun_get_filepath'),
-                \   'filter_name'  : 'match_position',
                 \   'maps'         : s:oldfiles_maps(),
                 \ }
 endfun

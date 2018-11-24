@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-19
+" Last modification: 2018-11-24
 
 
 fun! vfinder#sources#directories#check() " {{{1
@@ -46,7 +46,21 @@ endfun
 
 fun! s:directories_maps() abort " {{{1
     let keys = vfinder#maps#get('directories')
-    let glob_keys = vfinder#maps#get('_')
+    " Here we need to get the candidates_update action key, but it may not be
+    " declared at this time so we shamelessly use a not-so-good hack:
+    " - We first get the glob_keys if the variable exists (we silent errors in
+    " case it does not)
+    " - We check that the var is correct and contains the 'candidates_update'
+    " key, and:
+    "    * if yes, we continue normally
+    "    * otherwise we open and close an empty vfinder buffer to initiliaze
+    " the global keys variable once, and resave it in glob_keys var.
+    " Note that this workaround is temporary
+    silent! let glob_keys = vfinder#maps#get('_')
+    if !exists('glob_keys.i.candidates_update') || !exists('glob_keys.n.candidates_update')
+        call vfinder#helpers#open_and_close_empty_vf()
+        let glob_keys = vfinder#maps#get('_')
+    endif
     let keys_reload_i = glob_keys.i.candidates_update
     let keys_reload_n = glob_keys.n.candidates_update
     let options = {
@@ -84,6 +98,7 @@ fun! s:goto(path) abort " {{{1
                     \ ? b:vf.last_wd . a:path
                     \ : a:path
         call s:set_path_to(goto)
+        call vfinder#helpers#echo(s:reduce_path(goto))
     endif
 endfun
 " 1}}}
@@ -93,6 +108,7 @@ fun! s:go_back(path) abort " {{{1
                 \ ? b:vf.last_wd . '../'
                 \ : b:vf.initial_wd . '../'
     call s:set_path_to(goto)
+    call vfinder#helpers#echo(s:reduce_path(goto))
 endfun
 " 1}}}
 
@@ -101,7 +117,7 @@ fun! s:cd(path) abort " {{{1
                 \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
                 \ : a:path
     execute 'cd ' . goto
-    pwd
+    call vfinder#helpers#echo('cd to ' . s:reduce_path(getcwd()))
 endfun
 " 1}}}
 
@@ -137,6 +153,11 @@ fun! s:reload() abort " {{{1
     call vfinder#events#update_candidates_request()
 endfun
 " 1}}}
+
+fun! s:reduce_path(path) abort " {{{1
+    return fnamemodify(a:path, ':~:.')
+endfun
+" )}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	maps

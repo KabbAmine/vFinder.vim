@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-21
+" Last modification: 2018-11-24
 
 
 " s:vars {{{1
@@ -189,6 +189,15 @@ fun! vfinder#helpers#get_bufname(nr) abort " {{{1
     return empty(bufname(a:nr))
                 \ ? '[No Name]'
                 \ : fnamemodify(bufname(a:nr), ':~:.')
+endfun
+" 1}}}
+
+fun! vfinder#helpers#open_and_close_empty_vf() abort " {{{1
+    call vfinder#i({'name': '!', 'to_execute': [], 'maps': {
+                \   'i': {'<CR>': {'action': '%s', 'options': {}} },
+                \   'n': {'<CR>': {'action': '%s', 'options': {}} }
+                \ }})
+    silent execute bufnr('vf__!__') . 'bwipeout'
 endfun
 " 1}}}
 

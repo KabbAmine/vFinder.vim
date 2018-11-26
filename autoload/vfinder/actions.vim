@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-11-19
+" Last modification: 2018-11-27
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -53,7 +53,7 @@ let s:colors = {
 
 " s:commands {{{1
 let s:commands = {
-                \   'apply': {'action': '%s', 'options': {'silent': 0}},
+                \   'execute': {'action': '%s', 'options': {'silent': 0}},
                 \   'echo' : {'action': '%s', 'options': {'silent': 0, 'echo': 1}}
                 \ }
 " 1}}}

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-19
+" Last modification: 2018-11-27
 
 
 fun! vfinder#sources#command_history#check() " {{{1
@@ -49,11 +49,11 @@ fun! s:command_history_maps() abort " {{{1
     let actions = vfinder#actions#get('commands')
     return {
                 \   'i': {
-                \       keys.i.apply: actions.apply,
+                \       keys.i.execute: actions.execute,
                 \       keys.i.echo : actions.echo
                 \   },
                 \   'n': {
-                \       keys.n.apply: actions.apply,
+                \       keys.n.execute: actions.execute,
                 \       keys.n.echo : actions.echo
                 \   }
                 \ }
@@ -67,12 +67,12 @@ endfun
 fun! s:command_history_define_maps() abort " {{{1
     call vfinder#maps#define_gvar_maps('command_history', {
                 \   'i': {
-                \       'apply': '<CR>',
-                \       'echo' : '<C-o>'
+                \       'execute': '<CR>',
+                \       'echo'   : '<C-o>'
                 \   },
                 \   'n': {
-                \       'apply': '<CR>',
-                \       'echo' : 'o'
+                \       'execute': '<CR>',
+                \       'echo'   : 'o'
                 \   }
                 \ })
 endfun

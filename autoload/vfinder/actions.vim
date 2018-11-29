@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-11-27
+" Last modification: 2018-11-29
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -16,10 +16,11 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:buffers_wipe(buffer) abort " {{{1
-    let b = str2nr(a:buffer)
-    if bufexists(b)
-        unsilent execute b . 'bwipeout'
-    endif
+    try
+        unsilent execute str2nr(a:buffer) . 'bwipeout'
+    catch
+        call vfinder#helpers#throw(v:exception)
+    endtry
 endfun
 " 1}}}
 
@@ -76,17 +77,20 @@ let s:files = {
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:marks_go_to_mark(m) abort " {{{1
-    execute "normal! '" . a:m
-    call vfinder#helpers#unfold_and_put_line()
-    call vfinder#helpers#flash_line(winnr())
+    try
+        execute "normal! '" . a:m
+        call vfinder#helpers#unfold_and_put_line()
+        call vfinder#helpers#flash_line(winnr())
+    catch
+        unsilent call vfinder#helpers#echo(v:exception, 'Error')
+    endtry
 endfun
 " 1}}}
 
 fun! s:marks_delete_mark(m) abort " {{{1
     " Only A-Z and 0-9
     if a:m !~ '^\(\u\|\d\)$'
-        call vfinder#helpers#echo('only marks in range A-Z or 0-9 can be deleted', 'Error')
-        return ''
+        call vfinder#helpers#throw('only marks in range A-Z or 0-9 can be deleted')
     endif
     execute 'delmarks ' . a:m
 endfun
@@ -112,13 +116,17 @@ let s:marks = {
 fun! s:yank_paste(content) abort " {{{1
     " a:content can be something like 'foo^@bar^@zee'
 
-    let [line, col_p] = [line('.'), col('.')]
-    let new_lines = split(getline('.')[: col_p - 1] . a:content . getline('.')[col_p :], "\n")
-    let go_to_line = line + len(new_lines) - 1
-    let go_to_col = col_p + len(split(a:content, "\n")[-1])
-    silent execute 'keepjumps ' . line . 'delete_'
-    call append(line - 1, new_lines)
-    call cursor(go_to_line, go_to_col)
+    try
+        let [line, col_p] = [line('.'), col('.')]
+        let new_lines = split(getline('.')[: col_p - 1] . a:content . getline('.')[col_p :], "\n")
+        let go_to_line = line + len(new_lines) - 1
+        let go_to_col = col_p + len(split(a:content, "\n")[-1])
+        silent execute 'keepjumps ' . line . 'delete_'
+        call append(line - 1, new_lines)
+        call cursor(go_to_line, go_to_col)
+    catch
+        unsilent call vfinder#helpers#throw(v:exception)
+    endtry
 endfun
 " 1}}}
 

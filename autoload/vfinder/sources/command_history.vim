@@ -1,11 +1,6 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-27
+" Last modification: 2018-11-30
 
-
-fun! vfinder#sources#command_history#check() " {{{1
-    return v:true
-endfun
-" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	            main object

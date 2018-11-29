@@ -197,6 +197,13 @@ fun! vfinder#helpers#open_and_close_empty_vf() abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#throw(msg) abort " {{{1
+    " For some reason, its impossible to throw msg which start with 'Vim'
+    let e = a:msg =~# '^Vim' ? 'vim' . a:msg[3:] : a:msg
+    throw e
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -1,11 +1,6 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-27
+" Last modification: 2018-11-30
 
-
-fun! vfinder#sources#tags#check() " {{{1
-    return v:true
-endfun
-" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	            main object
@@ -75,42 +70,42 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:gototag(line) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:line)
+    let [name, file, cmd] = s:filename_and_cmd(a:line)
     execute 'edit ' . file
-    call s:execute_cmd_unfold_and_flash(cmd)
+    call s:execute_cmd_unfold_and_flash(name, cmd)
 endfun
 " 1}}}
 
 fun! s:split_and_goto(line) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:line)
+    let [name, file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'split ' . file
-    call s:execute_cmd_unfold_and_flash(cmd)
+    call s:execute_cmd_unfold_and_flash(name, cmd)
 endfun
 " 1}}}
 
 fun! s:vsplit_and_goto(line) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:line)
+    let [name, file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'vsplit ' . file
-    call s:execute_cmd_unfold_and_flash(cmd)
+    call s:execute_cmd_unfold_and_flash(name, cmd)
 endfun
 " 1}}}
 
 fun! s:tab_and_goto(line) abort " {{{1
-    let [file, cmd] = s:filename_and_cmd(a:line)
+    let [name, file, cmd] = s:filename_and_cmd(a:line)
     unsilent execute 'tabedit ' . file
-    call s:execute_cmd_unfold_and_flash(cmd)
+    call s:execute_cmd_unfold_and_flash(name, cmd)
 endfun
 " 1}}}
 
 fun! s:preview(line) abort " {{{1
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
-    let [file, cmd] = s:filename_and_cmd(a:line)
+    let [name, file, cmd] = s:filename_and_cmd(a:line)
     let b:vf.bopts.update_on_win_enter = 0
     " Always close the pwindow before to get width/height as expected
     silent execute 'pclose'
     execute vfinder#helpers#pedit_cmd(file)
     silent execute 'wincmd P'
-    call s:execute_cmd_unfold_and_flash(cmd)
+    call s:execute_cmd_unfold_and_flash(name, cmd)
     silent execute win_nr . 'wincmd w'
     let b:vf.bopts.update_on_win_enter = 1
     call cursor(line, col)
@@ -124,23 +119,27 @@ endfun
 
 fun! s:filename_and_cmd(line) abort " {{{1
     let tag_name = substitute(matchstr(a:line, '^.*\ze\s\+:\h:.*'), '\s*$', '', 'g')
-    let filename = matchstr(a:line, '\f\+$')
+    let [filename, tag_cmd] = [matchstr(a:line, '\f\+$'), '']
     for t in taglist('\V' . tag_name)
         if t.filename is# fnamemodify(filename, ':p')
             let tag_cmd = t.cmd
             break
         endif
     endfor
-    return [filename, tag_cmd]
+    return [tag_name, filename, tag_cmd]
 endfun
 " 1}}}
 
-fun! s:execute_cmd_unfold_and_flash(cmd) abort " {{{1
-    let [magic, &magic] = [&magic, 0]
-    execute a:cmd
-    let &magic = magic
-    call vfinder#helpers#unfold_and_put_line('t')
-    call vfinder#helpers#flash_line(winnr())
+fun! s:execute_cmd_unfold_and_flash(name, cmd) abort " {{{1
+    if empty(a:cmd)
+        call vfinder#helpers#throw('tag "' . a:name . '" not found')
+    else
+        let [magic, &magic] = [&magic, 0]
+        execute a:cmd
+        let &magic = magic
+        call vfinder#helpers#unfold_and_put_line('t')
+        call vfinder#helpers#flash_line(winnr())
+    endif
 endfun
 " 1}}}
 

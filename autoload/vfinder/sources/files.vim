@@ -1,11 +1,6 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-19
+" Last modification: 2018-11-30
 
-
-fun! vfinder#sources#files#check() " {{{1
-    return v:true
-endfun
-" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	            main object

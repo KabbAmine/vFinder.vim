@@ -1,11 +1,6 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-11-19
+" Last modification: 2018-11-30
 
-
-fun! vfinder#sources#spell#check() " {{{1
-    return v:true
-endfun
-" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	            main object
@@ -61,10 +56,14 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:use_suggestion(i) abort " {{{1
-    let pos = getpos('.')
-    silent execute 'normal! ' . a:i . 'z='
-    " Depending of the suggestion length, the position may not be accurate.
-    call setpos('.', pos)
+    try
+        let pos = getpos('.')
+        silent execute 'normal! ' . a:i . 'z='
+        " Depending of the suggestion length, the position may not be accurate.
+        call setpos('.', pos)
+    catch
+        unsilent call vfinder#helpers#throw(v:exception)
+    endtry
 endfun
 " 1}}}
 

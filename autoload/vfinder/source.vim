@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-18
+" Last modification: 2018-11-30
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -7,20 +7,18 @@
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#source#i(source, args) abort " {{{1
-    " if a:source is a:
-    "     - string: Its the name of a source/name.vim file
-    "     - dictionnary: Its a custom source
+    " A validate a:source should be:
+    "     - string     : name of a source/name.vim file
+    "     - dictionnary: custom source
 
     if type(a:source) is# v:t_string
-        let fun_name_prefix = 'vfinder#sources#' . a:source
-        " There is no good way to check if an autoloaded function exist before
-        " executing it, at least AFAIK.
-        let fun_result = execute('echo ' . fun_name_prefix . '#check()', 'silent!')
-        if empty(fun_result)
+        let fun_name = printf('vfinder#sources#%s#get', a:source)
+        try
+            let options = call(fun_name, [a:args])
+        catch
             call vfinder#helpers#echo('no source "' . a:source . '" found', 'Error')
             return s:is_not_valid()
-        endif
-        let options = call(fun_name_prefix . '#get', [a:args])
+        endtry
     elseif type(a:source) is# v:t_dict
         let options = a:source
     else
@@ -125,63 +123,67 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
     let no_candidates = line('$') is# 1
     let action = !empty(a:action) ? a:action : '%s'
 
-    if in_prompt
-        if no_candidates && !a:options.flag
-            call s:set_mode(line, a:mode)
-            return ''
-        endif
-        silent execute 'normal! j'
-        let target = a:candidate_fun()
-        silent execute 'normal! k'
-    else
-        let target = a:candidate_fun()
-    endif
-
-    if a:options.quit && !a:options.execute_in_place
-        silent execute 'wincmd p'
-        silent execute 'bwipeout ' . buffer
-    endif
-
-    " A capital C in case we have a funcref
-    if a:options.function
-        let Cmd = function(action, [target])
-    else
-        let Cmd = action =~ '%s' ? printf(action, target) : action
-    endif
-
-    let silent = a:options.silent ? 'silent' : ''
-    if a:options.function
-        execute silent . ' call Cmd()'
-    elseif a:options.echo
-        execute silent . ' call feedkeys(":" . Cmd)'
-    else
-        execute silent ' execute Cmd'
-    endif
-
-    if !a:options.silent && !a:options.echo
-        let to_add = a:options.function ? string(Cmd) : Cmd
-        call histadd('cmd', to_add)
-    endif
-
-    if a:options.quit && a:options.execute_in_place
-        silent execute 'bwipeout ' . buffer
-        silent execute 'wincmd p'
-    elseif !a:options.quit
-        if a:options.clear_prompt
-            let prompt = vfinder#prompt#i()
-            call prompt.render('')
-            call clearmatches()
-        endif
-        if a:options.update
-            call s:update_candidates(a:mode)
-        endif
-
-        if a:options.goto_prompt
-            silent startinsert!
+    try
+        if in_prompt
+            if no_candidates && !a:options.flag
+                call s:set_mode(line, a:mode)
+                return ''
+            endif
+            silent execute 'normal! j'
+            let target = a:candidate_fun()
+            silent execute 'normal! k'
         else
-            call s:set_mode(line, a:mode)
+            let target = a:candidate_fun()
         endif
-    endif
+
+        if a:options.quit && !a:options.execute_in_place
+            silent execute 'wincmd p'
+            silent execute 'bwipeout ' . buffer
+        endif
+
+        " A capital C in case we have a funcref
+        if a:options.function
+            let Cmd = function(action, [target])
+        else
+            let Cmd = action =~ '%s' ? printf(action, target) : action
+        endif
+
+        let silent = a:options.silent ? 'silent' : ''
+        if a:options.function
+            execute silent . ' call Cmd()'
+        elseif a:options.echo
+            execute silent . ' call feedkeys(":" . Cmd)'
+        else
+            execute silent ' execute Cmd'
+        endif
+
+        if !a:options.silent && !a:options.echo
+            let to_add = a:options.function ? string(Cmd) : Cmd
+            call histadd('cmd', to_add)
+        endif
+
+        if a:options.quit && a:options.execute_in_place
+            silent execute 'bwipeout ' . buffer
+            silent execute 'wincmd p'
+        elseif !a:options.quit
+            if a:options.clear_prompt
+                let prompt = vfinder#prompt#i()
+                call prompt.render('')
+                call clearmatches()
+            endif
+            if a:options.update
+                call s:update_candidates(a:mode)
+            endif
+
+            if a:options.goto_prompt
+                silent startinsert!
+            else
+                call s:set_mode(line, a:mode)
+            endif
+        endif
+    catch
+        call vfinder#helpers#echo(v:exception, 'Error')
+    endtry
 endfun
 " 1}}}
 

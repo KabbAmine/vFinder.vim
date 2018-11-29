@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-27
+" Last modification: 2018-11-29
 
 
 " s:vars {{{1
@@ -73,24 +73,22 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
                 \ }, {'repeat': 4})
     " Stop the flashing when the line changes, set back the initial
     " cursorline's higroup and unlet all the s:vars.
-    " This augroup is executed once, then it deletes itself.
     augroup VFPostFlashLine
         autocmd!
         autocmd CursorMoved,CursorMovedI <buffer>
                     \ if exists('s:initial_line') && line('.') isnot# s:initial_line
                     \|  call s:clean_flash_setup()
-                    \|  augroup VFPostFlashLine | autocmd! | augroup END
-                    \|  augroup! VFPostFlashLine
                     \| endif
-        autocmd CursorHold,CursorHoldI <buffer>
-                    \| call s:clean_flash_setup()
-                    \| augroup VFPostFlashLine | autocmd! | augroup END
-                    \| augroup! VFPostFlashLine
+        autocmd CursorHold,CursorHoldI <buffer> call s:clean_flash_setup()
     augroup END
-    " Ensure to set back the cursor line initial higroup
+    " Ensure to set back the cursor line initial higroup another
+    " time with the timer
     call timer_start(600, {t -> s:clean_flash_setup()})
+    " Then delete the augroup
+    call timer_start(700, {t -> s:delete_flash_augroup()})
 endfun
 " 1}}}
+
 
 fun! vfinder#helpers#pedit_cmd(...) abort " {{{1
     let file = get(a:, 1, '')
@@ -176,11 +174,9 @@ endfun
 fun! vfinder#helpers#autoclose_pwindow_autocmd() abort " {{{1
     augroup VFAutoClosePWindow
         autocmd!
+        " The augroup will be deleted when the buffer is
+        " closed/deleted/wiped
         autocmd BufDelete,BufWipeout <buffer> pclose!
-                    \| augroup VFAutoClosePWindow
-                    \|  autocmd!
-                    \| augroup End
-                    \| augroup! VFAutoClosePWindow
     augroup END
 endfun
 " 1}}}
@@ -213,6 +209,11 @@ fun! s:clean_flash_setup() abort " {{{1
     call setbufvar(s:buf_nr, '&cursorline', s:initial_cursorline)
     execute 'highlight CursorLine ' . s:initial_cl_hi
     unlet! s:initial_cursorline s:initial_cl_hi s:initial_line s:flash_timer
+endfun
+" 1}}}
+
+fun! s:delete_flash_augroup() abort " {{{1
+    augroup VFPostFlashLine | autocmd! | augroup END | augroup! VFPostFlashLine
 endfun
 " 1}}}
 

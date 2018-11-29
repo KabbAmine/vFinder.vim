@@ -1,17 +1,17 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-18
+" Last modification: 2018-11-29
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "		    main buffer object
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#buffer#i(source, buf_win_opts) abort " {{{1
+fun! vfinder#buffer#i(source, sopts) abort " {{{1
     call s:buffer_define_maps()
     return {
                 \   'source'        : a:source,
                 \   'name'          : 'vf__' . a:source.name . '__',
-                \   'win_pos'       : a:buf_win_opts.win_pos,
+                \   'win_pos'       : a:sopts.win_pos,
                 \   'goto'          : function('s:buffer_goto'),
                 \   'new'           : function('s:buffer_new'),
                 \   'quit'          : function('s:buffer_quit'),
@@ -135,16 +135,10 @@ endfun
 fun! s:buffer_set_autocmds() dict " {{{1
     augroup VFinder
         autocmd!
-        autocmd TextChangedI <buffer> :call vfinder#events#query_modified()
-        autocmd InsertCharPre <buffer> :call vfinder#events#char_inserted()
-        autocmd WinEnter <buffer>
-                    \ if !get(b:vf, 'do_not_update', 0)
-                    \|  call vfinder#events#update_candidates_request()
-                    \|  if b:vf.last_pos !=# []
-                    \|      call cursor(b:vf.last_pos[0], b:vf.last_pos[1])
-                    \|  endif
-                    \| endif
-        autocmd WinLeave <buffer> :let b:vf.last_pos = [line('.'), col('.')]
+        autocmd TextChangedI <buffer> call vfinder#events#query_modified()
+        autocmd InsertCharPre <buffer> call vfinder#events#char_inserted()
+        autocmd WinEnter <buffer> call vfinder#events#win_enter()
+        autocmd WinLeave <buffer> call vfinder#events#win_leave()
     augroup END
 endfun
 " 1}}}
@@ -291,7 +285,7 @@ endfun
 " 1}}}
 
 fun! s:toggle_fuzzy(mode) abort " {{{1
-    let b:vf.fuzzy = !b:vf.fuzzy
+    let b:vf.flags.fuzzy = !b:vf.flags.fuzzy
     if a:mode is# 'i'
         silent call vfinder#buffer#update_candidates_i()
     else
@@ -380,9 +374,9 @@ fun! s:toggle_maps_in_sl(...) abort " {{{1
     let in_ins_mode = get(a:, 1, 0)
     let col = col('.')
     let [def_sl, global_maps_sl, source_maps_sl] = [
-                \   b:vf.statusline,
+                \   b:vf.vopts.statusline,
                 \   vfinder#helpers#get_maps_str_for('_'),
-                \   vfinder#helpers#get_maps_str_for(b:vf.name)
+                \   vfinder#helpers#get_maps_str_for(b:vf.s.name)
                 \ ]
     if &l:statusline is# def_sl
         let &l:statusline = source_maps_sl

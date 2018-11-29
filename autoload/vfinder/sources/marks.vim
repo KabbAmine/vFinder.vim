@@ -1,5 +1,5 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-11-19
+" Last modification: 2018-11-27
 
 
 fun! vfinder#sources#marks#check() " {{{1
@@ -25,7 +25,7 @@ endfun
 
 fun! s:marks_source() abort " {{{1
     " Go to the initial window to get its marks
-    silent execute bufwinnr(b:vf.initial_bufnr) . 'wincmd w'
+    silent execute bufwinnr(b:vf.ctx.bufnr) . 'wincmd w'
     let marks = split(execute('marks'), "\n")[1:]
     silent execute 'wincmd p'
     return map(marks, {i, v -> substitute(v, '^\s\+', '', '')})

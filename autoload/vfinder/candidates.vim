@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-17
+" Last modification: 2018-11-29
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -11,7 +11,7 @@ fun! vfinder#candidates#i(source) abort " {{{1
                 \   'source'           : a:source,
                 \   'query'            : '',
                 \   'was_filtered'     : 0,
-                \   'original_list'    : [],
+                \   'initial'          : [],
                 \   'filtered_list'    : [],
                 \   'current'          : [],
                 \   'get'              : function('s:candidates_get'),
@@ -24,8 +24,8 @@ endfun
 " 1}}}
 
 fun! s:candidates_get() dict " {{{1
-    if self.original_list ==# []
-        let self.original_list = self.source.prepare().candidates
+    if self.initial ==# []
+        let self.initial = self.source.prepare().candidates
     endif
     let self.current = getline(2, '$')
     return self
@@ -46,7 +46,7 @@ fun! s:candidates_populate() dict " {{{1
         let candidates = self.filtered_list
         let self.was_filtered = 0
     else
-        let candidates = self.original_list
+        let candidates = self.initial
     endif
     call setline(2, candidates)
     return self
@@ -59,11 +59,11 @@ fun! s:candidates_filter(query) dict " {{{1
     " There is no need to filter all the original candidates if we added
     " characters to our previous query.
     " Note that the following is not appliable if we have a manual update.
-    let candidates = !exists('b:vf.update') && exists('b:vf.last_query')
-                \ && self.query[2:] =~# '^\v' . b:vf.last_query[2:]
+    let candidates = !exists('b:vf.bopts.manual_update')
+                \ && self.query[2:] =~# '^\v' . b:vf.bopts.last_query[2:]
                 \   ? self.current
-                \   : self.original_list
-    let b:vf.last_query = self.query
+                \   : self.initial
+    let b:vf.bopts.last_query = self.query
     let self.filtered_list = s:filter(self.query, candidates)
     let self.was_filtered = 1
     return self
@@ -85,7 +85,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:filter(query, candidates) abort " {{{1
-    return vfinder#filter#i(b:vf.filter_name, a:candidates, a:query)
+    return vfinder#filter#i(b:vf.s.filter_name, a:candidates, a:query)
 endfun
 " 1}}}
 

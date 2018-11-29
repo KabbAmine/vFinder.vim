@@ -1,13 +1,13 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-11-10
+" Last modification: 2018-11-27
 
 
 fun! vfinder#statusline#get() abort " {{{1
-    return '%{vfinder#statusline#left()}%=%{vfinder#statusline#search_mode()}%{vfinder#statusline#flags()} '
+    return '%{vfinder#statusline#head()}%=%{vfinder#statusline#flags()}'
 endfun
 " 1}}}
 
-fun! vfinder#statusline#left() abort " {{{1
+fun! vfinder#statusline#head() abort " {{{1
     let current = s:current_item()
     let count_filtered = s:count_filtered()
 
@@ -35,12 +35,6 @@ fun! vfinder#statusline#flags() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#statusline#search_mode() abort " {{{1
-    let fuzzy = b:vf.fuzzy ? '[fuzzy]': ''
-    return printf('%3s', fuzzy)
-endfun
-" 1}}}
-
 
 fun! s:name() abort " {{{1
     return bufname('%')
@@ -55,8 +49,8 @@ endfun
 fun! s:count_candidates() abort " {{{1
     " The check is here to avoid errors popping when the candidates gathering
     " process is interrupted
-    let count_candidates = exists('b:vf.original_candidates')
-                \ ? len(b:vf.original_candidates)
+    let count_candidates = exists('b:vf.candidates.initial')
+                \ ? len(b:vf.candidates.initial)
                 \ : 0
     return count_candidates ? count_candidates : '-'
 endfun

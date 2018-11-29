@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-24
+" Last modification: 2018-11-27
 
 
 " s:vars {{{1
@@ -118,10 +118,10 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#helpers#process_query(query) abort " {{{1
-    let q = b:vf.fuzzy
+    let q = b:vf.flags.fuzzy
                 \ ? substitute(a:query, ' ', '', 'g')
                 \ : a:query
-    let q_sep = b:vf.fuzzy ? '\zs' : ' '
+    let q_sep = b:vf.flags.fuzzy ? '\zs' : ' '
     let join_pat = '.{-}'
     let to_escape = '@=?+&$.*~()|{}%[]'
     let final_regex = []
@@ -193,7 +193,7 @@ endfun
 " 1}}}
 
 fun! vfinder#helpers#open_and_close_empty_vf() abort " {{{1
-    call vfinder#i({'name': '!', 'to_execute': [], 'maps': {
+    silent call vfinder#i({'name': '!', 'to_execute': [], 'maps': {
                 \   'i': {'<CR>': {'action': '%s', 'options': {}} },
                 \   'n': {'<CR>': {'action': '%s', 'options': {}} }
                 \ }})
@@ -212,7 +212,7 @@ fun! s:clean_flash_setup() abort " {{{1
     call timer_stop(s:flash_timer)
     call setbufvar(s:buf_nr, '&cursorline', s:initial_cursorline)
     execute 'highlight CursorLine ' . s:initial_cl_hi
-    unlet! s:initial_cursorline s:initial_cl_hi s:win_nr s:initial_line s:flash_timer
+    unlet! s:initial_cursorline s:initial_cl_hi s:initial_line s:flash_timer
 endfun
 " 1}}}
 

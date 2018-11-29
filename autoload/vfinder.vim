@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-19
+" Last modification: 2018-11-29
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -11,40 +11,37 @@ fun! vfinder#i(source, ...) abort " {{{1
     " a:1 is a {} which can contain vfinder options
 
     try
-        let ctx = s:get_ctx_opts_from(get(a:, 1, {}))
+        let opts = get(a:, 1, {})
 
-        let source = vfinder#source#i(a:source, ctx.args)
+        let source = vfinder#source#i(a:source, get(opts, 'args', ''))
         if !source.is_valid
             return ''
         endif
 
-        " Some sources need an initial content to process (e.g tags_in_buffer
-        " source) to be updated more than once, so we store the current
-        " buffer number (same goes for the working directory).
-        let [initial_bufnr, initial_wd] = [bufnr('%'), getcwd() . '/']
+        let [ctx, sopts, flags] = [
+                    \  s:get_ctx(),
+                    \  s:get_sopts(opts),
+                    \  s:get_global_flags(opts)
+                    \ ]
 
-        let buffer = vfinder#buffer#i(source, ctx)
-        call buffer.goto()
-        let b:vf = extend(source, {
-                    \   'initial_bufnr': initial_bufnr,
-                    \   'initial_wd'   : initial_wd,
-                    \   'fuzzy'        : ctx.fuzzy,
-                    \   'flags'        : {},
-                    \   'statusline'   : &l:statusline,
-                    \   'last_pos'     : [],
-                    \   'do_not_update': 0
-                    \ })
+        call vfinder#buffer#i(source, sopts).goto()
+        let b:vf = {
+                    \   's'         : source,
+                    \   'ctx'       : ctx,
+                    \   'flags'     : flags,
+                    \   'vopts'     : s:get_vopts(),
+                    \   'bopts'     : s:get_bopts(),
+                    \   'candidates': s:prepare_candidates_vars()
+                    \ }
 
-        let prompt = vfinder#prompt#i()
-        call prompt.render(ctx.query)
-
-        call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.name)
-        let candidates = vfinder#candidates#i(b:vf)
+        call vfinder#prompt#i().render(sopts.query)
+        call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.s.name)
+        let candidates = vfinder#candidates#i(b:vf.s)
         call candidates.get().populate()
-        let b:vf.original_candidates = candidates.original_list
+        let b:vf.candidates.initial = candidates.initial
 
         redraw!
-        startinsert!
+        call vfinder#helpers#go_to_prompt_and_startinsert()
     catch
         call vfinder#helpers#echomsg(v:exception, 'Error')
     endtry
@@ -143,22 +140,66 @@ endfun
 " 	        	helpers
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:get_ctx_opts_from(opts) abort " {{{1
-    " a:opts can have the following keys:
-    " - fuzzy
-    " - win_pos
-    " - query
-    " - args
+fun! s:get_ctx() abort " {{{1
+    " Some sources need an initial content to proceed (e.g tags_in_buffer) like
+    " updating more than once, so we store some informations about the current
+    " context
+    " last_pos: [line, col]
+
+    return {
+                \   'bufnr'   : bufnr('%'),
+                \   'wd'      : getcwd() . '/',
+                \   'last_pos': []
+                \ }
+endfun
+" 1}}}
+
+fun! s:get_sopts(opts) abort " {{{1
+    " Source extra options
 
     " Passed 'win_pos' have priority over the global g:vfinder_win_pos
     let win_pos = has_key(a:opts, 'win_pos')
                 \ ? a:opts.win_pos
                 \ : g:vfinder_win_pos
     return {
-                \   'fuzzy'  : get(a:opts, 'fuzzy', g:vfinder_fuzzy),
                 \   'query'  : get(a:opts, 'query', ''),
-                \   'args'   : get(a:opts, 'args', ''),
                 \   'win_pos': win_pos
+                \ }
+endfun
+" 1}}}
+
+fun! s:get_global_flags(opts) abort " {{{1
+    " Toggleable elements
+
+    return {
+                \   'fuzzy': get(a:opts, 'fuzzy', g:vfinder_fuzzy)
+                \ }
+endfun
+" 1}}}
+
+fun! s:get_vopts() abort " {{{1
+    " Vim options
+
+    return {
+                \   'statusline': &statusline
+                \ }
+endfun
+" 1}}}
+
+fun! s:prepare_candidates_vars() abort " {{{1
+    return {
+                \   'initial': [],
+                \ }
+endfun
+" 1}}}
+
+fun! s:get_bopts() abort " {{{1
+    " Buf-local options
+
+    return {
+                \   'last_query'         : '',
+                \   'first_execution'    : 1,
+                \   'update_on_win_enter': 1,
                 \ }
 endfun
 " 1}}}

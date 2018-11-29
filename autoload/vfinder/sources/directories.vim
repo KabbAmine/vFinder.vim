@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-24
+" Last modification: 2018-11-27
 
 
 fun! vfinder#sources#directories#check() " {{{1
@@ -106,7 +106,7 @@ endfun
 fun! s:go_back(path) abort " {{{1
     let goto = exists('b:vf.last_wd') && b:vf.last_wd isnot# '/..'
                 \ ? b:vf.last_wd . '../'
-                \ : b:vf.initial_wd . '../'
+                \ : b:vf.ctx.wd . '../'
     call s:set_path_to(goto)
     call vfinder#helpers#echo(s:reduce_path(goto))
 endfun
@@ -141,7 +141,7 @@ fun! s:set_path_to(dir) abort " {{{1
     silent execute 'cd ' . path
     call vfinder#prompt#i().render('')
     call vfinder#events#update_candidates_request()
-    silent execute 'cd ' . b:vf.initial_wd
+    silent execute 'cd ' . b:vf.ctx.wd
     let b:vf.last_wd = path
 endfun
 " 1}}}
@@ -151,11 +151,12 @@ fun! s:reload() abort " {{{1
         call remove(b:vf, 'last_wd')
     endif
     call vfinder#events#update_candidates_request()
+    unsilent call vfinder#helpers#echo(s:reduce_path(getcwd()))
 endfun
 " 1}}}
 
 fun! s:reduce_path(path) abort " {{{1
-    return fnamemodify(a:path, ':~:.')
+    return simplify(fnamemodify(a:path, ':~:.'))
 endfun
 " )}}}
 

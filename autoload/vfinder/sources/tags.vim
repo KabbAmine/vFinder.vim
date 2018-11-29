@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-18
+" Last modification: 2018-11-27
 
 
 fun! vfinder#sources#tags#check() " {{{1
@@ -105,14 +105,14 @@ endfun
 fun! s:preview(line) abort " {{{1
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
     let [file, cmd] = s:filename_and_cmd(a:line)
-    let b:vf.do_not_update = 1
+    let b:vf.bopts.update_on_win_enter = 0
     " Always close the pwindow before to get width/height as expected
     silent execute 'pclose'
     execute vfinder#helpers#pedit_cmd(file)
     silent execute 'wincmd P'
     call s:execute_cmd_unfold_and_flash(cmd)
     silent execute win_nr . 'wincmd w'
-    let b:vf.do_not_update = 0
+    let b:vf.bopts.update_on_win_enter = 1
     call cursor(line, col)
     call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun

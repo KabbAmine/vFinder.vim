@@ -31,7 +31,7 @@ fun! s:tags_in_buffer_source() abort " {{{1
     " The filename can be the current one if it is a file and was not modified,
     " otherwise save and use a temporary file with the current content.
     " P.S:
-    "	- The function uses b:vf.intitial_bufnr as initial buffer number.
+    "	- The function uses b:vf.ctx.intitial_bufnr as initial buffer number.
     "	- When using a temp file, we use the same extension as the
     "	current buffer, or we pass the current filetype to ctags command. If no
     "	extension and no filetype, we simply return an empty list.
@@ -41,7 +41,7 @@ fun! s:tags_in_buffer_source() abort " {{{1
     "	ctags --sort=no --language-force=vim -x /tmp/foo 2> /dev/null
 
     let cmd = ['ctags', '--sort=no']
-    let bufnr = b:vf.initial_bufnr
+    let bufnr = b:vf.ctx.bufnr
     let buffer = bufname(bufnr)
     if vfinder#helpers#empty_buffer(bufnr)
         return []

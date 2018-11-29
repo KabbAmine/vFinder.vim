@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-11-19
+" Last modification: 2018-11-27
 
 
 fun! vfinder#sources#grep#check() " {{{1
@@ -100,7 +100,7 @@ fun! s:preview(line) abort " {{{1
     let [buf_nr, p_line, p_col] = s:set_and_get_qf_values(a:line)
     let [win_nr, line, col] = [winnr(), line('.'), col('.')]
     " Prevent future update on WinEnter
-    let b:vf.do_not_update = 1
+    let b:vf.bopts.update_on_win_enter = 0
     silent execute 'pclose'
     execute vfinder#helpers#pedit_cmd(bufname(buf_nr))
     silent execute 'wincmd P'
@@ -108,7 +108,7 @@ fun! s:preview(line) abort " {{{1
     call vfinder#helpers#unfold_and_put_line('t')
     call vfinder#helpers#flash_line(winnr())
     silent execute win_nr . 'wincmd w'
-    let b:vf.do_not_update = 0
+    let b:vf.bopts.update_on_win_enter = 1
     call cursor(line, col)
     call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun

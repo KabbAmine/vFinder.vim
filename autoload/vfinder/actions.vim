@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-11-29
+" Last modification: 2018-12-02
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -71,6 +71,81 @@ let s:files = {
             \ 'tab'   : {'action': 'tabedit %s', 'options': {'silent': 0}}
             \ }
 " 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	grep
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:set_and_get_qf_values(line) abort " {{{1
+    let initial_qflist = getqflist()
+    cgetexpr a:line
+    let qf = getqflist()[0]
+    call setqflist(initial_qflist)
+    return [qf.bufnr, qf.lnum, qf.col]
+endfun
+" 1}}}
+
+fun! s:goto_buf(buf_target, line, col, ...) abort " {{{1
+    " if a:1 is pedit, then it gets the command from vfinder#helpers#pedit_cmd()
+
+    let cmd = get(a:, 1, 'buffer')
+    execute cmd . ' ' . a:buf_target
+    call cursor(a:line, a:col)
+    call vfinder#helpers#unfold_and_put_line('t')
+endfun
+" 1}}}
+
+fun! s:grep_goto(line) abort " {{{1
+    let [buf_nr, line, col] = s:set_and_get_qf_values(a:line)
+    call s:goto_buf(buf_nr, line, col)
+endfun
+" 1}}}
+
+fun! s:grep_split_and_goto(line) abort " {{{1
+    let [buf_nr, line, col] = s:set_and_get_qf_values(a:line)
+    call s:goto_buf(buf_nr, line, col, 'sbuffer')
+endfun
+" 1}}}
+
+fun! s:grep_vsplit_and_goto(line) abort " {{{1
+    let [buf_nr, line, col] = s:set_and_get_qf_values(a:line)
+    call s:goto_buf(buf_nr, line, col, 'vertical sbuffer')
+endfun
+" 1}}}
+
+fun! s:grep_tab_and_goto(line) abort " {{{1
+    let initial_qflist = getqflist()
+    let [buf_nr, line, col] = s:set_and_get_qf_values(a:line)
+    call s:goto_buf(buf_nr, line, col, 'tabnew | buffer')
+    call setqflist(initial_qflist)
+endfun
+" 1}}}
+
+fun! s:grep_preview(line) abort " {{{1
+    let [buf_nr, p_line, p_col] = s:set_and_get_qf_values(a:line)
+    let [win_nr, line, col] = [winnr(), line('.'), col('.')]
+    " Prevent future update on WinEnter
+    let b:vf.bopts.update_on_win_enter = 0
+    silent execute 'pclose'
+    execute vfinder#helpers#pedit_cmd(bufname(buf_nr))
+    silent execute 'wincmd P'
+    call cursor(p_line, p_col)
+    call vfinder#helpers#unfold_and_put_line('t')
+    call vfinder#helpers#flash_line(winnr())
+    silent execute win_nr . 'wincmd w'
+    let b:vf.bopts.update_on_win_enter = 1
+    call cursor(line, col)
+    call vfinder#helpers#autoclose_pwindow_autocmd()
+endfun
+" 1}}}
+
+let s:grep = {
+                \ 'goto'           : {'action': function('s:grep_goto'), 'options': {'function': 1}},
+                \ 'split_and_goto' : {'action': function('s:grep_split_and_goto'), 'options': {'function': 1}},
+                \ 'vsplit_and_goto': {'action': function('s:grep_vsplit_and_goto'), 'options': {'function': 1}},
+                \ 'tab_and_goto'   : {'action': function('s:grep_tab_and_goto'), 'options': {'function': 1}},
+                \ 'preview'        : {'action': function('s:grep_preview'), 'options': {'function': 1, 'quit': 0}}
+                \ }
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	marks

@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-12-02
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -22,6 +22,9 @@ endfun
 " 1}}}
 
 fun! s:grep_source(query) abort " {{{1
+    if !empty(a:query)
+        call histadd('@', a:query)
+    endif
     return &grepprg . ' "' . a:query . '"'
 endfun
 " 1}}}
@@ -93,12 +96,27 @@ endfun
 fun! s:get_query() abort " {{{1
     call inputsave()
     echohl vfinderPrompt
-    let query = input('VFGrep> ')
+    let query = input('VFGrep> ', '', 'customlist,vfinder#sources#grep#compl')
     echohl None
     call inputrestore()
     return !empty(query)
                 \ ? query
                 \ : ''
+endfun
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	completion
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#sources#grep#compl(arg, cmd, curpos) abort " {{{1
+    let hl = []
+    for h in ['/', '@']
+        let hl += map(split(execute('history ' . h), "\n"), {
+                    \   _, v -> matchstr(v, '^>\?\s*\d\+\s\+\zs\S.*$')
+                    \ })
+    endfor
+    return filter(copy(reverse(uniq(hl))), {_, v -> v =~ '^' . a:arg})
 endfun
 " 1}}}
 

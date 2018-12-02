@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-29
+" Last modification: 2018-12-02
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -148,6 +148,7 @@ fun! s:get_ctx() abort " {{{1
 
     return {
                 \   'bufnr'   : bufnr('%'),
+                \   'winnr'   : winnr(),
                 \   'wd'      : getcwd() . '/',
                 \   'last_pos': []
                 \ }

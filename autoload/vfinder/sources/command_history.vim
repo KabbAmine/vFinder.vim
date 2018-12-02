@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-30
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -19,15 +19,15 @@ endfun
 " 1}}}
 
 fun! s:command_history_source() abort " {{{1
-    return reverse(split(execute('history'), "\n")[1:-2])
+    return reverse(split(execute('history'), "\n")[1:])
 endfun
 " 1}}}
 
 fun! s:command_history_format(commands) abort " {{{1
     let res = []
     for c in a:commands
-        let index = matchstr(c, '^\s\+>\?\zs\d\+\ze')
-        let command = matchstr(c, '^\s\+>\?\d\+\s\+\zs.*')
+        let index = matchstr(c, '^>\?\s\+\zs\d\+\ze')
+        let command = matchstr(c, '^>\?\s\+\d\+\s\+\zs.*')
         call add(res, printf('%-5s %s', index, command))
     endfor
     return res

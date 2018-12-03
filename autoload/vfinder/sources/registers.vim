@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-11-30
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -64,7 +64,7 @@ endfun
 " 1}}}
 
 fun! s:registers_syntax_fun() abort " {{{1
-    syntax match vfinderRegistersName =^\S\+:\s\+=
+    syntax match vfinderRegistersName =\%>1l^\S\+:\s\+=
     highlight! link vfinderRegistersName vfinderIndex
 endfun
 " 1}}}

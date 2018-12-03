@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-11-30
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -45,8 +45,8 @@ endfun
 " 1}}}
 
 fun! s:yank_syntax_fun() abort " {{{1
-    syntax match vfinderYankIndex =^\d\+\s*:\s\+=
-    syntax match vfinderYankEndofline =\\n=
+    syntax match vfinderYankIndex =\%>1l^\d\+\s*:\s\+=
+    syntax match vfinderYankEndofline =\%>1l\\n=
     highlight! link vfinderYankIndex vfinderIndex
     highlight! link vfinderYankEndofline vfinderYankIndex
 endfun

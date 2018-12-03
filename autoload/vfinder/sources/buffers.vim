@@ -1,5 +1,5 @@
 " Creation         : 2018-02-10
-" Last modification: 2018-11-30
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -82,8 +82,8 @@ endfun
 " 1}}}
 
 fun! s:buffers_syntax_fun() abort " {{{1
-    syntax match vfinderBuffersModified =\[+\]=
-    syntax match vfinderBuffersName =\%>9c\zs.*\s\{2,\}=
+    syntax match vfinderBuffersModified =\%>1l\[+\]=
+    syntax match vfinderBuffersName =\%>1l\%>9c\zs.*\s\{2,\}=
     highlight! link vfinderBuffersName Statement
     highlight! link vfinderBuffersModified Identifier
 endfun

@@ -1,5 +1,5 @@
 " Creation         : 2018-12-02
-" Last modification: 2018-12-02
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -47,7 +47,7 @@ endfun
 " 1}}}
 
 fun! s:qf_syntax_fun() abort " {{{1
-    syntax match vfinderQfblc =^\S\+=
+    syntax match vfinderQfblc =\%>1l^\S\+=
     highlight! link vfinderQfblc vfinderIndex
 endfun
 " 1}}}

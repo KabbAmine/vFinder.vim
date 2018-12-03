@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-30
+" Last modification: 2018-12-03
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -14,7 +14,9 @@ fun! vfinder#source#i(source, args) abort " {{{1
     if type(a:source) is# v:t_string
         let fun_name = printf('vfinder#sources#%s#get', a:source)
         try
-            let options = call(fun_name, [a:args])
+            let options = !empty(a:args)
+                        \ ? call(fun_name, [a:args])
+                        \ : call(fun_name, [])
         catch
             call vfinder#helpers#echo('no source "' . a:source . '" found', 'Error')
             return s:is_not_valid()

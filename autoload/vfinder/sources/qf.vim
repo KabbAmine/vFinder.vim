@@ -37,9 +37,9 @@ fun! s:qf_format(items) abort " {{{1
         let buf_name = buf_nr ># 0
                     \ ? fnamemodify(bufname(buf_nr), ':~:.')
                     \ : ''
-        call add(res, printf('%30s %s',
+        call add(res, printf('%s %s',
                     \   join([buf_name, line, col], ':'),
-                    \   i.text
+                    \   s:trim(i.text)
                     \ ))
     endfor
     return res
@@ -98,5 +98,13 @@ fun! s:qf_define_maps() abort " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:trim(str) abort " {{{1
+    return matchstr(a:str, '^\s*\zs.*\ze\s*$')
+endfun
+" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

@@ -7,15 +7,20 @@ A versatile finder for vim.
 
 ![Demo of vFinder](.img/vfinder_demo.gif "Old demo of vFinder")
 
-**N.B:**
+Pros:
 
-The plugin:
+- Many built-in sources & features
+- Works fast for medium sized projects (<= 20000 files) (thanks to external tools like `rg`, `ag`...).
+- Easily customizable
+- Full vimscript, no external dependencies
 
-- Is my playground plugin and may change a lot (until v1.0).
+Cons:
+
+- Is a playground plugin and may change a lot (until v1.0).
 - Is not windows compatible yet.
-- Is non asynchronous (yet?) (see next line).
-- Medium sized projects (<= 20000 files) work as expected (thanks to external tools like `rg`, `ag`...).
-- Use some features from last vim versions so it may not work on old ones.
+- Is non asynchronous (yet?).
+- No custom matching/sorting algorithm yet.
+- Needs a recent version of vim to benefit of all features.
 
 # Usage
 
@@ -33,11 +38,16 @@ call vfinder#i('files')
 " Same thing but with fuzzy mode enabled
 call vfinder#i('files', {'fuzzy': 1})
 
-" Fuzzy mode in a vertical split window and an initial query
+" Fuzzy mode in a vertical split window and an initial query for filtering
 call vfinder#i('tags_in_buffer', {
         \   'fuzzy': 1
         \   'win_pos': 'vertical',
         \   'query': expand('<cexpr>')
+        \ })
+
+" You can pass an argument(s) to the source, here an example with an initial query for the grep source
+call vfinder#i('grep', {
+        \   'args': 'foo'
         \ })
 
 " Custom source
@@ -76,22 +86,25 @@ There are no mappings provided for executing sources, please define your owns (S
 
 The built-in sources:
 
-| source name                  | description                        | default actions                                  |
-| ---------------------------- | ---------------------------------- | ------------------------------------------------ |
-| `buffers`                    | List of buffers                    | edit, edit in (v)split/tab, wipe, toggle hiddens |
-| `colors`                     | List of installed colorschemes     | apply, preview                                   |
-| `command_history`            | History of vim commands            | execute, echo                                    |
-| `commands`                   | Vim commands                       | execute, echo                                    |
-| `directories`                | List of directories in the cwd     | goto, go_back, cd                                |
-| `files`<sup>n</sup>          | Recursive list of files in the cwd | open, open in a (v)split/tab, toggle git flags   |
-| `marks`                      | List of marks                      | goto, delete                                     |
-| `mru`<sup>c</sup>            | List of recent files               | open, open in a (v)split/tab                     |
-| `oldfiles`                   | Output of `:oldfiles`              | open, open in a (v)split/tab                     |
-| `tags_in_buffer`<sup>t</sup> | List of tags in current buffer     | goto, open in a (v)split                         |
-| `registers`                  | Values of registers                | paste                                            |
-| `spell`                      | Suggestions for the current word   | use suggestion                                   |
-| `tags`                       | List of tags from tagfiles         | goto, open in (v)split/tab, preview              |
-| `yank`<sup>c</sup>           | All yanked elements                | paste                                            |
+| source name                  | description                             | args (optional)                     | default actions                                  |
+| ---------------------------- | --------------------------------------- | ----------------------------------- | ------------------------------------------------ |
+| `buffers`                    | List of buffers                         | -                                   | edit, edit in (v)split/tab, wipe, toggle hiddens |
+| `colors`                     | List of installed colorschemes          | -                                   | apply, preview                                   |
+| `command_history`            | History of vim commands                 | -                                   | execute, echo                                    |
+| `commands`                   | Vim commands                            | -                                   | execute, echo                                    |
+| `directories`                | List of directories in the cwd          | -                                   | goto, go back, cd                                |
+| `files`<sup>n</sup>          | Recursive list of files in the cwd      | -                                   | open, open in a (v)split/tab, toggle git flags   |
+| `grep`                       | Ask for a query and grep using &grepprg | query: _should not be empty_        | goto, open in (v)split/tab, preview              |
+| `marks`                      | List of marks                           | -                                   | goto, delete                                     |
+| `mru`<sup>c</sup>            | List of recent files                    | -                                   | open, open in a (v)split/tab                     |
+| `oldfiles`                   | Output of `:oldfiles`                   | -                                   | open, open in a (v)split/tab                     |
+| `qf`                         | List of qf/loclist items                | type: _[q]f (default) or [l]oclist_ | goto, open in (v)split/tab, preview              |
+| `registers`                  | Values of registers                     | -                                   | paste                                            |
+| `spell`                      | Suggestions for the current word        | -                                   | use suggestion                                   |
+| `tags_in_buffer`<sup>t</sup> | List of tags in current buffer          | -                                   | goto, open in a (v)split                         |
+| `tags`                       | List of tags from tagfiles              | -                                   | goto, open in (v)split/tab, preview              |
+| `windows`                    | List of windows in all tabs             | -                                   | goto                                             |
+| `yank`<sup>c</sup>           | All yanked elements                     | -                                   | paste                                            |
 
 _**<sup>n</sup>** Need `rg`, `ag`, `git` or `find`._  
 _**<sup>t</sup>** Need `ctags`._  
@@ -101,11 +114,12 @@ The default mappings are: `<CR>`, `<C-s>`, `<C-v>`, `<C-t>`, `<C-o>` (see [per s
 
 ## <a name="default-sources-options">Source options</a>
 
-| option    | default value       | description       |
-| --------- | ------------------- | ----------------- |
-| `fuzzy`   | `g:vfinder_fuzzy`   | Fuzzy mode        |
-| `query`   | `''`                | Initial query     |
-| `win_pos` | `g:vfinder_win_pos` | Window's location |
+| option    | default value       | description                                                            |
+| --------- | ------------------- | ---------------------------------------------------------------------- |
+| `args`    | `''`                | Argument to be passed to the source (e.g. a query for the grep source) |
+| `fuzzy`   | `g:vfinder_fuzzy`   | Fuzzy mode                                                             |
+| `query`   | `''`                | Initial query for filtering                                            |
+| `win_pos` | `g:vfinder_win_pos` | Window's location                                                      |
 
 # Mappings
 
@@ -161,6 +175,8 @@ And where `scope` can be:
 | `n`  | `fuzzy_toggle`         | ^^^^^^^^^^^^^^^^^^^^^^^^^                                            |      `F`      |
 | `i`  | `toggle_maps_in_sl`    | Show and toggle between source and global mappings in the statusline |    `<F1>`     |
 | `n`  | `toggle_maps_in_sl`    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |    `<F1>`     |
+| `i`  | `send_to_qf`           | Send current candidates to the quickfix list                         |    `<C-q>`    |
+| `n`  | `send_to_qf`           | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         |      `q`      |
 
 e.g.
 
@@ -174,7 +190,7 @@ let g:vfinder_maps._ = {
 
 ## <a name="per-source-mappings">Per source mappings</a>
 
-### Buffers
+### buffers
 
 | mode | action       | default value |
 | :--: | ------------ | :-----------: |
@@ -191,7 +207,7 @@ let g:vfinder_maps._ = {
 | `i`  | `toggle_all` |    `<C-o>`    |
 | `n`  | `toggle_all` |      `o`      |
 
-### Colors
+### colors
 
 | mode | action    | default value |
 | :--: | --------- | :-----------: |
@@ -200,16 +216,16 @@ let g:vfinder_maps._ = {
 | `i`  | `preview` |    `<C-o>`    |
 | `n`  | `preview` |      `o`      |
 
-### Commands
+### commands/command_history
 
-| mode | action  | default value |
-| :--: | ------- | :-----------: |
-| `i`  | `apply` |    `<CR>`     |
-| `n`  | `apply` |    `<CR>`     |
-| `i`  | `echo`  |    `<C-o>`    |
-| `n`  | `echo`  |      `o`      |
+| mode | action    | default value |
+| :--: | --------- | :-----------: |
+| `i`  | `execute` |    `<CR>`     |
+| `n`  | `execute` |    `<CR>`     |
+| `i`  | `echo`    |    `<C-o>`    |
+| `n`  | `echo`    |      `o`      |
 
-### Directories
+### directories
 
 | mode | action    | default value |
 | :--: | --------- | :-----------: |
@@ -220,7 +236,7 @@ let g:vfinder_maps._ = {
 | `i`  | `cd`      |    `<C-s>`    |
 | `n`  | `cd`      |      `s`      |
 
-### Files
+### files
 
 | mode | action             | default value |
 | :--: | ------------------ | :-----------: |
@@ -235,7 +251,20 @@ let g:vfinder_maps._ = {
 | `i`  | `toggle_git_flags` |    `<C-g>`    |
 | `n`  | `toggle_git_flags` |     `gi`      |
 
-### Marks
+### grep/qf
+
+| mode | action            | default value |
+| :--: | ----------------- | :-----------: |
+| `i`  | `goto`            |    `<CR>`     |
+| `n`  | `goto`            |    `<CR>`     |
+| `i`  | `split_and_goto`  |    `<C-s>`    |
+| `n`  | `split_and_goto`  |      `s`      |
+| `i`  | `vsplit_and_goto` |    `<C-v>`    |
+| `n`  | `vsplit_and_goto` |      `v`      |
+| `i`  | `preview`         |    `<C-o>`    |
+| `n`  | `preview`         |      `o`      |
+
+### marks
 
 | mode | action   | default value |
 | :--: | -------- | :-----------: |
@@ -243,6 +272,19 @@ let g:vfinder_maps._ = {
 | `n`  | `goto`   |    `<CR>`     |
 | `i`  | `delete` |    `<C-d>`    |
 | `n`  | `delete` |     `dd`      |
+
+### mru/oldfiles
+
+| mode | action   | default value |
+| :--: | -------- | :-----------: |
+| `i`  | `edit`   |    `<CR>`     |
+| `n`  | `edit`   |    `<CR>`     |
+| `i`  | `split`  |    `<C-s>`    |
+| `n`  | `split`  |      `s`      |
+| `i`  | `vsplit` |    `<C-v>`    |
+| `n`  | `vsplit` |      `v`      |
+| `i`  | `tab`    |    `<C-t>`    |
+| `n`  | `tab`    |      `t`      |
 
 ### tags_in_buffer
 
@@ -255,14 +297,14 @@ let g:vfinder_maps._ = {
 | `i`  | `vsplit_and_goto` |    `<C-v>`    |
 | `n`  | `vsplit_and_goto` |      `v`      |
 
-### Spell
+### spell
 
 | mode | action | default value |
 | :--: | ------ | :-----------: |
 | `i`  | `use`  |    `<CR>`     |
 | `n`  | `use`  |    `<CR>`     |
 
-### Tags
+### tags
 
 | mode | action            | default value |
 | :--: | ----------------- | :-----------: |
@@ -277,20 +319,21 @@ let g:vfinder_maps._ = {
 | `i`  | `preview`         |    `<C-o>`    |
 | `n`  | `preview`         |      `o`      |
 
-### Yank
+### windows
+
+| mode | action | default value |
+| :--: | ------ | :-----------: |
+| `i`  | `goto` |    `<CR>`     |
+| `n`  | `goto` |    `<CR>`     |
+
+### yank/registers
 
 | mode | action  | default value |
 | :--: | ------- | :-----------: |
 | `i`  | `paste` |    `<CR>`     |
 | `n`  | `paste` |    `<CR>`     |
 
-Some sources do not have their own actions, because they inherit them from other sources, but you can still customize their mappings.
-
-- `command_history` inherits from `commands`.
-- `mru` & `oldfiles` inherits from `files`.
-- `registers` inherits from `yank`.
-
-e.g.
+e.g. of defining custom mappings:
 
 ```viml
 " Define g:vfinder_maps only if its not already defined.
@@ -353,41 +396,56 @@ let g:vfinder_maps._ = {
             \   'n': {'window_quit': 'q'},
             \   'i': {
             \       'toggle_maps_in_sl': '<Tab>',
-            \       'cache_clean'      : '<C-x>'
+            \       'cache_clean': '<C-x>'
             \   }
             \ }
+
 nnoremap <silent> ,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,b :call vfinder#i('buffers')<CR>
-nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': ''})<CR>
+nnoremap <silent> ,w :call vfinder#i('windows')<CR>
+nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': 'botright'})<CR>
 nnoremap <silent> ,r :call vfinder#i('mru')<CR>
 nnoremap <silent> ,c :call vfinder#i('commands', {'fuzzy': 1})<CR>
 nnoremap <silent> ,,c :call vfinder#i('command_history')<CR>
 nnoremap <silent> ,t :call vfinder#i('tags')<CR>
 nnoremap <silent> ,,f :call vfinder#i('tags_in_buffer', {'fuzzy': 1})<CR>
+nnoremap <silent> ,y :call vfinder#i('yank')<CR>
+inoremap <silent> <A-y> <Esc>:call vfinder#i('yank')<CR>
+nnoremap <silent> ,m :call vfinder#i('marks')<CR>
 nnoremap <silent> z= :call vfinder#i('spell', {
             \   'win_pos': 'topleft vertical'
             \ })<CR>
 inoremap <silent> <A-z> <Esc>:call vfinder#i('spell', {
             \   'win_pos': 'topleft vertical'
             \ })<CR>
-nnoremap <silent> ,y :call vfinder#i('yank')<CR>
-inoremap <silent> <A-y> <Esc>:call vfinder#i('yank')<CR>
-nnoremap <silent> ,m :call vfinder#i('marks')<CR>
-" nnoremap <silent> ,C :call vfinder#i('colors')<CR>
-" nnoremap <silent> ,,r :call vfinder#i('oldfiles')<CR>
-" nnoremap <silent> ,Y :call vfinder#i('registers')<CR>
 
-nnoremap <silent> ,B :call vfinder#i(<SID>bookmarsk_source())<CR>
-fun! s:bookmarsk_source() abort
-    return {
-            \   'name'      : 'bookmarks',
-            \   'to_execute': ['~/.vim', '~/Temp/lab'],
-            \   'maps'      : {
-            \       'i': {'<CR>': {'action': 'cd %s \| pwd', 'options': {'silent': 0} }},
-            \       'n': {'<CR>': {'action': 'cd %s \| pwd', 'options': {'silent': 0} }}
-            \   }
-            \ }
-endfun
+" qf
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+command! VFQf call <SID>vfinder_qf()
+
+fun! s:vfinder_qf() abort " {{{2
+    if getwininfo(win_getid(winnr()))[0].loclist
+        call vfinder#i('qf', {'args': 'l'})
+    else
+        call vfinder#i('qf')
+    endif
+endfun " 2}}}
+
+" Grep
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <silent> ,,g :call vfinder#i('grep')<CR>
+xnoremap <silent> ,,g :call <SID>vfinder_grep_visual()<CR>
+nnoremap <silent> ,g <Esc>:setlocal operatorfunc=<SID>vfinder_grep_motion<CR>g@
+
+fun! s:vfinder_grep_visual() abort " {{{2
+    call vfinder#i('grep', {'args': ka#utils#get_visual_selection()})
+endfun " 2}}}
+
+fun! s:vfinder_grep_motion(...) abort " {{{2
+    call vfinder#i('grep', {'args': ka#utils#get_motion_result()})
+endfun " 2}}}
 ```
 
 # Note

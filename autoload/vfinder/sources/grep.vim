@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-12-03
+" Last modification: 2018-12-05
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -35,9 +35,9 @@ fun! s:grep_syntax_fun(query) abort " {{{1
                     \ ? '\C' . a:query
                     \ : '\c' . a:query
         let query = substitute(query, '"', '', 'g')
-        execute 'syntax match vfinderGrepQuery =' . query . '='
+        execute 'syntax match vfinderGrepQuery =\%>1l' . query . '='
     endif
-    syntax match vfinderGrepInfos =^\S\+:=
+    syntax match vfinderGrepInfos =\%>1l^\S\+:=
     highlight! link vfinderGrepInfos vfinderIndex
     highlight! link vfinderGrepQuery Title
 endfun

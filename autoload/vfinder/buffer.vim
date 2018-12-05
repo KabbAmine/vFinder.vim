@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-29
+" Last modification: 2018-12-05
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -90,7 +90,7 @@ endfun
 
 fun! s:buffer_set_maps() dict " {{{1
     " Disable some default vim keys
-    for k in ['<CR>', 'x', 'c', 'd', 'o', 'O', 'p', 'P']
+    for k in ['<CR>', 'x', 'c', 'd', 'o', 'O', 'p', 'P', 'u', 'U', '<C-r>']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
     endfor
     let keys = vfinder#maps#get('_')

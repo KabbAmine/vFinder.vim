@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-05
+" Last modification: 2018-12-08
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,7 +135,7 @@ endfun
 fun! s:buffer_set_autocmds() dict " {{{1
     augroup VFinder
         autocmd!
-        autocmd TextChangedI <buffer> call vfinder#events#query_modified()
+        autocmd TextChangedI <buffer> call vfinder#events#trigger_event_with_delay('query_modified')
         autocmd InsertCharPre <buffer> call vfinder#events#char_inserted()
         autocmd WinEnter <buffer> call vfinder#events#win_enter()
         autocmd WinLeave <buffer> call vfinder#events#win_leave()

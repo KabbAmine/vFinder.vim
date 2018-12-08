@@ -1,6 +1,24 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-29
+" Last modification: 2018-12-09
 
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	events
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! vfinder#events#trigger_event_with_delay(name) abort " {{{1
+    if exists('g:vf_filtering_timer') && timer_info(g:vf_filtering_timer) !=# []
+        call timer_stop(g:vf_filtering_timer)
+        unlet! g:vf_filtering_timer
+    endif
+    if vfinder#helpers#is_in_prompt()
+        let f = 'vfinder#events#' . a:name
+        let g:vf_filtering_timer = timer_start(s:get_timer_delay(), {
+                    \   t -> call(f, [])
+                    \ })
+    endif
+endfun
+" 1}}}
 
 fun! vfinder#events#char_inserted() abort " {{{1
     if !vfinder#helpers#is_in_prompt()
@@ -31,7 +49,11 @@ fun! vfinder#events#update_candidates_request() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#events#query_modified() abort " {{{1
+fun! vfinder#events#query_modified(...) abort " {{{1
+    " If coming from a vfinder#events#query_modified_with_delay()
+    if exists('g:vf_filtering_timer')
+        unlet g:vf_filtering_timer
+    endif
     " When triggered with startinsert the 1st time
     if exists('b:vf.bopts.first_execution')
         unlet! b:vf.bopts.first_execution
@@ -54,6 +76,10 @@ fun! vfinder#events#query_modified() abort " {{{1
 endfun
 " 1}}}
 
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	helpers
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! s:filter_and_update() abort " {{{1
     let manual_update = exists('b:vf.bopts.manual_update') && b:vf.bopts.manual_update
     let prompt = vfinder#prompt#i()
@@ -69,6 +95,22 @@ fun! s:filter_and_update() abort " {{{1
     endif
     call candidates.populate().highlight_matched()
     let b:vf.candidates.initial = candidates.initial
+    redrawstatus
+endfun
+" 1}}}
+
+fun! s:get_timer_delay() abort " {{{1
+    " More the candidates, bigger the delay
+    let ll = line('$')
+    return ll <# 5000
+                \ ? 0
+                \ : ll <# 15000
+                \ ? 50
+                \ : ll <# 30000
+                \ ? 100
+                \ : ll <# 50000
+                \ ? 150
+                \ : 250
 endfun
 " 1}}}
 

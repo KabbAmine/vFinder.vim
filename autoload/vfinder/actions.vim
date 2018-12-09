@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-12-02
+" Last modification: 2018-12-09
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -139,6 +139,7 @@ fun! s:grep_preview(line) abort " {{{1
 endfun
 " 1}}}
 
+" s:grep {{{1
 let s:grep = {
                 \ 'goto'           : {'action': function('s:grep_goto'), 'options': {'function': 1}},
                 \ 'split_and_goto' : {'action': function('s:grep_split_and_goto'), 'options': {'function': 1}},
@@ -146,6 +147,18 @@ let s:grep = {
                 \ 'tab_and_goto'   : {'action': function('s:grep_tab_and_goto'), 'options': {'function': 1}},
                 \ 'preview'        : {'action': function('s:grep_preview'), 'options': {'function': 1, 'quit': 0}}
                 \ }
+" 1}}}
+
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 	        	help
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" s:help {{{1
+let s:help = {
+                \ 'open'          : {'action': 'helpclose \| help %s', 'options': {}},
+                \ 'open_in_vsplit': {'action': 'helpclose \| vertical help %s', 'options': {}},
+                \ }
+" 1}}}
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	marks

@@ -327,7 +327,7 @@ endfun
 " 1}}}
 
 fun! vfinder#buffer#update_candidates_i() abort " {{{1
-    " Update candidadates and try to set back the cursor to the initial
+    " Update candidates and try to set back the cursor to the initial
     " position
     let [line, col] = [line('.'), col('.')]
     call vfinder#events#update_candidates_request()

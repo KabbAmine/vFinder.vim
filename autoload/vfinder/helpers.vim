@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-03
+" Last modification: 2018-12-10
 
 
 " s:vars {{{1
@@ -88,7 +88,6 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
     call timer_start(700, {t -> s:delete_flash_augroup()})
 endfun
 " 1}}}
-
 
 fun! vfinder#helpers#pedit_cmd(...) abort " {{{1
     let file = get(a:, 1, '')
@@ -201,6 +200,12 @@ fun! vfinder#helpers#throw(msg) abort " {{{1
     " For some reason, its impossible to throw msg which start with 'Vim'
     let e = a:msg =~# '^Vim' ? 'vim' . a:msg[3:] : a:msg
     throw e
+endfun
+" 1}}}
+
+fun! vfinder#helpers#go_to_initial_col_i(col) abort " {{{1
+    startinsert
+    call cursor(line('.'), a:col + 1)
 endfun
 " 1}}}
 

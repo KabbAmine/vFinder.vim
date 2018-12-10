@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-03
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -174,7 +174,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
                 call clearmatches()
             endif
             if a:options.update
-                call s:update_candidates(a:mode)
+                call vfinder#events#update_candidates_request(a:mode)
             endif
 
             if a:options.goto_prompt
@@ -229,15 +229,6 @@ endfun
 
 fun! s:is_not_valid() abort " {{{1
     return {'is_valid': 0}
-endfun
-" 1}}}
-
-fun! s:update_candidates(mode) abort " {{{1
-    if a:mode is# 'i'
-        silent call vfinder#buffer#update_candidates_i()
-    else
-        silent call vfinder#buffer#update_candidates_n()
-    endif
 endfun
 " 1}}}
 

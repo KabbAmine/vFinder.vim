@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-12-03
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -117,13 +117,12 @@ endfun
 " 1}}}
 
 fun! s:reload_i(...) abort " {{{1
-    call s:reload()
-    startinsert!
+    call s:reload('i')
 endfun
 " 1}}}
 
 fun! s:reload_n(...) abort " {{{1
-    call s:reload()
+    call s:reload('n')
 endfun
 " 1}}}
 
@@ -135,17 +134,17 @@ fun! s:set_path_to(dir) abort " {{{1
     let path = fnamemodify(a:dir, ':p')
     silent execute 'cd ' . path
     call vfinder#prompt#i().render('')
-    call vfinder#events#update_candidates_request()
+    silent call vfinder#events#update_candidates_request()
     silent execute 'cd ' . b:vf.ctx.wd
     let b:vf.last_wd = path
 endfun
 " 1}}}
 
-fun! s:reload() abort " {{{1
+fun! s:reload(mode) abort " {{{1
     if exists('b:vf.last_wd')
         call remove(b:vf, 'last_wd')
     endif
-    call vfinder#events#update_candidates_request()
+    call vfinder#events#update_candidates_request(a:mode)
     unsilent call vfinder#helpers#echo(s:reduce_path(getcwd()))
 endfun
 " 1}}}

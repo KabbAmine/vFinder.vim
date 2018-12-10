@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-09
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -43,9 +43,24 @@ fun! vfinder#events#win_leave() abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#events#update_candidates_request() abort " {{{1
+fun! vfinder#events#update_candidates_request(...) abort " {{{1
     let b:vf.bopts.manual_update = 1
+    let mode = get(a:, 1, 'i')
+    let [line, col] = [line('.'), col('.')]
     call s:filter_and_update()
+    silent execute line
+    if mode is# 'i'
+        if vfinder#helpers#is_in_prompt()
+            call vfinder#helpers#go_to_initial_col_i(col)
+        else
+            call cursor(line, 0)
+            startinsert
+        endif
+    else
+        call cursor(line, col)
+        stopinsert
+    endif
+    call vfinder#helpers#echo('list of candidates updated...')
 endfun
 " 1}}}
 
@@ -95,7 +110,6 @@ fun! s:filter_and_update() abort " {{{1
     endif
     call candidates.populate().highlight_matched()
     let b:vf.candidates.initial = candidates.initial
-    redrawstatus
 endfun
 " 1}}}
 

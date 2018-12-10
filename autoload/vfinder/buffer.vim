@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-08
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,8 +118,8 @@ fun! s:buffer_set_maps() dict " {{{1
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#buffer#update_candidates_i()<CR>'
-    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#buffer#update_candidates_n()<CR>'
+    silent execute 'inoremap <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#events#update_candidates_request("i")<CR>'
+    silent execute 'nnoremap <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#events#update_candidates_request("n")<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists("i")<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists("n")<CR>'
     " Toggle source mappings in the statusline
@@ -286,11 +286,7 @@ endfun
 
 fun! s:toggle_fuzzy(mode) abort " {{{1
     let b:vf.flags.fuzzy = !b:vf.flags.fuzzy
-    if a:mode is# 'i'
-        silent call vfinder#buffer#update_candidates_i()
-    else
-        silent call vfinder#buffer#update_candidates_n()
-    endif
+    call vfinder#events#update_candidates_request(a:mode)
 endfun
 " 1}}}
 
@@ -326,44 +322,17 @@ fun! s:wipe_buffer(...) abort " {{{1
 endfun
 " 1}}}
 
-fun! vfinder#buffer#update_candidates_i() abort " {{{1
-    " Update candidates and try to set back the cursor to the initial
-    " position
-    let [line, col] = [line('.'), col('.')]
-    call vfinder#events#update_candidates_request()
-    silent execute line
-    if vfinder#helpers#is_in_prompt()
-        call s:go_to_initial_col_i(col)
-    else
-        call cursor(line, 0)
-        startinsert
-    endif
-    call s:echo_candidates_updated()
-endfun
-" 1}}}
-
-fun! vfinder#buffer#update_candidates_n() abort " {{{1
-    " Same as vfinder#buffer#update_candidates_i but for normal mode
-    let [line, col] = [line('.'), col('.')]
-    call vfinder#events#update_candidates_request()
-    call cursor(line, col)
-    stopinsert
-    call s:echo_candidates_updated()
-endfun
-" 1}}}
-
 fun! s:clean_cache_if_it_exists(mode) abort " {{{1
     " The bufname is vf__foo_bar__
     let name = bufname('%')[4:-3]
-    let ins_mode = a:mode is# 'i'
     if vfinder#cache#exists(name)
         call vfinder#cache#clean(name)
-        call vfinder#events#update_candidates_request()
-        silent execute ins_mode ? 'startinsert!' : 'normal! 1gg$'
+        silent call vfinder#events#update_candidates_request(a:mode)
+        silent execute a:mode is# 'i' ? 'startinsert!' : 'normal! 1gg$'
         call vfinder#helpers#echo('cache for "' . name . '" deleted')
     else
         call vfinder#helpers#echo('no cache for the source "' . name . '"', 'WarningMsg')
-        if ins_mode
+        if a:mode is# 'i'
             call s:set_cursor_position_i()
         endif
     endif
@@ -387,7 +356,7 @@ fun! s:toggle_maps_in_sl(...) abort " {{{1
     endif
 
     if in_ins_mode
-        call s:go_to_initial_col_i(col)
+        call vfinder#helpers#go_to_initial_col_i(col)
     endif
 endfun
 " 1}}}
@@ -404,7 +373,7 @@ fun! s:send_to_quickfix(...) abort " {{{1
         endif
     endif
     if in_ins_mode
-        call s:go_to_initial_col_i(col)
+        call vfinder#helpers#go_to_initial_col_i(col)
     endif
 endfun
 " 1}}}
@@ -433,19 +402,8 @@ fun! s:get_pre_post_of_query(col) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:go_to_initial_col_i(col) abort " {{{1
-    startinsert
-    call cursor(line('.'), a:col + 1)
-endfun
-" 1}}}
-
 fun! s:go_to_start_of_prompt() abort " {{{1
     call cursor(1, 3)
-endfun
-" 1}}}
-
-fun! s:echo_candidates_updated() abort " {{{1
-    call vfinder#helpers#echo('list of candidates updated...')
 endfun
 " 1}}}
 

@@ -19,6 +19,7 @@ endfun
 " 1}}}
 
 fun! s:directories_source() abort " {{{1
+    let b:vf.bopts.update_on_win_enter = 0
     let wd = getcwd() . '/'
     let dirs = glob(wd . '*/', 1, 1)
     let dirs += glob(wd . '.*/', 1, 1)[2:]

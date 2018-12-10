@@ -394,9 +394,9 @@ fun! s:already_near_the_prompt_char() abort " {{{1
     if col('.') <# 3
         startinsert
         call s:go_to_start_of_prompt()
-        return 1
+        return v:true
     else
-        return 0
+        return v:false
     endif
 endfun
 " 1}}}

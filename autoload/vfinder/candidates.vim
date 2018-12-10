@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-29
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -9,6 +9,7 @@
 fun! vfinder#candidates#i(source) abort " {{{1
     return {
                 \   'source'           : a:source,
+                \   'buf_nr'           : bufnr('%'),
                 \   'query'            : '',
                 \   'was_filtered'     : 0,
                 \   'initial'          : [],
@@ -27,15 +28,13 @@ fun! s:candidates_get() dict " {{{1
     if self.initial ==# []
         let self.initial = self.source.prepare().candidates
     endif
-    let self.current = getline(2, '$')
+    let self.current = getbufline(self.buf_nr, 2, '$')
     return self
 endfun
 " 1}}}
 
 fun! s:candidates_delete() dict " {{{1
-    if line('$') ># 1
-        silent execute '2,$delete_'
-    endif
+    silent call deletebufline(self.buf_nr, 2, '$')
     return self
 endfun
 " 1}}}
@@ -48,7 +47,7 @@ fun! s:candidates_populate() dict " {{{1
     else
         let candidates = self.initial
     endif
-    call setline(2, candidates)
+    call setbufline(self.buf_nr, 2, candidates)
     return self
 endfun
 " 1}}}

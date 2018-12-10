@@ -10,7 +10,7 @@ A versatile finder for vim.
 Pros:
 
 - Many built-in sources & features
-- Works fast for medium sized projects (<= 20000 files) (thanks to external tools like `rg`, `ag`...).
+- Works fast for medium sized projects (<= 50000 files), thanks to timers & external tools like `rg`, `ag`...
 - Easily customizable
 - Full vimscript, no external dependencies
 
@@ -18,7 +18,7 @@ Cons:
 
 - Is a playground plugin and may change a lot (until v1.0).
 - Is not windows compatible yet.
-- Is non asynchronous (yet?).
+- Is non asynchronous (yet?) (but use timers to quickly filter candidates).
 - No custom matching/sorting algorithm yet.
 - Needs a recent version of vim to benefit of all features.
 
@@ -95,6 +95,7 @@ The built-in sources:
 | `directories`                | List of directories in the cwd          | -                                   | goto, go back, cd                                |
 | `files`<sup>n</sup>          | Recursive list of files in the cwd      | -                                   | open, open in a (v)split/tab, toggle git flags   |
 | `grep`                       | Ask for a query and grep using &grepprg | query: _should not be empty_        | goto, open in (v)split/tab, preview              |
+| `help`                       | Help files                              | -                                   | open, open_in_vsplit                             |
 | `marks`                      | List of marks                           | -                                   | goto, delete                                     |
 | `mru`<sup>c</sup>            | List of recent files                    | -                                   | open, open in a (v)split/tab                     |
 | `oldfiles`                   | Output of `:oldfiles`                   | -                                   | open, open in a (v)split/tab                     |
@@ -167,6 +168,7 @@ And where `scope` can be:
 | `n`  | `start_insert_mode_I`  | -                                                                    |      `I`      |
 | `i`  | `window_quit`          | -                                                                    |    `<Esc>`    |
 | `n`  | `window_quit`          | -                                                                    |    `<Esc>`    |
+| `n`  | `new_query`            | Delete current query and start insert mode                           |     `cc`      |
 | `i`  | `candidates_update`    | Refresh candidates                                                   |    `<C-r>`    |
 | `n`  | `candidates_update`    | ^^^^^^^^^^^^^^^^^^                                                   |      `R`      |
 | `i`  | `cache_clean`          | Delete cache file if it exists                                       |    `<F5>`     |
@@ -263,6 +265,15 @@ let g:vfinder_maps._ = {
 | `n`  | `vsplit_and_goto` |      `v`      |
 | `i`  | `preview`         |    `<C-o>`    |
 | `n`  | `preview`         |      `o`      |
+
+### help
+
+| mode | action           | default value |
+| :--: | ---------------- | :-----------: |
+| `i`  | `open`           |    `<CR>`     |
+| `n`  | `open`           |    `<CR>`     |
+| `i`  | `open_in_vsplit` |    `<C-v>`    |
+| `n`  | `open_in_vsplit` |      `v`      |
 
 ### marks
 

@@ -106,6 +106,7 @@ fun! s:buffer_set_maps() dict " {{{1
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete . ' <Esc>:call <SID>delete_i()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_word . ' <Esc>:call <SID>control_w_i()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_delete_line . ' <Esc>:call <SID>control_u_i()<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.new_query . ' <Esc>:call <SID>new_query()<CR>'
     " Modes
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.fuzzy_toggle . ' <Esc>:call <SID>toggle_fuzzy("i")<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.fuzzy_toggle . ' :call <SID>toggle_fuzzy("n")<CR>'
@@ -274,6 +275,13 @@ fun! s:control_u_i() abort " {{{1
 endfun
 " 1}}}
 
+fun! s:new_query() abort " {{{1
+    " like the behavior of cc in normal mode
+    call s:move_to_edge_i(1)
+    call s:control_u_i()
+endfun
+" 1}}}
+
 fun! s:set_cursor_position_i() abort " {{{1
     if vfinder#helpers#is_in_prompt()
         startinsert!
@@ -414,34 +422,35 @@ endfun
 fun! s:buffer_define_maps() abort " {{{1
     call vfinder#maps#define_gvar_maps('_', {
                 \   'i': {
-                \       'prompt_move_down'    : '<C-n>',
-                \       'prompt_move_up'      : '<C-p>',
-                \       'prompt_move_left'    : '<C-h>',
-                \       'prompt_move_right'   : '<C-l>',
-                \       'prompt_move_to_start': '<C-a>',
-                \       'prompt_move_to_end'  : '<C-e>',
+                \       'cache_clean'         : '<F5>',
+                \       'candidates_update'   : '<C-r>',
+                \       'fuzzy_toggle'        : '<C-f>',
                 \       'prompt_backspace'    : '<BS>',
                 \       'prompt_delete'       : '<Del>',
-                \       'prompt_delete_word'  : '<C-w>',
                 \       'prompt_delete_line'  : '<C-u>',
-                \       'fuzzy_toggle'        : '<C-f>',
-                \       'window_quit'         : '<Esc>',
-                \       'candidates_update'   : '<C-r>',
-                \       'cache_clean'         : '<F5>',
+                \       'prompt_delete_word'  : '<C-w>',
+                \       'prompt_move_down'    : '<C-n>',
+                \       'prompt_move_left'    : '<C-h>',
+                \       'prompt_move_right'   : '<C-l>',
+                \       'prompt_move_to_end'  : '<C-e>',
+                \       'prompt_move_to_start': '<C-a>',
+                \       'prompt_move_up'      : '<C-p>',
+                \       'send_to_qf'          : '<C-q>',
                 \       'toggle_maps_in_sl'   : '<F1>',
-                \       'send_to_qf'          : '<C-q>'
+                \       'window_quit'         : '<Esc>'
                 \   },
                 \   'n': {
+                \       'cache_clean'        : '<F5>',
+                \       'candidates_update'  : 'R',
                 \       'fuzzy_toggle'       : 'F',
-                \       'start_insert_mode_i': 'i',
-                \       'start_insert_mode_I': 'I',
+                \       'new_query': 'cc',
+                \       'send_to_qf'         : 'Q',
                 \       'start_insert_mode_a': 'a',
                 \       'start_insert_mode_A': 'A',
-                \       'window_quit'        : '<Esc>',
-                \       'candidates_update'  : 'R',
-                \       'cache_clean'        : '<F5>',
+                \       'start_insert_mode_i': 'i',
+                \       'start_insert_mode_I': 'I',
                 \       'toggle_maps_in_sl'  : '<F1>',
-                \       'send_to_qf'         : 'Q'
+                \       'window_quit'        : '<Esc>'
                 \   }
                 \ })
 endfun

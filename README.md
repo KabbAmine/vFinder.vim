@@ -1,6 +1,6 @@
 # vFinder [EXPERIMENTAL]
 
-![Badge version](https://img.shields.io/badge/version-0.0.8-blue.svg?style=flat-square "Badge for version")
+![Badge version](https://img.shields.io/badge/version-0.0.9-blue.svg?style=flat-square "Badge for version")
 ![License version](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square "Badge for license")
 
 A versatile finder for vim.

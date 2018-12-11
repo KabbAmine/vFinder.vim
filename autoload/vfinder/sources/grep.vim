@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-12-05
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -25,7 +25,7 @@ fun! s:grep_source(query) abort " {{{1
     if !empty(a:query)
         call histadd('@', a:query)
     endif
-    return &grepprg . ' "' . a:query . '"'
+    return &grepprg . ' "' . escape(a:query, '"') . '"'
 endfun
 " 1}}}
 
@@ -34,8 +34,7 @@ fun! s:grep_syntax_fun(query) abort " {{{1
         let query = a:query =~# '\u'
                     \ ? '\C' . a:query
                     \ : '\c' . a:query
-        let query = substitute(query, '"', '', 'g')
-        execute 'syntax match vfinderGrepQuery =\%>1l' . query . '='
+        execute 'syntax match vfinderGrepQuery =\%>1l\V' . query . '='
     endif
     syntax match vfinderGrepInfos =\%>1l^\S\+:=
     highlight! link vfinderGrepInfos vfinderIndex

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-03
+" Last modification: 2018-12-10
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -24,7 +24,7 @@ fun! s:files_source() abort " {{{1
                 \ ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
-                \ : s:in_git_project()
+                \ : vfinder#helpers#in_git_project()
                 \ ? 'git ls-files -co --exclude-standard'
                 \ : 'find * -type f'
 endfun
@@ -33,7 +33,7 @@ endfun
 fun! s:files_format_fun(files) abort " {{{1
     " Add git flags if the option is enabled
     let b:vf.flags.git_flags = get(b:vf.flags, 'git_flags', 0)
-    if !s:in_git_project() || !b:vf.flags.git_flags
+    if !vfinder#helpers#in_git_project() || !b:vf.flags.git_flags
         return a:files
     endif
     let files = []
@@ -91,7 +91,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:toggle_git_flags(file) abort " {{{1
-    if !s:in_git_project()
+    if !vfinder#helpers#in_git_project()
         call vfinder#helpers#echo('not in a git project')
         return ''
     endif
@@ -110,11 +110,6 @@ let s:git_status_symbols = {
             \   'R': '-',
             \   'D': '-'
             \ }
-" 1}}}
-
-fun! s:in_git_project() abort " {{{1
-    return executable('git') && isdirectory('./.git')
-endfun
 " 1}}}
 
 fun! s:git_status_files() abort " {{{1

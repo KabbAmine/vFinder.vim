@@ -110,6 +110,11 @@ fun! vfinder#helpers#black_hole() abort " {{{1
 endfun
 " 1}}}
 
+fun! vfinder#helpers#in_git_project() abort " {{{1
+    return executable('git') && isdirectory('./.git')
+endfun
+" 1}}}
+
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	misc
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""

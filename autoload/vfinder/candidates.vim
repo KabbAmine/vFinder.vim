@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -24,7 +24,7 @@ fun! vfinder#candidates#i(source) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:candidates_get() dict " {{{1
+fun! s:candidates_get() dict abort " {{{1
     if self.initial ==# []
         let self.initial = self.source.prepare().candidates
     endif
@@ -33,13 +33,13 @@ fun! s:candidates_get() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:candidates_delete() dict " {{{1
+fun! s:candidates_delete() dict abort " {{{1
     silent call deletebufline(self.buf_nr, 2, '$')
     return self
 endfun
 " 1}}}
 
-fun! s:candidates_populate() dict " {{{1
+fun! s:candidates_populate() dict abort " {{{1
     call self.delete()
     if self.was_filtered
         let candidates = self.filtered_list
@@ -52,7 +52,7 @@ fun! s:candidates_populate() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:candidates_filter(query) dict " {{{1
+fun! s:candidates_filter(query) dict abort " {{{1
     call self.get()
     let self.query = vfinder#helpers#process_query(a:query)
     " There is no need to filter all the original candidates if we added
@@ -69,7 +69,7 @@ fun! s:candidates_filter(query) dict " {{{1
 endfun
 " 1}}}
 
-fun! s:candidates_highlight_matched() dict " {{{1
+fun! s:candidates_highlight_matched() dict abort " {{{1
     call clearmatches()
     if !empty(self.query) && self.query isnot# '\v'
         let case = self.query =~# '\u' ? '\C' : '\c'

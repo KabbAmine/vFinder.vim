@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-07
+" Last modification: 2018-12-12
 
 
 fun! vfinder#prompt#i() abort " {{{1
@@ -13,7 +13,7 @@ fun! vfinder#prompt#i() abort " {{{1
 endfun
 " 1}}}
 
-fun! s:prompt_render(...) dict " {{{1
+fun! s:prompt_render(...) dict abort " {{{1
     if exists('a:1')
         let self.query = a:1
         call self.set()
@@ -24,19 +24,19 @@ fun! s:prompt_render(...) dict " {{{1
 endfun
 " 1}}}
 
-fun! s:prompt_get_query() dict " {{{1
+fun! s:prompt_get_query() dict abort " {{{1
     let self.query = getline(1)[2:]
     return self
 endfun
 " 1}}}
 
-fun! s:prompt_delete() dict " {{{1
+fun! s:prompt_delete() dict abort " {{{1
     let self.query = ''
     return self
 endfun
 " 1}}}
 
-fun! s:prompt_set() dict " {{{1
+fun! s:prompt_set() dict abort " {{{1
     call setline(1, '> ' . self.query)
     return self
 endfun

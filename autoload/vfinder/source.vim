@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -46,13 +46,13 @@ fun! vfinder#source#i(source, args) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:source_prepare() dict " {{{1
+fun! s:source_prepare() dict abort " {{{1
     call self.execute().format().set_maps()
     return self
 endfun
 " 1}}}
 
-fun! s:source_execute() dict " {{{1
+fun! s:source_execute() dict abort " {{{1
     let candidates = []
     if type(self.to_execute) is# v:t_string && filereadable(self.to_execute)
         " We delay the file reading a little to be sure that the writing
@@ -75,7 +75,7 @@ fun! s:source_execute() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:source_format() dict " {{{1
+fun! s:source_format() dict abort " {{{1
     if !empty(self.format_fun) && !empty(self.candidates)
         let self.candidates = call(self.format_fun, [self.candidates])
     endif
@@ -83,7 +83,7 @@ fun! s:source_format() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:source_set_maps() dict " {{{1
+fun! s:source_set_maps() dict abort " {{{1
     for mode in ['i', 'n']
         let maps_{mode} = self.maps[mode]
         let keys_{mode} = keys(maps_{mode})
@@ -184,7 +184,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
             endif
         endif
     catch
-        call vfinder#helpers#echo(v:exception, 'Error')
+        call vfinder#helpers#echomsg(v:exception, 'Error')
     endtry
 endfun
 " 1}}}

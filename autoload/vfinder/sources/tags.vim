@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-12-03
+" Last modification: 2018-12-11
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -98,7 +98,7 @@ endfun
 " 1}}}
 
 fun! s:preview(line) abort " {{{1
-    let [win_nr, line, col] = [winnr(), line('.'), col('.')]
+    let win_nr = winnr()
     let [name, file, cmd] = s:filename_and_cmd(a:line)
     let b:vf.bopts.update_on_win_enter = 0
     " Always close the pwindow before to get width/height as expected
@@ -108,7 +108,6 @@ fun! s:preview(line) abort " {{{1
     call s:execute_cmd_unfold_and_flash(name, cmd)
     silent execute win_nr . 'wincmd w'
     let b:vf.bopts.update_on_win_enter = 1
-    call cursor(line, col)
     call vfinder#helpers#autoclose_pwindow_autocmd()
 endfun
 " 1}}}

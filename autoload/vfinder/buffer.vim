@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -24,7 +24,7 @@ fun! vfinder#buffer#i(source, sopts) abort " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_goto() dict " {{{1
+fun! s:buffer_goto() dict abort " {{{1
     " If the vf buffer already exists we:
     "    - move to it if its window is in the current tab.
     "    - wipe it and create a new on in the current tab.
@@ -45,7 +45,7 @@ fun! s:buffer_goto() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_new() dict " {{{1
+fun! s:buffer_new() dict abort " {{{1
     silent execute self.win_pos . ' split ' . self.name
     call self.set_options().set_syntax().set_maps().set_autocmds()
     call self.set_statusline()
@@ -53,13 +53,13 @@ fun! s:buffer_new() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_quit() dict " {{{1
+fun! s:buffer_quit() dict abort " {{{1
     call s:wipe_buffer(self.name)
     return self
 endfun
 " 1}}}
 
-fun! s:buffer_set_options() dict " {{{1
+fun! s:buffer_set_options() dict abort " {{{1
     setfiletype vfinder
     setlocal nonumber
     setlocal nobuflisted
@@ -76,7 +76,7 @@ fun! s:buffer_set_options() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_set_syntax() dict " {{{1
+fun! s:buffer_set_syntax() dict abort " {{{1
     syntax clear
     syntax case ignore
     syntax match vfinderPrompt =\%1l.*=
@@ -88,7 +88,7 @@ fun! s:buffer_set_syntax() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_set_maps() dict " {{{1
+fun! s:buffer_set_maps() dict abort " {{{1
     " Disable some default vim keys
     for k in ['<CR>', 'x', 'c', 'd', 'o', 'O', 'p', 'P', 'u', 'U', '<C-r>']
         silent execute 'nnoremap <silent> <buffer> ' . k . ' <Nop>'
@@ -133,7 +133,7 @@ fun! s:buffer_set_maps() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_set_autocmds() dict " {{{1
+fun! s:buffer_set_autocmds() dict abort " {{{1
     augroup VFinder
         autocmd!
         autocmd TextChangedI <buffer> call vfinder#events#trigger_event_with_delay('query_modified')
@@ -144,7 +144,7 @@ fun! s:buffer_set_autocmds() dict " {{{1
 endfun
 " 1}}}
 
-fun! s:buffer_set_statusline() dict " {{{1
+fun! s:buffer_set_statusline() dict abort " {{{1
     let &l:statusline = vfinder#statusline#get()
 endfun
 " 1}}}
@@ -294,7 +294,7 @@ endfun
 
 fun! s:toggle_fuzzy(mode) abort " {{{1
     let b:vf.flags.fuzzy = !b:vf.flags.fuzzy
-    call vfinder#events#update_candidates_request(a:mode)
+    silent call vfinder#events#update_candidates_request(a:mode)
 endfun
 " 1}}}
 

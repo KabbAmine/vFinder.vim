@@ -151,35 +151,29 @@ And where `scope` can be:
 
 ## Global mappings
 
-| mode | action                 | description                                                          | default value |
-| :--: | ---------------------- | -------------------------------------------------------------------- | :-----------: |
-| `i`  | `prompt_backspace`     | -                                                                    |    `<BS>`     |
-| `i`  | `prompt_delete`        | -                                                                    |    `<Del>`    |
-| `i`  | `prompt_delete_line`   | -                                                                    |    `<C-u>`    |
-| `i`  | `prompt_delete_word`   | -                                                                    |    `<C-w>`    |
-| `i`  | `prompt_move_down`     | -                                                                    |    `<C-n>`    |
-| `i`  | `prompt_move_left`     | -                                                                    |    `<C-h>`    |
-| `i`  | `prompt_move_right`    | -                                                                    |    `<C-l>`    |
-| `i`  | `prompt_move_to_end`   | -                                                                    |    `<C-e>`    |
-| `i`  | `prompt_move_to_start` | -                                                                    |    `<C-a>`    |
-| `i`  | `prompt_move_up`       | -                                                                    |    `<C-p>`    |
-| `n`  | `start_insert_mode_a`  | -                                                                    |      `a`      |
-| `n`  | `start_insert_mode_A`  | -                                                                    |      `A`      |
-| `n`  | `start_insert_mode_i`  | -                                                                    |      `i`      |
-| `n`  | `start_insert_mode_I`  | -                                                                    |      `I`      |
-| `i`  | `window_quit`          | -                                                                    |    `<Esc>`    |
-| `n`  | `window_quit`          | -                                                                    |    `<Esc>`    |
-| `n`  | `new_query`            | Delete current query and start insert mode                           |     `cc`      |
-| `i`  | `candidates_update`    | Refresh candidates                                                   |    `<C-r>`    |
-| `n`  | `candidates_update`    | ^^^^^^^^^^^^^^^^^^                                                   |      `R`      |
-| `i`  | `cache_clean`          | Delete cache file if it exists                                       |    `<F5>`     |
-| `n`  | `cache_clean`          | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       |    `<F5>`     |
-| `i`  | `fuzzy_toggle`         | Enable/Disable fuzzy mode                                            |    `<C-f>`    |
-| `n`  | `fuzzy_toggle`         | ^^^^^^^^^^^^^^^^^^^^^^^^^                                            |      `F`      |
-| `i`  | `toggle_maps_in_sl`    | Show and toggle between source and global mappings in the statusline |    `<F1>`     |
-| `n`  | `toggle_maps_in_sl`    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ |    `<F1>`     |
-| `i`  | `send_to_qf`           | Send current candidates to the quickfix list                         |    `<C-q>`    |
-| `n`  | `send_to_qf`           | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         |      `q`      |
+| mode(s) | action                 | description                                                          |  default value  |
+| :-----: | ---------------------- | -------------------------------------------------------------------- | :-------------: |
+|   `i`   | `prompt_backspace`     | -                                                                    |     `<BS>`      |
+|   `i`   | `prompt_delete`        | -                                                                    |     `<Del>`     |
+|   `i`   | `prompt_delete_line`   | -                                                                    |     `<C-u>`     |
+|   `i`   | `prompt_delete_word`   | -                                                                    |     `<C-w>`     |
+|   `i`   | `prompt_move_down`     | -                                                                    |     `<C-n>`     |
+|   `i`   | `prompt_move_left`     | -                                                                    |     `<C-h>`     |
+|   `i`   | `prompt_move_right`    | -                                                                    |     `<C-l>`     |
+|   `i`   | `prompt_move_to_end`   | -                                                                    |     `<C-e>`     |
+|   `i`   | `prompt_move_to_start` | -                                                                    |     `<C-a>`     |
+|   `i`   | `prompt_move_up`       | -                                                                    |     `<C-p>`     |
+|   `n`   | `start_insert_mode_a`  | -                                                                    |       `a`       |
+|   `n`   | `start_insert_mode_A`  | -                                                                    |       `A`       |
+|   `n`   | `start_insert_mode_i`  | -                                                                    |       `i`       |
+|   `n`   | `start_insert_mode_I`  | -                                                                    |       `I`       |
+|   `n`   | `new_query`            | Delete current query and start insert mode                           |      `cc`       |
+| `i`/`n` | `window_quit`          | -                                                                    | `<Esc>`/`<Esc>` |
+| `i`/`n` | `candidates_update`    | Refresh candidates                                                   |   `<C-r>`/`R`   |
+| `i`/`n` | `cache_clean`          | Delete cache file if it exists                                       |  `<F5>`/`<F5>`  |
+| `i`/`n` | `fuzzy_toggle`         | Enable/Disable fuzzy mode                                            |   `<C-f>`/`F`   |
+| `i`/`n` | `toggle_maps_in_sl`    | Show and toggle between source and global mappings in the statusline |  `<F1>`/`<F1>`  |
+| `i`/`n` | `send_to_qf`           | Send current candidates to the quickfix list                         |   `<C-q>`/`q`   |
 
 e.g.
 
@@ -195,166 +189,122 @@ let g:vfinder_maps._ = {
 
 ### buffers
 
-| mode | action       | default value |
-| :--: | ------------ | :-----------: |
-| `i`  | `edit`       |    `<CR>`     |
-| `n`  | `edit`       |    `<CR>`     |
-| `i`  | `split`      |    `<C-s>`    |
-| `n`  | `split`      |      `s`      |
-| `i`  | `vsplit`     |    `<C-v>`    |
-| `n`  | `vsplit`     |      `v`      |
-| `i`  | `tab`        |    `<C-t>`    |
-| `n`  | `tab`        |      `t`      |
-| `i`  | `wipe`       |    `<C-d>`    |
-| `n`  | `wipe`       |     `dd`      |
-| `i`  | `toggle_all` |    `<C-o>`    |
-| `n`  | `toggle_all` |      `o`      |
+|  modes  | action       | default value |
+| :-----: | ------------ | :-----------: |
+| `i`/`n` | `edit`       | `<CR>`/`<CR>` |
+| `i`/`n` | `split`      |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit`     |  `<C-v>`/`v`  |
+| `i`/`n` | `tab`        |  `<C-t>`/`t`  |
+| `i`/`n` | `wipe`       | `<C-d>`/`dd`  |
+| `i`/`n` | `toggle_all` |  `<C-o>`/`o`  |
 
 ### colors
 
-| mode | action    | default value |
-| :--: | --------- | :-----------: |
-| `i`  | `apply`   |    `<CR>`     |
-| `n`  | `apply`   |    `<CR>`     |
-| `i`  | `preview` |    `<C-o>`    |
-| `n`  | `preview` |      `o`      |
+|  modes  | action    | default value  |
+| :-----: | --------- | :------------: |
+| `i`/`n` | `apply`   | `<CR>`/`<CR>` |
+| `i`/`n` | `preview` |  `<C-o>`/`o`   |
 
 ### commands/command_history
 
-| mode | action    | default value |
-| :--: | --------- | :-----------: |
-| `i`  | `execute` |    `<CR>`     |
-| `n`  | `execute` |    `<CR>`     |
-| `i`  | `echo`    |    `<C-o>`    |
-| `n`  | `echo`    |      `o`      |
+|  modes  | action    | default value  |
+| :-----: | --------- | :------------: |
+| `i`/`n` | `execute` | `<CR>`/`<CR>` |
+| `i`/`n` | `echo`    |  `<C-o>`/`o`   |
 
 ### directories
 
-| mode | action    | default value |
-| :--: | --------- | :-----------: |
-| `i`  | `goto`    |    `<CR>`     |
-| `n`  | `goto`    |    `<CR>`     |
-| `i`  | `go_back` |    `<C-v>`    |
-| `n`  | `go_back` |      `v`      |
-| `i`  | `cd`      |    `<C-s>`    |
-| `n`  | `cd`      |      `s`      |
+|  modes  | action    | default value  |
+| :-----: | --------- | :------------: |
+| `i`/`n` | `goto`    | `<CR>`/`<CR>` |
+| `i`/`n` | `go_back` |  `<C-v>`/`v`   |
+| `i`/`n` | `cd`      |  `<C-s>`/`s`   |
 
 ### files
 
-| mode | action             | default value |
-| :--: | ------------------ | :-----------: |
-| `i`  | `edit`             |    `<CR>`     |
-| `n`  | `edit`             |    `<CR>`     |
-| `i`  | `split`            |    `<C-s>`    |
-| `n`  | `split`            |      `s`      |
-| `i`  | `vsplit`           |    `<C-v>`    |
-| `n`  | `vsplit`           |      `v`      |
-| `i`  | `tab`              |    `<C-t>`    |
-| `n`  | `tab`              |      `t`      |
-| `i`  | `toggle_git_flags` |    `<C-g>`    |
-| `n`  | `toggle_git_flags` |     `gi`      |
+|  modes  | action             | default value |
+| :-----: | ------------------ | :-----------: |
+| `i`/`n` | `edit`             | `<CR>`/`<CR>` |
+| `i`/`n` | `split`            |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit`           |  `<C-v>`/`v`  |
+| `i`/`n` | `tab`              |  `<C-t>`/`t`  |
+| `i`/`n` | `toggle_git_flags` | `<C-g>`/`gi`  |
 
 ### git_commits
 
-| mode | action      | default value |
-| :--: | ----------- | :-----------: |
-| `i`  | `use_sha`   |    `<C-s>`    |
-| `n`  | `use_sha`   |      `s`      |
-| `i`  | `diff_stat` |    `<C-o>`    |
-| `n`  | `diff_stat` |      `o`      |
-| `i`  | `diff`      |    `<CR>`     |
-| `n`  | `diff`      |    `<CR>`     |
+|  modes  | action      | default value |
+| :-----: | ----------- | :-----------: |
+| `i`/`n` | `use_sha`   |  `<C-s>`/`s`  |
+| `i`/`n` | `diff_stat` |  `<C-o>`/`o`  |
+| `i`/`n` | `diff`      | `<CR>`/`<CR>` |
 
 ### grep/qf
 
-| mode | action            | default value |
-| :--: | ----------------- | :-----------: |
-| `i`  | `goto`            |    `<CR>`     |
-| `n`  | `goto`            |    `<CR>`     |
-| `i`  | `split_and_goto`  |    `<C-s>`    |
-| `n`  | `split_and_goto`  |      `s`      |
-| `i`  | `vsplit_and_goto` |    `<C-v>`    |
-| `n`  | `vsplit_and_goto` |      `v`      |
-| `i`  | `preview`         |    `<C-o>`    |
-| `n`  | `preview`         |      `o`      |
+|  modes  | action            | default value |
+| :-----: | ----------------- | :-----------: |
+| `i`/`n` | `goto`            | `<CR>`/`<CR>` |
+| `i`/`n` | `split_and_goto`  |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit_and_goto` |  `<C-v>`/`v`  |
+| `i`/`n` | `preview`         |  `<C-o>`/`o`  |
 
 ### help
 
-| mode | action           | default value |
-| :--: | ---------------- | :-----------: |
-| `i`  | `open`           |    `<CR>`     |
-| `n`  | `open`           |    `<CR>`     |
-| `i`  | `open_in_vsplit` |    `<C-v>`    |
-| `n`  | `open_in_vsplit` |      `v`      |
+|  modes  | action           | default value |
+| :-----: | ---------------- | :-----------: |
+| `i`/`n` | `open`           | `<CR>`/`<CR>` |
+| `i`/`n` | `open_in_vsplit` |  `<C-v>`/`v`  |
 
 ### marks
 
-| mode | action   | default value |
-| :--: | -------- | :-----------: |
-| `i`  | `goto`   |    `<CR>`     |
-| `n`  | `goto`   |    `<CR>`     |
-| `i`  | `delete` |    `<C-d>`    |
-| `n`  | `delete` |     `dd`      |
+|  modes  | action   | default value |
+| :-----: | -------- | :-----------: |
+| `i`/`n` | `goto`   | `<CR>`/`<CR>` |
+| `i`/`n` | `delete` | `<C-d>`/`dd`  |
 
 ### mru/oldfiles
 
-| mode | action   | default value |
-| :--: | -------- | :-----------: |
-| `i`  | `edit`   |    `<CR>`     |
-| `n`  | `edit`   |    `<CR>`     |
-| `i`  | `split`  |    `<C-s>`    |
-| `n`  | `split`  |      `s`      |
-| `i`  | `vsplit` |    `<C-v>`    |
-| `n`  | `vsplit` |      `v`      |
-| `i`  | `tab`    |    `<C-t>`    |
-| `n`  | `tab`    |      `t`      |
+|  modes  | action   | default value |
+| :-----: | -------- | :-----------: |
+| `i`/`n` | `edit`   | `<CR>`/`<CR>` |
+| `i`/`n` | `split`  |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit` |  `<C-v>`/`v`  |
+| `i`/`n` | `tab`    |  `<C-t>`/`t`  |
 
 ### tags_in_buffer
 
-| mode | action            | default value |
-| :--: | ----------------- | :-----------: |
-| `i`  | `goto`            |    `<CR>`     |
-| `n`  | `goto`            |    `<CR>`     |
-| `i`  | `split_and_goto`  |    `<C-s>`    |
-| `n`  | `split_and_goto`  |      `s`      |
-| `i`  | `vsplit_and_goto` |    `<C-v>`    |
-| `n`  | `vsplit_and_goto` |      `v`      |
+|  modes  | action            | default value |
+| :-----: | ----------------- | :-----------: |
+| `i`/`n` | `goto`            | `<CR>`/`<CR>` |
+| `i`/`n` | `split_and_goto`  |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit_and_goto` |  `<C-v>`/`v`  |
 
 ### spell
 
-| mode | action | default value |
-| :--: | ------ | :-----------: |
-| `i`  | `use`  |    `<CR>`     |
-| `n`  | `use`  |    `<CR>`     |
+|  modes  | action | default value |
+| :-----: | ------ | :-----------: |
+| `i`/`n` | `use`  | `<CR>`/`<CR>` |
 
 ### tags
 
-| mode | action            | default value |
-| :--: | ----------------- | :-----------: |
-| `i`  | `goto`            |    `<CR>`     |
-| `n`  | `goto`            |    `<CR>`     |
-| `i`  | `split_and_goto`  |    `<C-s>`    |
-| `n`  | `split_and_goto`  |      `s`      |
-| `i`  | `vsplit_and_goto` |    `<C-v>`    |
-| `n`  | `vsplit_and_goto` |      `v`      |
-| `i`  | `tab_and_goto`    |    `<C-t>`    |
-| `n`  | `tab_and_goto`    |      `t`      |
-| `i`  | `preview`         |    `<C-o>`    |
-| `n`  | `preview`         |      `o`      |
+|  modes  | action            | default value |
+| :-----: | ----------------- | :-----------: |
+| `i`/`n` | `goto`            | `<CR>`/`<CR>` |
+| `i`/`n` | `split_and_goto`  |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit_and_goto` |  `<C-v>`/`v`  |
+| `i`/`n` | `tab_and_goto`    |  `<C-t>`/`t`  |
+| `i`/`n` | `preview`         |  `<C-o>`/`o`  |
 
 ### windows
 
-| mode | action | default value |
-| :--: | ------ | :-----------: |
-| `i`  | `goto` |    `<CR>`     |
-| `n`  | `goto` |    `<CR>`     |
+|  modes  | action | default value |
+| :-----: | ------ | :-----------: |
+| `i`/`n` | `goto` | `<CR>`/`<CR>` |
 
 ### yank/registers
 
-| mode | action  | default value |
-| :--: | ------- | :-----------: |
-| `i`  | `paste` |    `<CR>`     |
-| `n`  | `paste` |    `<CR>`     |
+|  modes  | action  | default value |
+| :-----: | ------- | :-----------: |
+| `i`/`n` | `paste` | `<CR>`/`<CR>` |
 
 e.g. of defining custom mappings:
 
@@ -426,15 +376,23 @@ let g:vfinder_maps._ = {
 nnoremap <silent> ,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,b :call vfinder#i('buffers')<CR>
 nnoremap <silent> ,w :call vfinder#i('windows')<CR>
-nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': 'botright'})<CR>
+nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': 'tab'})<CR>
 nnoremap <silent> ,r :call vfinder#i('mru')<CR>
 nnoremap <silent> ,c :call vfinder#i('commands', {'fuzzy': 1})<CR>
 nnoremap <silent> ,,c :call vfinder#i('command_history')<CR>
+nnoremap <silent> ,h :call vfinder#i('help')<CR>
 nnoremap <silent> ,t :call vfinder#i('tags')<CR>
 nnoremap <silent> ,,f :call vfinder#i('tags_in_buffer', {'fuzzy': 1})<CR>
+nnoremap <silent> ,m :call vfinder#i('marks')<CR>
+
+" yank
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 nnoremap <silent> ,y :call vfinder#i('yank')<CR>
 inoremap <silent> <A-y> <Esc>:call vfinder#i('yank')<CR>
-nnoremap <silent> ,m :call vfinder#i('marks')<CR>
+
+" spell
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <silent> z= :call vfinder#i('spell', {
             \   'win_pos': 'topleft vertical'
             \ })<CR>
@@ -455,9 +413,17 @@ fun! s:vfinder_qf() abort " {{{2
     endif
 endfun " 2}}}
 
-" Grep
+" git_commits
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+highlight! link vfinderGitCommitsDiffStatPlus Question
+highlight! link vfinderGitCommitsDiffStatMinus Error
+nnoremap <silent> ,gc :call vfinder#i('git_commits', {'win_pos': 'tab'})<CR>
+
+" grep
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" The following mappings overwrite the ones defined in config/minimal
 nnoremap <silent> ,,g :call vfinder#i('grep')<CR>
 xnoremap <silent> ,,g :call <SID>vfinder_grep_visual()<CR>
 nnoremap <silent> ,g <Esc>:setlocal operatorfunc=<SID>vfinder_grep_motion<CR>g@

@@ -86,32 +86,33 @@ There are no mappings provided for executing sources, please define your owns (S
 
 The built-in sources:
 
-| source name                  | description                             | args (optional)                     | default actions                                  |
-| ---------------------------- | --------------------------------------- | ----------------------------------- | ------------------------------------------------ |
-| `buffers`                    | List of buffers                         | -                                   | edit, edit in (v)split/tab, wipe, toggle hiddens |
-| `colors`                     | List of installed colorschemes          | -                                   | apply, preview                                   |
-| `command_history`            | History of vim commands                 | -                                   | execute, echo                                    |
-| `commands`                   | Vim commands                            | -                                   | execute, echo                                    |
-| `directories`                | List of directories in the cwd          | -                                   | goto, go back, cd                                |
-| `files`<sup>n</sup>          | Recursive list of files in the cwd      | -                                   | open, open in a (v)split/tab, toggle git flags   |
-| `grep`                       | Ask for a query and grep using &grepprg | query: _should not be empty_        | goto, open in (v)split/tab, preview              |
-| `help`                       | Help files                              | -                                   | open, open_in_vsplit                             |
-| `marks`                      | List of marks                           | -                                   | goto, delete                                     |
-| `mru`<sup>c</sup>            | List of recent files                    | -                                   | open, open in a (v)split/tab                     |
-| `oldfiles`                   | Output of `:oldfiles`                   | -                                   | open, open in a (v)split/tab                     |
-| `qf`                         | List of qf/loclist items                | type: _[q]f (default) or [l]oclist_ | goto, open in (v)split/tab, preview              |
-| `registers`                  | Values of registers                     | -                                   | paste                                            |
-| `spell`                      | Suggestions for the current word        | -                                   | use suggestion                                   |
-| `tags_in_buffer`<sup>t</sup> | List of tags in current buffer          | -                                   | goto, open in a (v)split                         |
-| `tags`                       | List of tags from tagfiles              | -                                   | goto, open in (v)split/tab, preview              |
-| `windows`                    | List of windows in all tabs             | -                                   | goto                                             |
-| `yank`<sup>c</sup>           | All yanked elements                     | -                                   | paste                                            |
+| source name                  | description                             | args (optional)                     | default actions                                                       |
+| ---------------------------- | --------------------------------------- | ----------------------------------- | --------------------------------------------------------------------- |
+| `buffers`                    | List of buffers                         | -                                   | edit, edit in (v)split/tab, wipe, toggle hiddens                      |
+| `colors`                     | List of installed colorschemes          | -                                   | apply, preview                                                        |
+| `command_history`            | History of vim commands                 | -                                   | execute, echo                                                         |
+| `commands`                   | Vim commands                            | -                                   | execute, echo                                                         |
+| `directories`                | List of directories in the cwd          | -                                   | goto, go back, cd                                                     |
+| `files`<sup>n</sup>          | Recursive list of files in the cwd      | -                                   | open, open in a (v)split/tab, toggle git flags                        |
+| `git_commits`                | Log of git commits of current wd        | -                                   | use sha (use fugitive if installed), diff (needs fugitive), diff stat |
+| `grep`                       | Ask for a query and grep using &grepprg | query: _should not be empty_        | goto, open in (v)split/tab, preview                                   |
+| `help`                       | Help files                              | -                                   | open, open_in_vsplit                                                  |
+| `marks`                      | List of marks                           | -                                   | goto, delete                                                          |
+| `mru`<sup>c</sup>            | List of recent files                    | -                                   | open, open in a (v)split/tab                                          |
+| `oldfiles`                   | Output of `:oldfiles`                   | -                                   | open, open in a (v)split/tab                                          |
+| `qf`                         | List of qf/loclist items                | type: _[q]f (default) or [l]oclist_ | goto, open in (v)split/tab, preview                                   |
+| `registers`                  | Values of registers                     | -                                   | paste                                                                 |
+| `spell`                      | Suggestions for the current word        | -                                   | use suggestion                                                        |
+| `tags_in_buffer`<sup>t</sup> | List of tags in current buffer          | -                                   | goto, open in a (v)split                                              |
+| `tags`                       | List of tags from tagfiles              | -                                   | goto, open in (v)split/tab, preview                                   |
+| `windows`                    | List of windows in all tabs             | -                                   | goto                                                                  |
+| `yank`<sup>c</sup>           | All yanked elements                     | -                                   | paste                                                                 |
 
 _**<sup>n</sup>** Need `rg`, `ag`, `git` or `find`._  
 _**<sup>t</sup>** Need `ctags`._  
 _**<sup>c</sup>** Use cache files._
 
-The default mappings are: `<CR>`, `<C-s>`, `<C-v>`, `<C-t>`, `<C-o>` (see [per source mappings](#per-source-mappings))
+The default mappings are usually: `<CR>`, `<C-s>`, `<C-v>`, `<C-t>`, `<C-o>` (see [per source mappings](#per-source-mappings))
 
 ## <a name="default-sources-options">Source options</a>
 
@@ -252,6 +253,17 @@ let g:vfinder_maps._ = {
 | `n`  | `tab`              |      `t`      |
 | `i`  | `toggle_git_flags` |    `<C-g>`    |
 | `n`  | `toggle_git_flags` |     `gi`      |
+
+### git_commits
+
+| mode | action      | default value |
+| :--: | ----------- | :-----------: |
+| `i`  | `use_sha`   |    `<C-s>`    |
+| `n`  | `use_sha`   |      `s`      |
+| `i`  | `diff_stat` |    `<C-o>`    |
+| `n`  | `diff_stat` |      `o`      |
+| `i`  | `diff`      |    `<CR>`     |
+| `n`  | `diff`      |    `<CR>`     |
 
 ### grep/qf
 

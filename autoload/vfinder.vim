@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-03
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -52,10 +52,10 @@ endfun
 " 1}}}
 
 fun! vfinder#set_global_higroups() abort " {{{1
-    highlight! link vfinderPrompt ModeMsg
-    highlight! link vfinderIndex Comment
-    highlight! link vfinderPreviewCursorLine IncSearch
-    highlight! link vfinderMatched CursorLineNr
+    highlight default link vfinderPrompt ModeMsg
+    highlight default link vfinderIndex Comment
+    highlight default link vfinderPreviewCursorLine IncSearch
+    highlight default link vfinderMatched CursorLineNr
 endfun
 " 1}}}
 

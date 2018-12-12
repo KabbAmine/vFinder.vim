@@ -1,5 +1,5 @@
 " Creation         : 2018-11-19
-" Last modification: 2018-12-03
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -70,8 +70,8 @@ endfun
 fun! s:windows_syntax_fun() abort " {{{1
     syntax match vfinderWindowsTabnrAndId =\%>1l^\S\+=
     syntax match vfinderWindowsName =\%>1l \{2\}.*\ze \{2,\}\f\+$=
-    highlight! link vfinderWindowsTabnrAndId vfinderIndex
-    highlight! link vfinderWindowsName Statement
+    highlight default link vfinderWindowsTabnrAndId vfinderIndex
+    highlight default link vfinderWindowsName Statement
 endfun
 " 1}}}
 

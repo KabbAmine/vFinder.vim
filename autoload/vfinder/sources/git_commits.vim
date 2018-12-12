@@ -36,9 +36,9 @@ fun! s:git_commits_syntax_fun() abort " {{{1
     syntax match vfinderGitCommitsSha =\%>1l^\S\+=
     syntax match vfinderGitCommitsDate =\%>1l\s\+[0-9-]\{10}=
     syntax match vfinderGitCommitsRefs =\%>1l\s\{2}(.\{-})\s\+=
-    highlight! link vfinderGitCommitsSha Identifier
-    highlight! link vfinderGitCommitsDate vfinderIndex
-    highlight! link vfinderGitCommitsRefs Title
+    highlight default link vfinderGitCommitsSha Identifier
+    highlight default link vfinderGitCommitsDate vfinderIndex
+    highlight default link vfinderGitCommitsRefs Title
 endfun
 " 1}}}
 
@@ -166,9 +166,9 @@ fun! s:set_syntax_diff_stat_prev_buf() abort " {{{1
     execute 'syntax match vfinderGitCommitsDiffStatLl =\%' . ll . 'l.*='
     execute 'syntax match vfinderGitCommitsDiffStatPlus =\%<' . ll . 'l\%(\d\+\ \)\zs+\+='
     execute 'syntax match vfinderGitCommitsDiffStatMinus =\%<' . ll . 'l-\+$='
-    highlight! default link vfinderGitCommitsDiffStatLl Identifier
-    highlight! default link vfinderGitCommitsDiffStatPlus DiffAdd
-    highlight! default link vfinderGitCommitsDiffStatMinus DiffDelete
+    highlight default link vfinderGitCommitsDiffStatLl Identifier
+    highlight default link vfinderGitCommitsDiffStatPlus DiffAdd
+    highlight default link vfinderGitCommitsDiffStatMinus DiffDelete
 endfun
 " 1}}}
 

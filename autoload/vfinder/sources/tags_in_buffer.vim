@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -90,10 +90,10 @@ endfun
 " 1}}}
 
 fun! s:tags_in_buffer_syntax_fun() abort " {{{1
-    syntax match vfindertags_in_bufferLinenr =\%>1l\d\+$=
-    syntax match vfindertags_in_bufferKind =\%>1l\s\+:\S\+:\s\+=
-    highlight! link vfindertags_in_bufferLinenr vfinderIndex
-    highlight! link vfindertags_in_bufferKind Identifier
+    syntax match vfinderTagsInBufferLinenr =\%>1l\d\+$=
+    syntax match vfinderTagsInBufferKind =\%>1l\s\+:\S\+:\s\+=
+    highlight default link vfinderTagsInBufferLinenr vfinderIndex
+    highlight default link vfinderTagsInBufferKind Identifier
 endfun
 " 1}}}
 

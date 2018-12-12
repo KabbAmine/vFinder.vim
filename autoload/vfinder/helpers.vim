@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " s:vars {{{1
@@ -64,7 +64,7 @@ fun! vfinder#helpers#flash_line(win_nr) abort " {{{1
     let s:initial_cursorline = getwinvar(a:win_nr, '&cursorline')
     let s:buf_nr = bufnr('%')
     let s:initial_line = line('.')
-    highlight! link CursorLine vfinderPreviewCursorLine
+    highlight default link CursorLine vfinderPreviewCursorLine
     let s:flash_timer = timer_start(100, {t ->
                 \    setwinvar(
                 \       a:win_nr,
@@ -180,7 +180,7 @@ fun! vfinder#helpers#autoclose_pwindow_autocmd() abort " {{{1
         autocmd!
         " The augroup will be deleted when the buffer is
         " closed/deleted/wiped
-        autocmd BufDelete,BufWipeout <buffer> pclose!
+        autocmd BufDelete,BufWipeout <buffer> unsilent echomsg 'wéé' | pclose!
     augroup END
 endfun
 " 1}}}

@@ -1,5 +1,5 @@
 " Creation         : 2018-03-31
-" Last modification: 2018-11-30
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -34,7 +34,7 @@ endfun
 
 fun! s:marks_syntax_fun() abort " {{{1
     syntax match vfinderMarksLine =\%>1l^\S\+\s\+\d\+\s\+\d\+\s\+=
-    highlight! link vfinderMarksLine vfinderIndex
+    highlight default link vfinderMarksLine vfinderIndex
 endfun
 " 1}}}
 

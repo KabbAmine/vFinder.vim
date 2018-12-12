@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -53,10 +53,10 @@ fun! s:files_syntax_fun() abort " {{{1
     syntax match vfinderModifiedGitStatus =\%>1l^\ \~\ =
     syntax match vfinderRenamedGitStatus =\%>1l^\ -\ =
     syntax match vfinderUntrackedGitStatus =\%>1l^\ ?\ =
-    highlight! link vfinderAddedGitStatus DiffAdded
-    highlight! link vfinderModifiedGitStatus DiffChange
-    highlight! link vfinderRenamedGitStatus DiffDelete
-    highlight! link vfinderUntrackedGitStatus vfinderIndex
+    highlight default link vfinderAddedGitStatus DiffAdded
+    highlight default link vfinderModifiedGitStatus DiffChange
+    highlight default link vfinderRenamedGitStatus DiffDelete
+    highlight default link vfinderUntrackedGitStatus vfinderIndex
 endfun
 " 1}}}
 

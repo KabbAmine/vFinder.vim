@@ -1,5 +1,5 @@
 " Creation         : 2018-12-09
-" Last modification: 2018-12-09
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,10 +40,8 @@ endfun
 " 1}}}
 
 fun! s:help_syntax_fun() abort " {{{1
-    " syntax match vfinderHelpSubject =\%>1l\S\+=
     syntax match vfinderHelpFilename =\%>1l\f\+$=
-    highlight! link vfinderHelpFilename vfinderIndex
-    " highlight! link vfinderTagsKind Identifier
+    highlight default link vfinderHelpFilename vfinderIndex
 endfun
 " 1}}}
 

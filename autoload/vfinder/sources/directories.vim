@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-12-10
+" Last modification: 2018-12-12
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -35,8 +35,8 @@ endfun
 fun! s:directories_syntax_fun() abort " {{{1
     syntax match vfinderDirectoriesHidden =\%>1l^\.\f\+$=
     syntax match vfinderDirectoriesGoback =\%2l\.\./=
-    highlight! link vfinderDirectoriesHidden Comment
-    highlight! link vfinderDirectoriesGoback CursorLineNr
+    highlight default link vfinderDirectoriesHidden Comment
+    highlight default link vfinderDirectoriesGoback CursorLineNr
 endfun
 " 1}}}
 

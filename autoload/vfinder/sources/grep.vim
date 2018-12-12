@@ -37,8 +37,8 @@ fun! s:grep_syntax_fun(query) abort " {{{1
         execute 'syntax match vfinderGrepQuery =\%>1l\V' . query . '='
     endif
     syntax match vfinderGrepInfos =\%>1l^\S\+:=
-    highlight! link vfinderGrepInfos vfinderIndex
-    highlight! link vfinderGrepQuery Title
+    highlight default link vfinderGrepInfos vfinderIndex
+    highlight default link vfinderGrepQuery Title
 endfun
 " 1}}}
 

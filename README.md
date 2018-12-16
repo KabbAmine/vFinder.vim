@@ -151,29 +151,29 @@ And where `scope` can be:
 
 ## Global mappings
 
-| mode(s) | action                 | description                                                          |  default value  |
-| :-----: | ---------------------- | -------------------------------------------------------------------- | :-------------: |
-|   `i`   | `prompt_backspace`     | -                                                                    |     `<BS>`      |
-|   `i`   | `prompt_delete`        | -                                                                    |     `<Del>`     |
-|   `i`   | `prompt_delete_line`   | -                                                                    |     `<C-u>`     |
-|   `i`   | `prompt_delete_word`   | -                                                                    |     `<C-w>`     |
-|   `i`   | `prompt_move_down`     | -                                                                    |     `<C-n>`     |
-|   `i`   | `prompt_move_left`     | -                                                                    |     `<C-h>`     |
-|   `i`   | `prompt_move_right`    | -                                                                    |     `<C-l>`     |
-|   `i`   | `prompt_move_to_end`   | -                                                                    |     `<C-e>`     |
-|   `i`   | `prompt_move_to_start` | -                                                                    |     `<C-a>`     |
-|   `i`   | `prompt_move_up`       | -                                                                    |     `<C-p>`     |
-|   `n`   | `start_insert_mode_a`  | -                                                                    |       `a`       |
-|   `n`   | `start_insert_mode_A`  | -                                                                    |       `A`       |
-|   `n`   | `start_insert_mode_i`  | -                                                                    |       `i`       |
-|   `n`   | `start_insert_mode_I`  | -                                                                    |       `I`       |
-|   `n`   | `new_query`            | Delete current query and start insert mode                           |      `cc`       |
-| `i`/`n` | `window_quit`          | -                                                                    | `<Esc>`/`<Esc>` |
-| `i`/`n` | `candidates_update`    | Refresh candidates                                                   |   `<C-r>`/`R`   |
-| `i`/`n` | `cache_clean`          | Delete cache file if it exists                                       |  `<F5>`/`<F5>`  |
-| `i`/`n` | `fuzzy_toggle`         | Enable/Disable fuzzy mode                                            |   `<C-f>`/`F`   |
-| `i`/`n` | `toggle_maps_in_sl`    | Show and toggle between source and global mappings in the statusline |  `<F1>`/`<F1>`  |
-| `i`/`n` | `send_to_qf`           | Send current candidates to the quickfix list                         |   `<C-q>`/`q`   |
+| mode(s) | action                 | description                                                          | default value |
+| :-----: | ---------------------- | -------------------------------------------------------------------- | :-----------: |
+|   `n`   | `window_quit`          | -                                                                    |    `<Esc>`    |
+|   `i`   | `prompt_backspace`     | -                                                                    |    `<BS>`     |
+|   `i`   | `prompt_delete`        | -                                                                    |    `<Del>`    |
+|   `i`   | `prompt_delete_line`   | -                                                                    |    `<C-u>`    |
+|   `i`   | `prompt_delete_word`   | -                                                                    |    `<C-w>`    |
+|   `i`   | `prompt_move_down`     | -                                                                    |    `<C-n>`    |
+|   `i`   | `prompt_move_left`     | -                                                                    |    `<C-h>`    |
+|   `i`   | `prompt_move_right`    | -                                                                    |    `<C-l>`    |
+|   `i`   | `prompt_move_to_end`   | -                                                                    |    `<C-e>`    |
+|   `i`   | `prompt_move_to_start` | -                                                                    |    `<C-a>`    |
+|   `i`   | `prompt_move_up`       | -                                                                    |    `<C-p>`    |
+|   `n`   | `start_insert_mode_a`  | -                                                                    |      `a`      |
+|   `n`   | `start_insert_mode_A`  | -                                                                    |      `A`      |
+|   `n`   | `start_insert_mode_i`  | -                                                                    |      `i`      |
+|   `n`   | `start_insert_mode_I`  | -                                                                    |      `I`      |
+|   `n`   | `new_query`            | Delete current query and start insert mode                           |     `cc`      |
+| `i`/`n` | `candidates_update`    | Refresh candidates                                                   |  `<C-r>`/`R`  |
+| `i`/`n` | `cache_clean`          | Delete cache file if it exists                                       | `<F5>`/`<F5>` |
+| `i`/`n` | `fuzzy_toggle`         | Enable/Disable fuzzy mode                                            |  `<C-f>`/`F`  |
+| `i`/`n` | `toggle_maps_in_sl`    | Show and toggle between source and global mappings in the statusline | `<F1>`/`<F1>` |
+| `i`/`n` | `send_to_qf`           | Send current candidates to the quickfix list                         |  `<C-q>`/`q`  |
 
 e.g.
 
@@ -200,25 +200,25 @@ let g:vfinder_maps._ = {
 
 ### colors
 
-|  modes  | action    | default value  |
-| :-----: | --------- | :------------: |
+|  modes  | action    | default value |
+| :-----: | --------- | :-----------: |
 | `i`/`n` | `apply`   | `<CR>`/`<CR>` |
-| `i`/`n` | `preview` |  `<C-o>`/`o`   |
+| `i`/`n` | `preview` |  `<C-o>`/`o`  |
 
 ### commands/command_history
 
-|  modes  | action    | default value  |
-| :-----: | --------- | :------------: |
+|  modes  | action    | default value |
+| :-----: | --------- | :-----------: |
 | `i`/`n` | `execute` | `<CR>`/`<CR>` |
-| `i`/`n` | `echo`    |  `<C-o>`/`o`   |
+| `i`/`n` | `echo`    |  `<C-o>`/`o`  |
 
 ### directories
 
-|  modes  | action    | default value  |
-| :-----: | --------- | :------------: |
+|  modes  | action    | default value |
+| :-----: | --------- | :-----------: |
 | `i`/`n` | `goto`    | `<CR>`/`<CR>` |
-| `i`/`n` | `go_back` |  `<C-v>`/`v`   |
-| `i`/`n` | `cd`      |  `<C-s>`/`s`   |
+| `i`/`n` | `go_back` |  `<C-v>`/`v`  |
+| `i`/`n` | `cd`      |  `<C-s>`/`s`  |
 
 ### files
 
@@ -436,6 +436,13 @@ fun! s:vfinder_grep_motion(...) abort " {{{2
     call vfinder#i('grep', {'args': ka#utils#get_motion_result()})
 endfun " 2}}}
 ```
+
+# Inspiration
+
+- [unite](https://github.com/Shougo/unite.vim)
+- [fzf](https://github.com/junegunn/fzf.vim)
+- [GV](https://github.com/junegunn/gv.vim)
+- [agit](https://github.com/cohama/agit.vim)
 
 # Note
 

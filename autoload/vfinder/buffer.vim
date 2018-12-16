@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-15
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -116,7 +116,6 @@ fun! s:buffer_set_maps() dict abort " {{{1
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_I . ' :call <SID>start_ins_mode_with_key("I")<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.start_insert_mode_A . ' :call <SID>start_ins_mode_with_key("A")<CR>'
     " Buffer
-    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.window_quit . ' <Esc>:call <SID>wipe_buffer()<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
     silent execute 'inoremap <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#events#update_candidates_request("i")<CR>'
@@ -437,7 +436,6 @@ fun! s:buffer_define_maps() abort " {{{1
                 \       'prompt_move_up'      : '<C-p>',
                 \       'send_to_qf'          : '<C-q>',
                 \       'toggle_maps_in_sl'   : '<F1>',
-                \       'window_quit'         : '<Esc>'
                 \   },
                 \   'n': {
                 \       'cache_clean'        : '<F5>',

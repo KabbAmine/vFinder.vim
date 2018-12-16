@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-16
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -119,14 +119,13 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:do(action, candidate_fun, mode, options) " {{{1
-    let line = line('.')
-    let buffer = bufnr('%')
-    let in_prompt = vfinder#helpers#is_in_prompt()
+    let [line, buffer] = [line('.'), bufnr('%')]
+    let one_win = winnr() is# winnr('$')
     let no_candidates = line('$') is# 1
     let action = !empty(a:action) ? a:action : '%s'
 
     try
-        if in_prompt
+        if vfinder#helpers#is_in_prompt()
             if no_candidates && !a:options.flag
                 call s:set_mode(line, a:mode)
                 return ''
@@ -139,25 +138,25 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
         endif
 
         if a:options.quit && !a:options.execute_in_place
-            silent execute 'wincmd p'
+            if !one_win
+                silent execute 'wincmd p'
+            endif
             silent execute 'bwipeout ' . buffer
         endif
 
         " A capital C in case we have a funcref
-        if a:options.function
-            let Cmd = function(action, [target])
-        else
-            let Cmd = action =~ '%s' ? printf(action, target) : action
-        endif
+        let Cmd = a:options.function
+                    \ ? function(action, [target])
+                    \ : action =~ '%s'
+                    \   ? printf(action, target)
+                    \   : action
 
         let silent = a:options.silent ? 'silent' : ''
-        if a:options.function
-            execute silent . ' call Cmd()'
-        elseif a:options.echo
-            execute silent . ' call feedkeys(":" . Cmd)'
-        else
-            execute silent ' execute Cmd'
-        endif
+        execute a:options.function
+                    \ ? silent . ' call Cmd()'
+                    \ : a:options.echo
+                    \ ? silent . ' call feedkeys(":" . Cmd)'
+                    \ : silent . ' execute Cmd'
 
         if !a:options.silent && !a:options.echo
             let to_add = a:options.function ? string(Cmd) : Cmd
@@ -165,8 +164,10 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
         endif
 
         if a:options.quit && a:options.execute_in_place
+            if !one_win
+                silent execute 'wincmd p'
+            endif
             silent execute 'bwipeout ' . buffer
-            silent execute 'wincmd p'
         elseif !a:options.quit
             if a:options.clear_prompt
                 let prompt = vfinder#prompt#i()

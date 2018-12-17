@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-12-09
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -192,7 +192,7 @@ let s:marks = {
                 \       },
                 \ 'delete': {
                 \       'action': function('s:marks_delete_mark'),
-                \       'options': {'function': 1, 'silent': 0, 'quit': 0, 'update': 1}
+                \       'options': {'function': 1, 'quit': 0, 'update': 1}
                 \       }
                 \ }
 " 1}}}

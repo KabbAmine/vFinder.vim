@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-12-16
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -62,8 +62,7 @@ fun! s:directories_maps() abort " {{{1
     let options = {
                 \   'clear_prompt': 1,
                 \   'function'    : 1,
-                \   'quit'        : 0,
-                \   'silent'      : 0
+                \   'quit'        : 0
                 \ }
     return {
                 \   'i': {
@@ -94,7 +93,7 @@ fun! s:goto(path) abort " {{{1
                     \ ? b:vf.last_wd . a:path
                     \ : a:path
         call s:set_path_to(goto, mode())
-        call vfinder#helpers#echo(s:reduce_path(goto))
+        unsilent call vfinder#helpers#echo(s:reduce_path(goto))
     endif
 endfun
 " 1}}}
@@ -104,7 +103,7 @@ fun! s:go_back(path) abort " {{{1
                 \ ? b:vf.last_wd . '../'
                 \ : b:vf.ctx.wd . '../'
     call s:set_path_to(goto, mode())
-    call vfinder#helpers#echo(s:reduce_path(goto))
+    unsilent call vfinder#helpers#echo(s:reduce_path(goto))
 endfun
 " 1}}}
 
@@ -113,7 +112,7 @@ fun! s:cd(path) abort " {{{1
                 \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
                 \ : a:path
     execute 'cd ' . goto
-    call vfinder#helpers#echo('cd to ' . s:reduce_path(getcwd()))
+    unsilent call vfinder#helpers#echo('cd to ' . s:reduce_path(getcwd()))
     sleep 500m
 endfun
 " 1}}}

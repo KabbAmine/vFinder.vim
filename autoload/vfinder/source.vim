@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-16
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -175,7 +175,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
                 call clearmatches()
             endif
             if a:options.update
-                call vfinder#events#update_candidates_request(a:mode)
+                silent call vfinder#events#update_candidates_request(a:mode)
             endif
 
             if a:options.goto_prompt

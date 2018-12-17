@@ -1,5 +1,5 @@
 " Creation         : 2018-12-10
-" Last modification: 2018-12-12
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -46,7 +46,7 @@ fun! s:git_commits_maps() abort " {{{1
     let keys = vfinder#maps#get('git_commits')
     let use_sha_action = {
                 \   'action': function('s:git_sha'),
-                \   'options': {'function': 1, 'silent': 0}
+                \   'options': {'function': 1}
                 \   }
     let diff_action = {
                 \   'action': function('s:diff'),
@@ -118,11 +118,11 @@ endfun
 
 fun! s:git_commits_is_valid() abort " {{{1
     if !executable('git')
-        call vfinder#helpers#echo('"git" was not found', 'Error')
+        unsilent call vfinder#helpers#echo('"git" was not found', 'Error')
         return v:false
     endif
     if !vfinder#helpers#in_git_project()
-        call vfinder#helpers#echo('not a git project', 'Error')
+        unsilent call vfinder#helpers#echo('not a git project', 'Error')
         return v:false
     endif
     return v:true

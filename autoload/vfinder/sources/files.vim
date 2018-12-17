@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -66,7 +66,7 @@ fun! s:files_maps() abort " {{{1
     let actions = extend(vfinder#actions#get('files'), {
                 \ 'toggle_git_flags': {
                 \   'action' : function('s:toggle_git_flags'),
-                \   'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0, 'silent': 0}
+                \   'options': {'function': 1, 'flag': 1, 'update': 1, 'quit': 0}
                 \ }})
     let maps.i = {
                 \   keys.i.edit            : actions.edit,
@@ -92,7 +92,7 @@ endfun
 
 fun! s:toggle_git_flags(file) abort " {{{1
     if !vfinder#helpers#in_git_project()
-        call vfinder#helpers#echo('not in a git project')
+        unsilent call vfinder#helpers#echo('not in a git project')
         return ''
     endif
     let b:vf.flags.git_flags = !b:vf.flags.git_flags

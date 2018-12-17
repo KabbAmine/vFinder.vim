@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-12-10
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -44,7 +44,7 @@ endfun
 fun! s:spell_maps() abort " {{{1
     let maps = {}
     let keys = vfinder#maps#get('spell')
-    let options = {'function': 1, 'silent': 0}
+    let options = {'function': 1}
     let maps.i = {keys.i.use: {'action': function('s:use_suggestion'), 'options': options}}
     let maps.n = {keys.n.use: {'action': function('s:use_suggestion'), 'options': options}}
     return maps
@@ -73,7 +73,7 @@ endfun
 
 fun! s:spell_is_valid() " {{{1
     if !&l:spell
-        call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg')
+        unsilent call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg')
         return v:false
     else
         return v:true

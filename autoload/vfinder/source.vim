@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-17
+" Last modification: 2018-12-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -165,7 +165,7 @@ fun! s:do(action, candidate_fun, mode, options) " {{{1
 
         if a:options.quit && a:options.execute_in_place
             if !one_win
-                silent execute 'wincmd p'
+                silent execute bufwinnr(b:vf.ctx.bufnr) . 'wincmd w'
             endif
             silent execute 'bwipeout ' . buffer
         elseif !a:options.quit

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-17
+" Last modification: 2018-12-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,15 +40,15 @@ fun! vfinder#events#win_enter() abort " {{{1
     if b:vf.bopts.update_on_win_enter
         let b:vf.bopts.manual_update = 1
         call s:filter_and_update()
-        if b:vf.ctx.last_pos !=# []
-            call cursor(b:vf.ctx.last_pos[0], b:vf.ctx.last_pos[1])
+        if b:vf.bopts.last_pos !=# []
+            call cursor(b:vf.bopts.last_pos[0], b:vf.bopts.last_pos[1])
         endif
     endif
 endfun
 " 1}}}
 
 fun! vfinder#events#win_leave() abort " {{{1
-    let b:vf.ctx.last_pos = [line('.'), col('.')]
+    let b:vf.bopts.last_pos = [line('.'), col('.')]
 endfun
 " 1}}}
 

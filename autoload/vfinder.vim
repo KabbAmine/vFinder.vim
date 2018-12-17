@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-17
+" Last modification: 2018-12-18
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -147,13 +147,11 @@ fun! s:get_ctx() abort " {{{1
     " Some sources need an initial content to proceed (e.g tags_in_buffer) like
     " updating more than once, so we store some informations about the current
     " context
-    " last_pos: [line, col]
 
     return {
                 \   'bufnr'   : bufnr('%'),
                 \   'winnr'   : winnr(),
-                \   'wd'      : getcwd() . '/',
-                \   'last_pos': []
+                \   'wd'      : getcwd() . '/'
                 \ }
 endfun
 " 1}}}
@@ -201,6 +199,7 @@ fun! s:get_bopts() abort " {{{1
     " Buf-local options
 
     return {
+                \   'last_pos'           : [],
                 \   'last_query'         : '',
                 \   'first_execution'    : 1,
                 \   'update_on_win_enter': 1,

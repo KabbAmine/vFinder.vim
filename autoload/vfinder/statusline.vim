@@ -1,9 +1,9 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-11-27
+" Last modification: 2018-12-17
 
 
 fun! vfinder#statusline#get() abort " {{{1
-    return '%{vfinder#statusline#head()}%=%{vfinder#statusline#flags()}'
+    return '%{vfinder#statusline#head()}%=%{vfinder#statusline#flags()}%{vfinder#statusline#match_mode()}'
 endfun
 " 1}}}
 
@@ -32,6 +32,13 @@ fun! vfinder#statusline#flags() abort " {{{1
         endif
     endfor
     return str
+endfun
+" 1}}}
+
+fun! vfinder#statusline#match_mode() abort " {{{1
+    let m_mode = get(b:vf.s, 'match_mode', 'default')
+    return m_mode is# 'default'
+                \ ? '' : '[M:' . m_mode . ']'
 endfun
 " 1}}}
 

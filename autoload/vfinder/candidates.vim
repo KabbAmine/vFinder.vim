@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -84,7 +84,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:filter(query, candidates) abort " {{{1
-    return vfinder#filter#i(b:vf.s.filter_name, a:candidates, a:query)
+    return vfinder#match#i(b:vf.s.match_mode, a:candidates, a:query)
 endfun
 " 1}}}
 

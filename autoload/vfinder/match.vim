@@ -2,7 +2,7 @@
 " Last modification: 2018-11-09
 
 
-fun! vfinder#filter#i(name, candidates, query) abort " {{{1
+fun! vfinder#match#i(name, candidates, query) abort " {{{1
     " Where name can be:
     " - default       : Use built-in filter function
     " - match_position: Sort by 1st index of matched string

@@ -29,19 +29,19 @@ fun! vfinder#source#i(source, args) abort " {{{1
     endif
 
     return {
-                \   'name'          : options.name,
-                \   'is_valid'      : get(options, 'is_valid', 1),
-                \   'to_execute'    : options.to_execute,
-                \   'format_fun'    : get(options, 'format_fun', ''),
-                \   'candidate_fun' : get(options, 'candidate_fun', function('getline', ['.'])),
-                \   'syntax_fun'    : get(options, 'syntax_fun', ''),
-                \   'filter_name'   : get(options, 'filter_name', 'default'),
-                \   'maps'          : options.maps,
-                \   'prepare'       : function('<SID>source_prepare'),
-                \   'execute'       : function('<SID>source_execute'),
-                \   'format'        : function('<SID>source_format'),
-                \   'set_maps'      : function('<SID>source_set_maps'),
-                \   'candidates'    : [],
+                \   'name'         : options.name,
+                \   'is_valid'     : get(options, 'is_valid', 1),
+                \   'to_execute'   : options.to_execute,
+                \   'format_fun'   : get(options, 'format_fun', ''),
+                \   'candidate_fun': get(options, 'candidate_fun', function('getline', ['.'])),
+                \   'syntax_fun'   : get(options, 'syntax_fun', ''),
+                \   'match_mode'   : get(options, 'match_mode', g:vfinder_default_match_mode),
+                \   'maps'         : options.maps,
+                \   'prepare'      : function('<SID>source_prepare'),
+                \   'execute'      : function('<SID>source_execute'),
+                \   'format'       : function('<SID>source_format'),
+                \   'set_maps'     : function('<SID>source_set_maps'),
+                \   'candidates'   : [],
                 \ }
 endfun
 " 1}}}

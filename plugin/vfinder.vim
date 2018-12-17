@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-11-17
+" Last modification: 2018-12-17
 " Maintainer       : Kabbaj Amine <amine.kabb@gmail.com>
 " License          : MIT
 
@@ -17,6 +17,7 @@ set cpoptions&vim
 
 " Global options {{{1
 let g:vfinder_fuzzy = get(g:, 'vfinder_fuzzy', 0)
+let g:vfinder_default_match_mode = get(g:, 'vfinder_default_match_mode', 'default')
 let g:vfinder_win_pos = get(g:, 'vfinder_win_pos', 'topleft')
 let g:vfinder_flash = get(g:, 'vfinder_flash', 1)
 let g:vfinder_cache_path = get(g:, 'vfinder_cache_path', $HOME . '/.cache/vfinder')

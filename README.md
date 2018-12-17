@@ -336,7 +336,7 @@ let g:vfinder_maps.spell = {
 - format_fun
 - candidate_fun
 - syntax_fun
-- filter_name
+- match_mode
 - maps
 
 ## Actions

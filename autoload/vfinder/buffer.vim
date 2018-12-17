@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-15
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -201,6 +201,7 @@ endfun
 " 1}}}
 
 fun! s:backspace_i() abort " {{{1
+    let b:vf.bopts.delete_map_used = 1
     if !vfinder#helpers#is_in_prompt()
         call s:move_to_edge_i(1)
     endif
@@ -217,6 +218,7 @@ endfun
 " 1}}}
 
 fun! s:delete_i() abort " {{{1
+    let b:vf.bopts.delete_map_used = 1
     if !vfinder#helpers#is_in_prompt()
         call s:move_to_edge_i(1)
     endif
@@ -237,6 +239,7 @@ endfun
 " 1}}}
 
 fun! s:control_w_i() abort " {{{1
+    let b:vf.bopts.delete_map_used = 1
     if !vfinder#helpers#is_in_prompt()
         call s:move_to_edge_i(1)
     endif
@@ -259,6 +262,7 @@ endfun
 " 1}}}
 
 fun! s:control_u_i() abort " {{{1
+    let b:vf.bopts.delete_map_used = 1
     if !vfinder#helpers#is_in_prompt()
         call s:move_to_edge_i(1)
     endif
@@ -276,6 +280,7 @@ endfun
 
 fun! s:new_query() abort " {{{1
     " like the behavior of cc in normal mode
+    let b:vf.bopts.delete_map_used = 1
     call s:move_to_edge_i(1)
     call s:control_u_i()
 endfun

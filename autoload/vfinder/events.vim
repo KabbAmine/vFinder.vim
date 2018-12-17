@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-10
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -12,8 +12,17 @@ fun! vfinder#events#trigger_event_with_delay(name) abort " {{{1
         unlet! g:vf_filtering_timer
     endif
     if vfinder#helpers#is_in_prompt()
+        " If a delete map was used (<BS>, <Del>...) we get the delay related to
+        " the initial candidates (b:vf.candidates.initial), otherwise we get
+        " the one related to the current candidates
+        if b:vf.bopts.delete_map_used
+            let b:vf.bopts.delete_map_used = 0
+            let delay = s:get_timer_delay('initial')
+        else
+            let delay = s:get_timer_delay('current')
+        endif
         let f = 'vfinder#events#' . a:name
-        let g:vf_filtering_timer = timer_start(s:get_timer_delay(), {
+        let g:vf_filtering_timer = timer_start(delay, {
                     \   t -> call(f, [])
                     \ })
     endif
@@ -113,9 +122,11 @@ fun! s:filter_and_update() abort " {{{1
 endfun
 " 1}}}
 
-fun! s:get_timer_delay() abort " {{{1
+fun! s:get_timer_delay(who) abort " {{{1
+    let ll = a:who is# 'current'
+                \ ? line('$')
+                \ : len(b:vf.candidates.initial)
     " More the candidates, bigger the delay
-    let ll = line('$')
     return ll <# 5000
                 \ ? 0
                 \ : ll <# 15000

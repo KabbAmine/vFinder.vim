@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -204,6 +204,7 @@ fun! s:get_bopts() abort " {{{1
                 \   'last_query'         : '',
                 \   'first_execution'    : 1,
                 \   'update_on_win_enter': 1,
+                \   'delete_map_used'    : 0
                 \ }
 endfun
 " 1}}}

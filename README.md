@@ -72,15 +72,16 @@ There are no mappings provided for executing sources, please define your owns (S
 
 # Global options
 
-| options                         | default value                     | description                                   |
-| ------------------------------- | --------------------------------- | --------------------------------------------- |
-| `g:vfinder_fuzzy`               | `0`                               | Enable/Disable fuzzy matching (May be slow)   |
-| `g:vfinder_win_pos`             | `'topleft'`                       | Default position of the window                |
-| `g:vfinder_flash`               | `1`                               | Flash target line when executing some actions |
-| `g:vfinder_cache_path`          | `$HOME . '/.cache/vfinder'`       | Directory where to store cache files          |
-| `g:vfinder_yank_source_enabled` | `1`                               | Enable/Disable yank source which use caching  |
-| `g:vfinder_mru_source_enabled`  | `1`                               | Enable/Disable mru source which use caching   |
-| `g:vfinder_maps`                | _See the part about **Mappings**_ | Global & per sources actions/mappings         |
+| options                         | default value                     | description                                    |
+| ------------------------------- | --------------------------------- | ---------------------------------------------- |
+| `g:vfinder_fuzzy`               | `0`                               | Enable/Disable fuzzy matching                  |
+| `g:vfinder_default_match_mode`  | `'default'`                       | Match mode ('match_position', 'compact_match') |
+| `g:vfinder_win_pos`             | `'topleft'`                       | Default position of the window                 |
+| `g:vfinder_flash`               | `1`                               | Flash target line when executing some actions  |
+| `g:vfinder_cache_path`          | `$HOME . '/.cache/vfinder'`       | Directory where to store cache files           |
+| `g:vfinder_yank_source_enabled` | `1`                               | Enable/Disable yank source which use caching   |
+| `g:vfinder_mru_source_enabled`  | `1`                               | Enable/Disable mru source which use caching    |
+| `g:vfinder_maps`                | _See the part about **Mappings**_ | Global & per sources actions/mappings          |
 
 # <a name="default-sources">Default sources</a>
 
@@ -364,6 +365,7 @@ let g:vfinder_maps.spell = {
 
 ```viml
 let g:vfinder_fuzzy = 0
+let g:vfinder_default_match_mode = 'compact_match'
 let g:vfinder_maps = {}
 let g:vfinder_maps._ = {
             \   'n': {'window_quit': 'q'},
@@ -375,14 +377,14 @@ let g:vfinder_maps._ = {
 
 nnoremap <silent> ,f :call vfinder#i('files')<CR>
 nnoremap <silent> ,b :call vfinder#i('buffers')<CR>
-nnoremap <silent> ,w :call vfinder#i('windows')<CR>
-nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': 'tab'})<CR>
 nnoremap <silent> ,r :call vfinder#i('mru')<CR>
+nnoremap <silent> ,t :call vfinder#i('tags')<CR>
+nnoremap <silent> ,,f :call vfinder#i('tags_in_buffer')<CR>
 nnoremap <silent> ,c :call vfinder#i('commands', {'fuzzy': 1})<CR>
 nnoremap <silent> ,,c :call vfinder#i('command_history')<CR>
+nnoremap <silent> ,w :call vfinder#i('windows')<CR>
+nnoremap <silent> ,d :call vfinder#i('directories', {'win_pos': 'tab'})<CR>
 nnoremap <silent> ,h :call vfinder#i('help')<CR>
-nnoremap <silent> ,t :call vfinder#i('tags')<CR>
-nnoremap <silent> ,,f :call vfinder#i('tags_in_buffer', {'fuzzy': 1})<CR>
 nnoremap <silent> ,m :call vfinder#i('marks')<CR>
 
 " yank

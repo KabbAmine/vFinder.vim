@@ -1,5 +1,5 @@
 " Creation         : 2018-11-19
-" Last modification: 2018-12-12
+" Last modification: 2018-12-19
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -29,6 +29,7 @@ fun! s:windows_format(ids) abort " {{{1
     for id in copy(a:ids)
         let w_infos = getwininfo(id)[0]
         let [t_nr, b_nr] = [w_infos.tabnr, w_infos.bufnr]
+        let w_nr = win_id2tabwin(id)[1]
         " do not add vfinder windows
         if b_nr is# bufnr('%')
             continue
@@ -39,7 +40,7 @@ fun! s:windows_format(ids) abort " {{{1
                     \   fnamemodify(b_name, ':t'),
                     \ ]
         call add(res, printf('%-15s %-25s %s',
-                    \   't' . t_nr  . ':' . id,
+                    \   't' . t_nr  . ':' . id . ':' . w_nr,
                     \   name,
                     \   path
                     \ ))
@@ -68,9 +69,9 @@ endfun
 " 1}}}
 
 fun! s:windows_syntax_fun() abort " {{{1
-    syntax match vfinderWindowsTabnrAndId =\%>1l^\S\+=
+    syntax match vfinderWindowsInfos =\%>1l^\S\+=
     syntax match vfinderWindowsName =\%>1l \{2\}.*\ze \{2,\}\f\+$=
-    highlight default link vfinderWindowsTabnrAndId vfinderIndex
+    highlight default link vfinderWindowsInfos vfinderIndex
     highlight default link vfinderWindowsName Statement
 endfun
 " 1}}}

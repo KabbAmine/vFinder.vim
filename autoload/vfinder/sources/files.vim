@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-17
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -33,30 +33,23 @@ endfun
 fun! s:files_format_fun(files) abort " {{{1
     " Add git flags if the option is enabled
     let b:vf.flags.git_flags = get(b:vf.flags, 'git_flags', 0)
-    if !vfinder#helpers#in_git_project() || !b:vf.flags.git_flags
+    if !b:vf.flags.git_flags
         return a:files
     endif
     let files = []
-    let files_with_flags = s:git_status_files()
+    let files_with_flags = s:get_git_status_files_with_flags()
     for file in a:files
-        let status = has_key(files_with_flags, file)
-                    \ ? ' ' . files_with_flags[file] . ' '
-                    \ : ''
-        call add(files, printf('%-3s %s', status, file))
+        let status = get(files_with_flags, file, '')
+        let status = !empty(status) ? '[' . status . ']' : status
+        call add(files, printf('%-4s %s', status, file))
     endfor
     return files
 endfun
 " 1}}}
 
 fun! s:files_syntax_fun() abort " {{{1
-    syntax match vfinderAddedGitStatus =\%>1l^\ +\ =
-    syntax match vfinderModifiedGitStatus =\%>1l^\ \~\ =
-    syntax match vfinderRenamedGitStatus =\%>1l^\ -\ =
-    syntax match vfinderUntrackedGitStatus =\%>1l^\ ?\ =
-    highlight default link vfinderAddedGitStatus DiffAdded
-    highlight default link vfinderModifiedGitStatus DiffChange
-    highlight default link vfinderRenamedGitStatus DiffDelete
-    highlight default link vfinderUntrackedGitStatus vfinderIndex
+    syntax match vfinderFilesGitStatusSymbols =\%>1l^\[.*] =
+    highlight default link vfinderFilesGitStatusSymbols Identifier
 endfun
 " 1}}}
 
@@ -103,26 +96,14 @@ endfun
 " 	            git related
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Git status symbols {{{1
-let s:git_status_symbols = {
-            \   'M': '~',
-            \   'A': '+',
-            \   'R': '-',
-            \   'D': '-'
-            \ }
-" 1}}}
-
-fun! s:git_status_files() abort " {{{1
+fun! s:get_git_status_files_with_flags() abort " {{{1
     let res = {}
     for str in systemlist('git status --porcelain --untracked-files=all')
-        " -> res[file] = status
-        let [file, status] = [
-                    \   matchstr(str, '\f\+$'),
-                    \   matchstr(str, '\S')
-                    \ ]
-        " Get the appropriate symbol if it exists
-        let status = get(s:git_status_symbols, status, status)
-        let res[file] = status
+        let [file, status] = [matchstr(str, '\f\+$'), str[:1]]
+        " 'X ' -> X+ (in index)
+        " ' Y' -> X
+        " 'XY' -> XY
+        let res[file] = substitute(status, '\s$', '+', '')
     endfor
     return res
 endfun
@@ -151,5 +132,6 @@ fun! s:files_define_maps() abort " {{{1
                 \ })
 endfun
 " 1}}}
+
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

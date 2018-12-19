@@ -61,17 +61,10 @@ endfun
 
 fun! s:buffer_set_options() dict abort " {{{1
     setfiletype vfinder
-    setlocal nonumber
-    setlocal nobuflisted
-    setlocal buftype=nofile
-    setlocal noswapfile
-    setlocal modifiable
-    setlocal cursorline
-    setlocal nowrap
-    setlocal foldcolumn=0
-    setlocal textwidth=0
-    setlocal omnifunc=
-    setlocal complete=
+    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+    setlocal nonumber cursorline nowrap
+    setlocal foldcolumn=0 textwidth=0
+    setlocal omnifunc=  complete=
     return self
 endfun
 " 1}}}

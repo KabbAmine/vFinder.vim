@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-12
+" Last modification: 2018-12-19
 
 
 " s:vars {{{1
@@ -180,7 +180,7 @@ fun! vfinder#helpers#autoclose_pwindow_autocmd() abort " {{{1
         autocmd!
         " The augroup will be deleted when the buffer is
         " closed/deleted/wiped
-        autocmd BufDelete,BufWipeout <buffer> unsilent echomsg 'wéé' | pclose!
+        autocmd BufDelete,BufWipeout <buffer> pclose!
     augroup END
 endfun
 " 1}}}

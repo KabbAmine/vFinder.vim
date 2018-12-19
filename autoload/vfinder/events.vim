@@ -1,29 +1,31 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-18
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 	        	events
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! vfinder#events#trigger_event_with_delay(name) abort " {{{1
-    if exists('g:vf_filtering_timer') && timer_info(g:vf_filtering_timer) !=# []
-        call timer_stop(g:vf_filtering_timer)
-        unlet! g:vf_filtering_timer
+fun! vfinder#events#query_modified_with_delay() abort " {{{1
+    " This event is fired the 1st time vfinder#i() is executed or after a
+    " manual update, so we ensure to stop it if its the case
+    if b:vf.bopts.manual_update
+        let b:vf.bopts.manual_update = 0
+        return
     endif
+    call s:stop_filtering_timer_if_running()
     if vfinder#helpers#is_in_prompt()
         " If a delete map was used (<BS>, <Del>...) we get the delay related to
-        " the initial candidates (b:vf.candidates.initial), otherwise we get
-        " the one related to the current candidates
+        " the number of the initial candidates (b:vf.candidates.initial),
+        " otherwise we get the one related to the current candidates
         if b:vf.bopts.delete_map_used
             let b:vf.bopts.delete_map_used = 0
             let delay = s:get_timer_delay('initial')
         else
             let delay = s:get_timer_delay('current')
         endif
-        let f = 'vfinder#events#' . a:name
         let g:vf_filtering_timer = timer_start(delay, {
-                    \   t -> call(f, [])
+                    \   t -> call('vfinder#events#query_modified', [])
                     \ })
     endif
 endfun
@@ -74,29 +76,12 @@ endfun
 " 1}}}
 
 fun! vfinder#events#query_modified(...) abort " {{{1
-    " If coming from a vfinder#events#query_modified_with_delay()
-    if exists('g:vf_filtering_timer')
-        unlet g:vf_filtering_timer
-    endif
-    " When triggered with startinsert the 1st time
-    if exists('b:vf.bopts.first_execution')
-        unlet! b:vf.bopts.first_execution
-        return
-    endif
-    " This event is called after a manual update, so we ensure to
-    " stop it if its the case.
+    " Be sure to delete the global timer variable if coming from a
+    " #query_modified_with_delay()
+    unlet! g:vf_filtering_timer
     let col = col('.')
-    if exists('b:vf.bopts.manual_update')
-        unlet! b:vf.bopts.manual_update
-        return
-    endif
     call s:filter_and_update()
-    if col is# col('$')
-        startinsert!
-    else
-        startinsert
-        call cursor(1, col)
-    endif
+    call s:start_insert_in_initial_pos(col)
 endfun
 " 1}}}
 
@@ -105,16 +90,12 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:filter_and_update() abort " {{{1
-    let manual_update = exists('b:vf.bopts.manual_update') && b:vf.bopts.manual_update
-    let prompt = vfinder#prompt#i()
-    call prompt.render()
+    let prompt = vfinder#prompt#i().render()
     let candidates = vfinder#candidates#i(b:vf.s)
-    " If no manual update
-    if !manual_update
+    if !b:vf.bopts.manual_update
         let candidates.initial = b:vf.candidates.initial
     endif
-    " No need to filter if no query
-    if !empty(prompt.query) || manual_update
+    if !empty(prompt.query) || b:vf.bopts.manual_update
         call candidates.filter(prompt.query)
     endif
     call candidates.populate().highlight_matched()
@@ -123,19 +104,35 @@ endfun
 " 1}}}
 
 fun! s:get_timer_delay(who) abort " {{{1
+    " who: current|initial
+
     let ll = a:who is# 'current'
                 \ ? line('$')
                 \ : len(b:vf.candidates.initial)
     " More the candidates, bigger the delay
-    return ll <# 5000
-                \ ? 0
-                \ : ll <# 15000
-                \ ? 50
-                \ : ll <# 30000
+    return ll <# 10000
                 \ ? 100
-                \ : ll <# 50000
-                \ ? 150
-                \ : 250
+                \ : ll <# 20000
+                \ ? 200
+                \ : 300
+endfun
+" 1}}}
+
+fun! s:stop_filtering_timer_if_running() abort " {{{1
+    if exists('g:vf_filtering_timer') && timer_info(g:vf_filtering_timer) !=# []
+        call timer_stop(g:vf_filtering_timer)
+        unlet! g:vf_filtering_timer
+    endif
+endfun
+" 1}}}
+
+fun! s:start_insert_in_initial_pos(col) abort " {{{1
+    if a:col is# col('$')
+        startinsert!
+    else
+        startinsert
+        call cursor(1, a:col)
+    endif
 endfun
 " 1}}}
 

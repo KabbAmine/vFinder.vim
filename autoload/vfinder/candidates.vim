@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-17
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -58,8 +58,8 @@ fun! s:candidates_filter(query) dict abort " {{{1
     " There is no need to filter all the original candidates if we added
     " characters to our previous query.
     " Note that the following is not appliable if we have a manual update.
-    let candidates = !exists('b:vf.bopts.manual_update')
-                \ && self.query[2:] =~# '^\v' . b:vf.bopts.last_query[2:]
+    let chars_added_to_last_query = self.query[2:] =~# '^\v' . b:vf.bopts.last_query[2:]
+    let candidates = !b:vf.bopts.manual_update && chars_added_to_last_query
                 \   ? self.current
                 \   : self.initial
     let b:vf.bopts.last_query = self.query

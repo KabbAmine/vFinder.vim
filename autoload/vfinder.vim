@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-18
+" Last modification: 2018-12-19
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -36,15 +36,17 @@ fun! vfinder#i(source, ...) abort " {{{1
 
         let prompt = vfinder#prompt#i().render(sopts.query)
         call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.s.name)
-        let candidates = vfinder#candidates#i(b:vf.s).get().populate()
+        let candidates = vfinder#candidates#i(b:vf.s)
+        if !empty(sopts.query)
+            call candidates.filter(sopts.query)
+        else
+            call candidates.get()
+        endif
+        call candidates.populate()
         let b:vf.candidates.initial = candidates.initial
 
         redraw!
         call vfinder#helpers#go_to_prompt_and_startinsert()
-
-        if !empty(sopts.query)
-            call vfinder#events#query_modified()
-        endif
     catch
         call vfinder#helpers#echomsg(v:exception, 'Error')
     endtry

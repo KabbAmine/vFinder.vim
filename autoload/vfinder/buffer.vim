@@ -62,7 +62,7 @@ endfun
 fun! s:buffer_set_options() dict abort " {{{1
     setfiletype vfinder
     setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
-    setlocal nonumber cursorline nowrap
+    setlocal nonumber cursorline nowrap nolist
     setlocal foldcolumn=0 textwidth=0
     setlocal omnifunc=  complete=
     return self
@@ -111,8 +111,8 @@ fun! s:buffer_set_maps() dict abort " {{{1
     " Buffer
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.window_quit . ' :call <SID>wipe_buffer()<CR>'
     " Candidates & cache
-    silent execute 'inoremap <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#events#update_candidates_request("i")<CR>'
-    silent execute 'nnoremap <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#events#update_candidates_request("n")<CR>'
+    silent execute 'inoremap <silent> <nowait> <buffer> ' . i.candidates_update . ' <Esc>:call vfinder#events#update_candidates_request("i")<CR>'
+    silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.candidates_update . ' :call vfinder#events#update_candidates_request("n")<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.cache_clean . ' <Esc>:call <SID>clean_cache_if_it_exists("i")<CR>'
     silent execute 'nnoremap <silent> <nowait> <buffer> ' . n.cache_clean . ' :call <SID>clean_cache_if_it_exists("n")<CR>'
     " Toggle source mappings in the statusline
@@ -371,9 +371,15 @@ fun! s:send_to_quickfix(...) abort " {{{1
     let [win_nr, col] = [winnr(), col('.')]
     let lines = getline(2, '$')
     if lines !=# []
-        cgetexpr lines
+        let title = type(b:vf.s.to_execute) is# v:t_string
+                    \ ? b:vf.s.to_execute
+                    \ : b:vf.s.name
+        call setqflist([], 'r', {
+                    \   'lines': lines,
+                    \   'title': title
+                    \ })
         if getqflist() !=# []
-            copen
+            silent execute 'copen'
             silent execute win_nr . 'wincmd w'
         endif
     endif

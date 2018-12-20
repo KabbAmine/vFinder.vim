@@ -76,6 +76,10 @@ endfun
 " 1}}}
 
 fun! vfinder#events#query_modified(...) abort " {{{1
+    " Always check that we're on a vfinder buffer before proceeding
+    if !s:in_vf_buffer()
+        return
+    endif
     " Be sure to delete the global timer variable if coming from a
     " #query_modified_with_delay()
     unlet! g:vf_filtering_timer
@@ -90,6 +94,9 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! s:filter_and_update() abort " {{{1
+    if !s:in_vf_buffer()
+        return
+    endif
     let prompt = vfinder#prompt#i().render()
     let candidates = vfinder#candidates#i(b:vf.s)
     if !b:vf.bopts.manual_update
@@ -127,12 +134,20 @@ endfun
 " 1}}}
 
 fun! s:start_insert_in_initial_pos(col) abort " {{{1
+    if !s:in_vf_buffer()
+        return
+    endif
     if a:col is# col('$')
         startinsert!
     else
         startinsert
         call cursor(1, a:col)
     endif
+endfun
+" 1}}}
+
+fun! s:in_vf_buffer() abort " {{{1
+    return exists('b:vf')
 endfun
 " 1}}}
 

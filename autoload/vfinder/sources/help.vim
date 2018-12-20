@@ -1,5 +1,5 @@
 " Creation         : 2018-12-09
-" Last modification: 2018-12-12
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -22,7 +22,7 @@ endfun
 fun! s:help_source() abort " {{{1
     " inspired from fzf-helptags
     let ht = []
-    for f in uniq(sort(split(globpath(&runtimepath, 'doc/tags', 1), "\n")))
+    for f in sort(split(globpath(&runtimepath, 'doc/tags', 1), "\n"))
         let ht += readfile(f)
     endfor
     return ht

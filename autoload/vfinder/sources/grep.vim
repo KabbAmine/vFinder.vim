@@ -1,5 +1,5 @@
 " Creation         : 2018-11-15
-" Last modification: 2018-12-12
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -38,7 +38,7 @@ fun! s:grep_syntax_fun(query) abort " {{{1
     endif
     syntax match vfinderGrepInfos =\%>1l^\S\+:=
     highlight default link vfinderGrepInfos vfinderIndex
-    highlight default link vfinderGrepQuery Title
+    highlight default link vfinderGrepQuery vfinderExtra
 endfun
 " 1}}}
 

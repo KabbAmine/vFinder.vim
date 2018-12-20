@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-12-12
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -93,7 +93,7 @@ fun! s:tags_in_buffer_syntax_fun() abort " {{{1
     syntax match vfinderTagsInBufferLinenr =\%>1l\d\+$=
     syntax match vfinderTagsInBufferKind =\%>1l\s\+:\S\+:\s\+=
     highlight default link vfinderTagsInBufferLinenr vfinderIndex
-    highlight default link vfinderTagsInBufferKind Identifier
+    highlight default link vfinderTagsInBufferKind vfinderSymbols
 endfun
 " 1}}}
 

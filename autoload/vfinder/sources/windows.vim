@@ -1,5 +1,5 @@
 " Creation         : 2018-11-19
-" Last modification: 2018-12-19
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -72,7 +72,7 @@ fun! s:windows_syntax_fun() abort " {{{1
     syntax match vfinderWindowsInfos =\%>1l^\S\+=
     syntax match vfinderWindowsName =\%>1l \{2\}.*\ze \{2,\}\f\+$=
     highlight default link vfinderWindowsInfos vfinderIndex
-    highlight default link vfinderWindowsName Statement
+    highlight default link vfinderWindowsName vfinderName
 endfun
 " 1}}}
 

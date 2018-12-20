@@ -72,7 +72,7 @@ endfun
 fun! s:buffer_set_syntax() dict abort " {{{1
     syntax clear
     syntax case ignore
-    syntax match vfinderPrompt =\%1l.*=
+    syntax match vfinderPrompt =\%1l^\S\ze =
     syntax match vfinderIndex =\%>1l^\d\+\s\+=
     if !empty(self.source.syntax_fun)
         call call(self.source.syntax_fun, [])

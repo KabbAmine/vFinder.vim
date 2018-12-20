@@ -1,5 +1,5 @@
 " Creation         : 2018-12-10
-" Last modification: 2018-12-17
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -36,9 +36,9 @@ fun! s:git_commits_syntax_fun() abort " {{{1
     syntax match vfinderGitCommitsSha =\%>1l^\S\+=
     syntax match vfinderGitCommitsDate =\%>1l\s\+[0-9-]\{10}=
     syntax match vfinderGitCommitsRefs =\%>1l\s\{2}(.\{-})\s\+=
-    highlight default link vfinderGitCommitsSha Identifier
+    highlight default link vfinderGitCommitsSha vfinderSymbols
     highlight default link vfinderGitCommitsDate vfinderIndex
-    highlight default link vfinderGitCommitsRefs Title
+    highlight default link vfinderGitCommitsRefs vfinderExtra
 endfun
 " 1}}}
 

@@ -56,8 +56,11 @@ endfun
 fun! vfinder#set_global_higroups() abort " {{{1
     highlight default link vfinderPrompt ModeMsg
     highlight default link vfinderIndex Comment
+    highlight default link vfinderName Statement
     highlight default link vfinderPreviewCursorLine IncSearch
-    highlight default link vfinderMatched CursorLineNr
+    highlight default link vfinderMatched vfinderPrompt
+    highlight default link vfinderSymbols Identifier
+    highlight default link vfinderExtra Title
 endfun
 " 1}}}
 

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-12-12
+" Last modification: 2018-12-20
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,7 +40,7 @@ fun! s:tags_syntax_fun() abort " {{{1
     syntax match vfinderTagsFilename =\%>1l\f\+$=
     syntax match vfinderTagsKind =\%>1l\s\+:\S\+:\s\+=
     highlight default link vfinderTagsFilename vfinderIndex
-    highlight default link vfinderTagsKind Identifier
+    highlight default link vfinderTagsKind vfinderSymbols
 endfun
 " 1}}}
 

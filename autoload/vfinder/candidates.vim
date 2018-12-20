@@ -73,7 +73,7 @@ fun! s:candidates_highlight_matched() dict abort " {{{1
     call clearmatches()
     if !empty(self.query) && self.query isnot# '\v'
         let case = self.query =~# '\u' ? '\C' : '\c'
-        call matchadd('vfinderMatched', case . self.query)
+        call matchadd('vfinderMatched', '\%>1l' . case . self.query)
     endif
     return self
 endfun

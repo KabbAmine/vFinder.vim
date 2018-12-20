@@ -49,7 +49,7 @@ endfun
 
 fun! s:files_syntax_fun() abort " {{{1
     syntax match vfinderFilesGitStatusSymbols =\%>1l^\[.*] =
-    highlight default link vfinderFilesGitStatusSymbols Identifier
+    highlight default link vfinderFilesGitStatusSymbols vfinderSymbols
 endfun
 " 1}}}
 

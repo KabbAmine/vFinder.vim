@@ -98,6 +98,7 @@ The built-in sources:
 | `git_commits`                | Log of git commits of current wd        | -                                   | use sha (use fugitive if installed), diff (needs fugitive), diff stat |
 | `grep`                       | Ask for a query and grep using &grepprg | query: _should not be empty_        | goto, open in (v)split/tab, preview                                   |
 | `help`                       | Help files                              | -                                   | open, open_in_vsplit                                                  |
+| `lines`                      | Lines of current buffer                 | -                                   | goto, open in (v)split/tab                                            |  |
 | `marks`                      | List of marks                           | -                                   | goto, delete                                                          |
 | `mru`<sup>c</sup>            | List of recent files                    | -                                   | open, open in a (v)split/tab                                          |
 | `oldfiles`                   | Output of `:oldfiles`                   | -                                   | open, open in a (v)split/tab                                          |
@@ -246,6 +247,7 @@ let g:vfinder_maps._ = {
 | `i`/`n` | `goto`            | `<CR>`/`<CR>` |
 | `i`/`n` | `split_and_goto`  |  `<C-s>`/`s`  |
 | `i`/`n` | `vsplit_and_goto` |  `<C-v>`/`v`  |
+| `i`/`n` | `tab_and_goto`    |  `<C-t>`/`t`  |
 | `i`/`n` | `preview`         |  `<C-o>`/`o`  |
 
 ### help
@@ -254,6 +256,15 @@ let g:vfinder_maps._ = {
 | :-----: | ---------------- | :-----------: |
 | `i`/`n` | `open`           | `<CR>`/`<CR>` |
 | `i`/`n` | `open_in_vsplit` |  `<C-v>`/`v`  |
+
+### lines
+
+|  modes  | action            | default value |
+| :-----: | ----------------- | :-----------: |
+| `i`/`n` | `goto`            | `<CR>`/`<CR>` |
+| `i`/`n` | `split_and_goto`  |  `<C-s>`/`s`  |
+| `i`/`n` | `vsplit_and_goto` |  `<C-v>`/`v`  |
+| `i`/`n` | `tab_and_goto`    |  `<C-t>`/`t`  |
 
 ### marks
 

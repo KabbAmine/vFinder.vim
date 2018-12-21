@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-20
+" Last modification: 2018-12-21
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -88,6 +88,11 @@ fun! s:buffer_set_maps() dict abort " {{{1
     endfor
     let keys = vfinder#maps#get('_')
     let [i, n] = [keys.i, keys.n]
+    " Non customizable arrow keys
+    inoremap <silent> <nowait> <buffer> <Down> <Esc>:call <SID>move_down_i()<CR>
+    inoremap <silent> <nowait> <buffer> <Up> <Esc>:call <SID>move_up_i()<CR>
+    inoremap <silent> <nowait> <buffer> <Left> <Esc>:call <SID>move_left_i()<CR>
+    inoremap <silent> <nowait> <buffer> <Right> <Esc>:call <SID>move_right_i()<CR>
     " Prompt & movement
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_down . ' <Esc>:call <SID>move_down_i()<CR>'
     silent execute 'inoremap <silent> <nowait> <buffer> ' . i.prompt_move_up . ' <Esc>:call <SID>move_up_i()<CR>'

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-11
-" Last modification: 2018-12-20
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -146,7 +146,7 @@ endfun
 
 fun! s:tags_in_buffer_is_valid() abort " {{{1
     if !executable('ctags')
-        call vfinder#helpers#echo('"ctags" was not found', 'Error')
+        call vfinder#helpers#echo('"ctags" was not found', 'Error', 'tags_in_buffer')
         return v:false
     else
         return v:true

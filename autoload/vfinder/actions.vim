@@ -1,5 +1,5 @@
 " Creation         : 2018-11-18
-" Last modification: 2018-12-17
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -170,7 +170,7 @@ fun! s:marks_go_to_mark(m) abort " {{{1
         call vfinder#helpers#unfold_and_put_line()
         call vfinder#helpers#flash_line(winnr())
     catch
-        unsilent call vfinder#helpers#echo(v:exception, 'Error')
+        unsilent call vfinder#helpers#echo(v:exception, 'Error', 'marks')
     endtry
 endfun
 " 1}}}

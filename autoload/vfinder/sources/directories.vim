@@ -1,5 +1,5 @@
 " Creation         : 2018-02-19
-" Last modification: 2018-12-20
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -93,7 +93,7 @@ fun! s:goto(path) abort " {{{1
                     \ ? b:vf.last_wd . a:path
                     \ : a:path
         call s:set_path_to(goto, mode())
-        unsilent call vfinder#helpers#echo(s:reduce_path(goto))
+        unsilent call vfinder#helpers#echo(s:reduce_path(goto), '', 'directories')
     endif
 endfun
 " 1}}}
@@ -103,7 +103,7 @@ fun! s:go_back(path) abort " {{{1
                 \ ? b:vf.last_wd . '../'
                 \ : b:vf.ctx.wd . '../'
     call s:set_path_to(goto, mode())
-    unsilent call vfinder#helpers#echo(s:reduce_path(goto))
+    unsilent call vfinder#helpers#echo(s:reduce_path(goto), '', 'directories')
 endfun
 " 1}}}
 
@@ -112,7 +112,7 @@ fun! s:cd(path) abort " {{{1
                 \ ? fnamemodify(b:vf.last_wd . a:path, ':p')
                 \ : a:path
     execute 'cd ' . goto
-    unsilent call vfinder#helpers#echo('cd to ' . s:reduce_path(getcwd()))
+    unsilent call vfinder#helpers#echo('cd to ' . s:reduce_path(getcwd()), '', 'directories')
     sleep 500m
 endfun
 " 1}}}
@@ -146,7 +146,7 @@ fun! s:reload(mode) abort " {{{1
         call remove(b:vf, 'last_wd')
     endif
     call vfinder#events#update_candidates_request(a:mode)
-    unsilent call vfinder#helpers#echo(s:reduce_path(getcwd()))
+    unsilent call vfinder#helpers#echo(s:reduce_path(getcwd()), '', 'directories')
 endfun
 " 1}}}
 

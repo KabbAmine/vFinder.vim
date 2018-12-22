@@ -1,5 +1,5 @@
 " Creation         : 2018-12-10
-" Last modification: 2018-12-20
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,11 +118,11 @@ endfun
 
 fun! s:git_commits_is_valid() abort " {{{1
     if !executable('git')
-        unsilent call vfinder#helpers#echo('"git" was not found', 'Error')
+        unsilent call vfinder#helpers#echo('"git" was not found', 'Error', 'git_commits')
         return v:false
     endif
     if !vfinder#helpers#in_git_project()
-        unsilent call vfinder#helpers#echo('not a git project', 'Error')
+        unsilent call vfinder#helpers#echo('not a git project', 'Error', 'git_commits')
         return v:false
     endif
     return v:true
@@ -131,7 +131,7 @@ endfun
 
 fun! s:fugitive_installed() abort " {{{1
     if !exists('*FugitiveExtractGitDir')
-        unsilent call vfinder#helpers#echo('this action needs vim-fugitive plugin to proceed', 'Error')
+        unsilent call vfinder#helpers#echo('this action needs vim-fugitive plugin to proceed', 'Error', 'git_commits')
         return v:false
     else
         return v:true

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-20
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -71,7 +71,7 @@ fun! vfinder#events#update_candidates_request(...) abort " {{{1
         call cursor(line, col)
         stopinsert
     endif
-    call vfinder#helpers#echo('list of candidates updated...')
+    call vfinder#helpers#echo('list of candidates updated...', '', b:vf.s.name)
 endfun
 " 1}}}
 

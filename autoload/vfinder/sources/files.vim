@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-20
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -21,7 +21,7 @@ endfun
 
 fun! s:files_source() abort " {{{1
     return executable('rg')
-                \ ? 'rg --files --hidden --glob "!.git/"'
+                \ ? 'rg -sdf-files --hidden --glob "!.git/"'
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
                 \ : vfinder#helpers#in_git_project()
@@ -85,7 +85,7 @@ endfun
 
 fun! s:toggle_git_flags(file) abort " {{{1
     if !vfinder#helpers#in_git_project()
-        unsilent call vfinder#helpers#echo('not in a git project')
+        unsilent call vfinder#helpers#echo('not in a git project', '', 'files')
         return ''
     endif
     let b:vf.flags.git_flags = !b:vf.flags.git_flags

@@ -1,5 +1,5 @@
 " Creation         : 2018-03-16
-" Last modification: 2018-12-17
+" Last modification: 2018-12-22
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -73,7 +73,7 @@ endfun
 
 fun! s:spell_is_valid() " {{{1
     if !&l:spell
-        unsilent call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg')
+        unsilent call vfinder#helpers#echo('`spell` option is not enabled', 'WarningMsg', 'spell')
         return v:false
     else
         return v:true

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-22
+" Last modification: 2018-12-24
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -21,7 +21,7 @@ endfun
 
 fun! s:files_source() abort " {{{1
     return executable('rg')
-                \ ? 'rg -sdf-files --hidden --glob "!.git/"'
+                \ ? 'rg --files --hidden --glob "!.git/"'
                 \ : executable('ag')
                 \ ? 'ag --nocolor --nogroup --hidden -g ""'
                 \ : vfinder#helpers#in_git_project()

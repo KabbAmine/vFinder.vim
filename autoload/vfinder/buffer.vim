@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-21
+" Last modification: 2018-12-26
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -326,7 +326,7 @@ fun! s:wipe_buffer(...) abort " {{{1
     let buffer = exists('a:1') ? a:1 : bufname('%')
     if bufexists(buffer)
         " Be sure to go back to the initial window
-        silent execute bufwinnr(b:vf.ctx.bufnr) . 'wincmd w'
+        call win_gotoid(b:vf.ctx.winid)
         silent execute 'bwipeout! ' . buffer
     endif
 endfun

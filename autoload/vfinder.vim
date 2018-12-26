@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-20
+" Last modification: 2018-12-26
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -156,6 +156,7 @@ fun! s:get_ctx() abort " {{{1
     return {
                 \   'bufnr'   : bufnr('%'),
                 \   'winnr'   : winnr(),
+                \   'winid'   : win_getid(),
                 \   'wd'      : getcwd() . '/'
                 \ }
 endfun

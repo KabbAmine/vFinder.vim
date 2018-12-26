@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-18
+" Last modification: 2018-12-26
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -120,7 +120,7 @@ endfun
 
 fun! s:do(action, candidate_fun, mode, options) " {{{1
     let [line, buffer] = [line('.'), bufnr('%')]
-    let one_win = winnr() is# winnr('$')
+    let one_win = winnr('$') is# 1
     let no_candidates = line('$') is# 1
     let action = !empty(a:action) ? a:action : '%s'
 

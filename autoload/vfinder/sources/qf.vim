@@ -1,5 +1,5 @@
 " Creation         : 2018-12-02
-" Last modification: 2018-12-12
+" Last modification: 2019-01-17
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -39,7 +39,7 @@ fun! s:qf_format(items) abort " {{{1
                     \ : ''
         call add(res, printf('%s %s',
                     \   join([buf_name, line, col], ':'),
-                    \   s:trim(i.text)
+                    \   trim(i.text)
                     \ ))
     endfor
     return res
@@ -98,13 +98,5 @@ fun! s:qf_define_maps() abort " {{{1
 endfun
 " 1}}}
 
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 	        	helpers
-" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! s:trim(str) abort " {{{1
-    return matchstr(a:str, '^\s*\zs.*\ze\s*$')
-endfun
-" 1}}}
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:

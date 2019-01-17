@@ -453,6 +453,10 @@ nnoremap <silent> ,gc :call vfinder#i('git_commits', {'win_pos': 'tab'})<CR>
 " endfun " 2}}}
 ```
 
+# External sources
+
+- [vfinder-cmus](https://github.com/KabbAmine/vfinder-cmus.vim)
+
 # Inspiration
 
 - [unite](https://github.com/Shougo/unite.vim)

@@ -1,5 +1,5 @@
 " Creation         : 2018-02-09
-" Last modification: 2018-12-17
+" Last modification: 2019-01-17
 
 
 fun! vfinder#statusline#get() abort " {{{1
@@ -27,9 +27,11 @@ endfun
 fun! vfinder#statusline#flags() abort " {{{1
     let str = ''
     for [name, value] in items(b:vf.flags)
-        if value
-            let str .= '[' . tolower(name) . ']'
-        endif
+        let str .= type(value) is# v:t_string && !empty(value)
+                    \ ? '[' . value . ']'
+                    \ : value
+                    \ ? '[' . tolower(name) . ']'
+                    \ : ''
     endfor
     return str
 endfun

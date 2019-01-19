@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-20
+" Last modification: 2019-01-19
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -59,9 +59,10 @@ fun! s:candidates_filter(query) dict abort " {{{1
     " characters to our previous query.
     " Note that the following is not appliable if we have a manual update.
     let chars_added_to_last_query = self.query[2:] =~# '^\v' . b:vf.bopts.last_query[2:]
-    let candidates = !b:vf.bopts.manual_update && chars_added_to_last_query
+    let candidates = !b:vf.bopts.manual_update && chars_added_to_last_query && !b:vf.bopts.query_passed
                 \   ? self.current
                 \   : self.initial
+    let b:vf.bopts.query_passed = 0
     let b:vf.bopts.last_query = self.query
     let self.filtered_list = s:filter(self.query, candidates)
     let self.was_filtered = 1

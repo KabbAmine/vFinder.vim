@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-26
+" Last modification: 2019-01-19
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -38,6 +38,7 @@ fun! vfinder#i(source, ...) abort " {{{1
         call vfinder#helpers#echo('candidates gathering... (C-c to stop)', '', b:vf.s.name)
         let candidates = vfinder#candidates#i(b:vf.s)
         if !empty(sopts.query)
+            let b:vf.bopts.query_passed = 1
             call candidates.filter(sopts.query)
         else
             call candidates.get()
@@ -209,7 +210,8 @@ fun! s:get_bopts() abort " {{{1
                 \   'last_query'         : '',
                 \   'manual_update'      : 0,
                 \   'update_on_win_enter': 1,
-                \   'delete_map_used'    : 0
+                \   'delete_map_used'    : 0,
+                \   'query_passed'       : 0
                 \ }
 endfun
 " 1}}}

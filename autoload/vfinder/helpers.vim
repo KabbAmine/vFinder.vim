@@ -1,5 +1,5 @@
 " Creation         : 2018-02-04
-" Last modification: 2018-12-19
+" Last modification: 2020-01-22
 
 
 " s:vars {{{1
@@ -106,7 +106,7 @@ endfun
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! vfinder#helpers#black_hole() abort " {{{1
-    return '2> /dev/null'
+    return has('unix') ? '2> /dev/null' : ''
 endfun
 " 1}}}
 
